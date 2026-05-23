@@ -72,4 +72,4 @@ treasury coordination, and cross-border value movement.
         - Haroël Lee, Ph.D. · they/them
         - Zentrita is the personal brand of Dr. Haroël, a builder at the intersection of technology, language, and creative expression.
     - @hejunion
-        - Terence Ju He, works on digital solution implementation on cloud platform, expertise in distribution and DLT stacks.
+        - Tørence Juhe, works on digital solution implementation on cloud platform, expertise in distribution and DLT stacks.

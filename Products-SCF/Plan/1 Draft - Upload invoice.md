@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This workflow defines how a Buyer/Core Enterprise handles invoices in the SCF platform through two supported flows:
+This workflow defines how a Buyer/Core Enterprise handles invoices in the SCF platform through two supported invoice modes. The invoice mode is a commercial setting negotiated between the supplier and buyer, usually defined in their contract, onboarding agreement, ERP integration setup, or trading relationship profile.
 
 1. **Primary flow: Supplier-issued invoice**
    - Supplier creates and issues the invoice.
@@ -22,7 +22,31 @@ Supplier invoice value is not financeable until the buyer confirms it as Due Val
 
 In SCF, the investor is not financing a raw invoice request. The investor is financing a buyer-accepted payable backed by delivery, contract, and payment-term evidence.
 
-## 2. Actors
+## 2. Invoice Mode Negotiation
+
+Before invoices enter the SCF lifecycle, the supplier and buyer must agree which invoice mode applies to their relationship.
+
+| Invoice mode | Who creates the invoice | When to use |
+| --- | --- | --- |
+| Supplier-issued invoice | Supplier | Default commercial model. Supplier issues invoice after goods/services are delivered. |
+| Buyer-created invoice / self-billing | Buyer | Used only when the buyer and supplier agree that buyer systems calculate and generate the invoice-like payable document. |
+
+The selected mode can be stored at:
+
+- Supplier-buyer relationship level.
+- Contract level.
+- Purchase order level.
+- ERP integration mapping level.
+- Individual invoice level when exceptions are allowed.
+
+Mode rules:
+
+- Supplier-issued invoice should be the default mode.
+- Buyer-created invoice requires explicit self-billing authorization.
+- The selected mode controls which party can create the invoice record.
+- Regardless of mode, SCF eligibility still requires buyer confirmation of the payable.
+
+## 3. Actors
 
 | Actor | Role in this workflow |
 | --- | --- |
@@ -32,7 +56,7 @@ In SCF, the investor is not financing a raw invoice request. The investor is fin
 | Investor / Factor | Funds the accepted invoice after it becomes financeable. |
 | Circle / Arc Infrastructure | Provides programmable wallets, USDC settlement rails, and smart contract execution. |
 
-## 3. Value-State Interpretation
+## 4. Value-State Interpretation
 
 | State | Business meaning | SCF meaning |
 | --- | --- | --- |
@@ -43,7 +67,7 @@ In SCF, the investor is not financing a raw invoice request. The investor is fin
 | `FACTORED` | Investor funds accepted receivable. | Supplier receives early payment. |
 | `SETTLED` | Buyer pays at maturity. | Escrow distributes funds to investor and supplier according to terms. |
 
-## 4. Preconditions
+## 5. Preconditions
 
 - Buyer has completed organization onboarding, KYB, and wallet setup.
 - Supplier is registered or invited to the SCF platform.
@@ -51,15 +75,16 @@ In SCF, the investor is not financing a raw invoice request. The investor is fin
 - Purchase order, delivery confirmation, service completion, or goods receipt data exists.
 - Payment terms are known, including currency, due date, discounts, and tolerance rules.
 - Buyer has permission to accept payables and approve SCF eligibility.
+- Supplier-buyer relationship has an agreed invoice mode: `SUPPLIER_ISSUED` or `SELF_BILLING`.
 
-## 5. Primary Flow: Supplier-Issued Invoice
+## 6. Primary Flow: Supplier-Issued Invoice
 
 ### Workflow Summary
 
 ```mermaid
 flowchart TD
-    A[Supplier issues invoice] --> B[Invoice received by buyer]
-    B --> C[Buyer opens invoice verification]
+    A[Supplier creates or imports invoice data] --> B[Invoice record enters SCF or buyer AP queue]
+    B --> C[Buyer receives or imports supplier invoice]
     C --> D[Match invoice to PO, receipt, contract, and terms]
     D --> E{Match passed?}
     E -- No --> F[Buyer disputes or requests correction]
@@ -77,7 +102,21 @@ flowchart TD
 
 ### Step 1: Supplier Issues Invoice
 
-The supplier creates the invoice based on delivered goods or completed services.
+The supplier creates the invoice based on delivered goods or completed services. The supplier does not need to upload a PDF invoice file for the SCF workflow to work. The platform can operate from structured invoice data, ERP/API imports, or manual invoice entry.
+
+Supplier invoice creation channels:
+
+| Channel | Description | PDF required? |
+| --- | --- | --- |
+| Manual creation in supplier portal | Supplier enters invoice number, buyer, amount, dates, line items, PO reference, and settlement details. | No |
+| Supplier ERP/AP import | Supplier imports invoice records from its ERP, accounting, billing, or AP/AR system through API, CSV, XML, or connector. | No |
+| Optional PDF attachment | Supplier attaches invoice PDF as supporting evidence or for buyer convenience. | Optional |
+
+Important rule:
+
+```
+The invoice record is the finance workflow object. The PDF is only supporting evidence.
+```
 
 Required invoice data:
 
@@ -102,20 +141,27 @@ Initial invoice state:
 SUPPLIER_ISSUED
 ```
 
-### Step 2: Buyer Receives Invoice
+### Step 2: Buyer Receives or Imports Supplier Invoice
 
-The buyer receives the supplier invoice through one of the supported channels:
+The buyer receives or imports the supplier-issued invoice through one of the supported channels.
 
-- Supplier uploads invoice to SCF platform.
-- Buyer imports invoice from ERP/AP system.
-- Buyer receives invoice by email/API and uploads it to SCF.
-- Supplier submits invoice through supplier portal.
+Buyer-side intake channels:
+
+| Channel | Description | PDF required? |
+| --- | --- | --- |
+| Supplier submits structured invoice to SCF | Supplier-created invoice record appears in buyer review queue. | No |
+| Buyer imports from buyer ERP/AP system | Buyer imports supplier-issued invoice records already captured in its ERP/AP workflow. | No |
+| Buyer uploads supplier invoice PDF | Buyer uploads a PDF received from supplier; system can parse/extract invoice data. | Yes for this channel only |
+| Buyer imports invoice package | Buyer imports PDF plus structured metadata from email, API, EDI, XML, CSV, or ERP connector. | Optional |
+
+The system should support both structured-first and document-first intake. For MVP, structured invoice data should be treated as the source of workflow truth; PDF files are evidence, not mandatory workflow inputs.
 
 System actions:
 
-- Parse invoice data.
+- Parse or import invoice data.
 - Identify buyer and supplier.
 - Link invoice to buyer workspace.
+- Link optional PDF or supporting documents if provided.
 - Set status to `PENDING_BUYER_REVIEW`.
 - Notify buyer AP or treasury user.
 
@@ -205,9 +251,11 @@ System actions:
 ACCEPTED -> FACTORING_REQUESTED -> FACTORED -> SETTLED
 ```
 
-## 6. Alternative Flow: Buyer-Created Invoice / Self-Billing
+## 7. Alternative Flow: Buyer-Created Invoice / Self-Billing
 
 Self-billing applies only when the commercial arrangement allows the buyer to generate the payable document on behalf of the supplier.
+
+This mode is not simply a buyer upload path. It is a negotiated invoice mode in which the buyer is authorized to create the invoice-like payable record from buyer-verified data.
 
 Typical use cases:
 
@@ -260,7 +308,7 @@ Self-billing business rules:
 - Corrections must create version history.
 - Only the latest accepted version can become financeable.
 
-## 7. Alternative and Exception Flows
+## 8. Alternative and Exception Flows
 
 ### A1. Supplier Invoice Is Disputed
 
@@ -321,7 +369,30 @@ System actions:
 - Hold invalid invoices in an exception queue.
 - Allow correction and reprocessing.
 
-## 8. Data Model
+### A5. PDF Uploaded Without Structured Invoice Data
+
+If the buyer uploads a supplier invoice PDF without structured fields, the system should extract the invoice data and route it to validation before buyer acceptance.
+
+System actions:
+
+- Run OCR or document extraction.
+- Ask buyer to confirm extracted fields.
+- Link the PDF as supporting evidence.
+- Create a structured invoice record.
+- Continue with `PENDING_BUYER_REVIEW`.
+
+### A6. Structured Invoice Imported Without PDF
+
+If supplier or buyer imports structured invoice data without PDF, the system should allow the invoice workflow to continue.
+
+System actions:
+
+- Validate required invoice fields.
+- Preserve import source and integration trace.
+- Allow optional supporting document attachment later.
+- Continue with buyer matching and acceptance.
+
+## 9. Data Model
 
 ### Invoice Entity
 
@@ -329,6 +400,7 @@ System actions:
 | --- | --- | --- | --- |
 | `invoiceId` | string | Yes | Internal platform ID. |
 | `invoiceOrigin` | enum | Yes | `SUPPLIER_ISSUED` or `SELF_BILLED`. |
+| `invoiceModeAgreementId` | string | Optional | Relationship, contract, or PO-level agreement defining invoice mode. |
 | `invoiceNumber` | string | Yes | Supplier invoice number or buyer self-billing number. |
 | `invoiceHash` | bytes32/string | Yes after registration | Unique anti-duplicate key. |
 | `buyerId` | string | Yes | Buyer organization ID. |
@@ -344,6 +416,9 @@ System actions:
 | `status` | enum | Yes | Workflow state. |
 | `financingAllowed` | boolean | Yes | Buyer permission for SCF. |
 | `sourceDocuments` | array | Yes | Invoice, PO, receipt, contract, delivery proof. |
+| `invoicePdfRequired` | boolean | Yes | Usually `false`; true only for document-first intake requirements. |
+| `invoicePdfUrl` | string | Optional | Supporting invoice PDF if uploaded or imported. |
+| `intakeChannel` | enum | Yes | `SUPPLIER_PORTAL`, `SUPPLIER_ERP`, `BUYER_ERP`, `BUYER_UPLOAD`, `API`, `CSV`, `XML`, `EDI`. |
 | `createdBy` | userId | Yes | Supplier user, buyer user, or API integration. |
 | `buyerSignature` | string | Conditional | Required for accepted payable. |
 | `supplierAcceptance` | string | Conditional | Required for self-billed invoice unless pre-authorized. |
@@ -367,10 +442,16 @@ System actions:
 | `SETTLED` | Buyer paid at maturity and escrow distributed funds. |
 | `CANCELLED` | Invoice was voided before acceptance. |
 
-## 9. Business Rules
+## 10. Business Rules
 
 - Supplier-issued invoice is the primary workflow.
 - Buyer-created invoice is allowed only under self-billing or reverse-invoicing agreements.
+- Invoice mode must be negotiated between supplier and buyer before invoice creation, or selected as an explicit exception.
+- Supplier-issued invoices can be manually created by the supplier without uploading a PDF.
+- Supplier-issued invoices can be imported from the supplier ERP/AP/AR system without uploading a PDF.
+- Buyer can upload a supplier invoice PDF, but PDF upload is one intake channel, not a universal requirement.
+- Buyer can import supplier-issued invoices from the buyer ERP/AP system without uploading a PDF.
+- Structured invoice data is the workflow source of truth; invoice PDF is supporting evidence unless a document-first policy applies.
 - A supplier-issued invoice cannot be financed until buyer acceptance.
 - A self-billed invoice cannot be financed until supplier acceptance and buyer signature, unless pre-authorized self-billing applies.
 - Buyer must sign or otherwise cryptographically confirm the payable obligation before SCF eligibility.
@@ -384,7 +465,27 @@ System actions:
 - Settlement wallet must belong to the verified supplier or approved beneficiary.
 - All accepted invoices must have a complete audit trail.
 
-## 10. UI Requirements
+## 11. UI Requirements
+
+### Invoice Mode Setup
+
+Core sections:
+
+- Supplier-buyer relationship selector.
+- Invoice mode selector: `Supplier-issued` or `Buyer-created / self-billing`.
+- Contract or PO reference.
+- Self-billing authorization status.
+- Allowed intake channels.
+- PDF requirement setting.
+
+Primary actions:
+
+| Action | Description |
+| --- | --- |
+| Set Supplier-Issued Mode | Supplier creates invoice; buyer validates and accepts. |
+| Enable Self-Billing Mode | Buyer creates invoice only under authorized agreement. |
+| Configure Intake Channels | Choose portal, ERP, API, CSV, XML, EDI, or PDF upload options. |
+| Save Mode Agreement | Store selected mode for future invoices. |
 
 ### Buyer Invoice Review Screen
 
@@ -430,6 +531,27 @@ Primary actions:
 | Submit to Supplier | Send buyer-created invoice to supplier for review. |
 | Cancel Invoice | Void draft invoice. |
 
+### Supplier Invoice Creation Screen
+
+Core sections:
+
+- Buyer selector.
+- Invoice number and dates.
+- PO and delivery references.
+- Line items, tax, freight, discount, and adjustments.
+- Settlement beneficiary.
+- Optional PDF/supporting document attachment.
+- ERP/import source indicator.
+
+Primary actions:
+
+| Action | Description |
+| --- | --- |
+| Create Invoice Manually | Create structured invoice record without requiring PDF upload. |
+| Import From ERP | Import invoice data from supplier ERP/AP/AR system. |
+| Attach PDF | Add invoice PDF as optional supporting evidence. |
+| Submit to Buyer | Send invoice record to buyer review queue. |
+
 ### Supplier Review Screen for Self-Billing
 
 Core sections:
@@ -448,13 +570,17 @@ Primary actions:
 | Request Correction | Send correction request to buyer. |
 | Reject Invoice | Reject payable if invalid. |
 
-## 11. API / Smart Contract Events
+## 12. API / Smart Contract Events
 
 Suggested API events:
 
 | Event | Description |
 | --- | --- |
 | `invoice.supplier_issued` | Supplier created or uploaded invoice. |
+| `invoice.mode_agreed` | Supplier and buyer invoice mode was configured. |
+| `invoice.imported_from_supplier_erp` | Supplier-issued invoice imported from supplier system. |
+| `invoice.imported_from_buyer_erp` | Supplier-issued invoice imported from buyer system. |
+| `invoice.pdf_uploaded_by_buyer` | Buyer uploaded supplier invoice PDF. |
 | `invoice.received_by_buyer` | Invoice entered buyer review queue. |
 | `invoice.validation_passed` | Invoice passed matching and validation. |
 | `invoice.validation_failed` | Invoice failed matching or required checks. |
@@ -478,12 +604,15 @@ event InvoiceCancelled(bytes32 indexed invoiceHash, string reason);
 event DuplicateInvoiceRejected(bytes32 indexed invoiceHash);
 ```
 
-## 12. Controls and Risk Mitigation
+## 13. Controls and Risk Mitigation
 
 | Risk | Control |
 | --- | --- |
 | Supplier issues invoice for undelivered goods | Buyer must match invoice to PO, goods receipt, delivery proof, or service approval. |
 | Buyer self-bills without authorization | Require self-billing agreement or supplier pre-authorization. |
+| Incorrect invoice mode used | Enforce supplier-buyer mode agreement before allowing invoice creation. |
+| PDF treated as legal truth despite bad extracted data | Require buyer confirmation of structured fields after PDF extraction. |
+| Imported invoice lacks supporting document | Allow workflow if required structured fields and source trace are present; flag evidence gap if policy requires attachment. |
 | Supplier disputes self-billed amount | Supplier review is mandatory unless pre-authorized. |
 | Duplicate financing | Use deterministic `invoiceHash` and registry lookup. |
 | Wrong beneficiary | Validate supplier wallet and approved beneficiary records. |
@@ -491,9 +620,14 @@ event DuplicateInvoiceRejected(bytes32 indexed invoiceHash);
 | Amount manipulation | Preserve source documents and version history. |
 | Late buyer payment | Record payment behavior in buyer profile and settlement history. |
 
-## 13. Acceptance Criteria
+## 14. Acceptance Criteria
 
+- Supplier and buyer can configure invoice mode as supplier-issued or buyer-created/self-billing.
 - Supplier-issued invoice can enter buyer review queue.
+- Supplier can manually create supplier-issued invoice without uploading PDF.
+- Supplier can import supplier-issued invoice from supplier ERP/AP/AR system.
+- Buyer can upload supplier invoice PDF and convert it into structured invoice record.
+- Buyer can import supplier-issued invoice from buyer ERP/AP system.
 - Buyer can validate invoice against PO, receipt, contract, and terms.
 - Buyer can accept, dispute, reject, or hold supplier-issued invoice.
 - Accepted supplier-issued invoice generates an invoice hash.
@@ -505,9 +639,13 @@ event DuplicateInvoiceRejected(bytes32 indexed invoiceHash);
 - Audit trail records invoice origin, validations, disputes, signatures, and state transitions.
 - Invoice state cannot skip required acceptance steps.
 
-## 14. Open Questions
+## 15. Open Questions
 
 - Which invoice intake channel is MVP priority: supplier portal, buyer upload, ERP import, or API?
+- Should invoice mode be configured at supplier-buyer relationship level, contract level, PO level, or all three?
+- Which supplier ERP/AP/AR import formats should be supported first?
+- Which buyer ERP/AP import formats should be supported first?
+- Is invoice PDF required for any target jurisdiction or only optional evidence for MVP?
 - Should buyer acceptance be an on-chain wallet signature for MVP, or can the first version use off-chain audit log plus later settlement signature?
 - Should self-billing require supplier acceptance in all cases, or support pre-authorized supplier agreements?
 - Should fiat-denominated invoices settle in USDC at a locked FX rate?
@@ -515,16 +653,18 @@ event DuplicateInvoiceRejected(bytes32 indexed invoiceHash);
 - Should near-duplicate detection use deterministic rules only, or also include AI/anomaly scoring?
 - What legal language is required for buyer payable acceptance by target jurisdiction?
 
-## 15. MVP Scope Recommendation
+## 16. MVP Scope Recommendation
 
 For the first MVP, implement the primary supplier-issued invoice path:
 
-1. Supplier uploads invoice.
-2. Buyer reviews invoice against PO, receipt, amount, and maturity date.
-3. Buyer accepts or disputes invoice.
-4. System generates invoice hash for accepted invoice.
-5. System blocks exact duplicates.
-6. Buyer enables financing.
-7. Supplier sees accepted invoice and can request factoring.
+1. Supplier and buyer configure invoice mode as `SUPPLIER_ISSUED`.
+2. Supplier manually creates structured invoice data without requiring PDF upload.
+3. Buyer can alternatively import the supplier-issued invoice from buyer ERP/AP system or upload a supplier invoice PDF.
+4. Buyer reviews invoice against PO, receipt, amount, and maturity date.
+5. Buyer accepts or disputes invoice.
+6. System generates invoice hash for accepted invoice.
+7. System blocks exact duplicates.
+8. Buyer enables financing.
+9. Supplier sees accepted invoice and can request factoring.
 
 Self-billing should be included as a documented alternative flow, but can be implemented after the primary supplier-issued invoice workflow is stable.
