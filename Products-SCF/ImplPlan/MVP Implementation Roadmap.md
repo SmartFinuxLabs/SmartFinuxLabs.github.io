@@ -2,7 +2,7 @@
 
 ## 1. Planning Basis
 
-This plan consolidates the Round001 analysis and the Round002 product specification into an executable MVP roadmap for **Verity**, the on-chain supply chain finance platform.
+This plan uses the consolidated Round001 product specification as the executable MVP roadmap basis for **Verity**, the on-chain supply chain finance platform. Round002 has been merged into Round001 and removed from the active ideation tree.
 
 Primary source documents:
 
@@ -11,10 +11,8 @@ Primary source documents:
 - `Products-SCF/Ideation/Round001/001 Risk Analysis on Buyer Default.md`
 - `Products-SCF/Ideation/Round001/001 Yield Model.md`
 - `Products-SCF/Ideation/Round001/Frontend_TRD.md`
-- `Products-SCF/Ideation/Round002/Product Specifications.md`
-- `Products-SCF/Ideation/Round002/1 Draft - Upload invoice.md`
 
-Note: the earlier ideation folder has been consolidated into `Round001`; the current product specification lives in `Round002`.
+Note: `Products-SCF/Ideation/Round001/001 Draft of Specification.md` is now the canonical product specification. It contains the merged Round002 product specification and Appendix A for invoice upload, buyer validation, and the decision to treat the upload-invoice draft as a workflow module rather than a separate product spec.
 
 ## 1.1 SDLC Map
 
@@ -26,7 +24,7 @@ Ideation -> Use Cases -> Roadmap of Impl Plan
 
 | SDLC stage | Folder | Purpose | Output |
 | --- | --- | --- | --- |
-| Ideation | `Products-SCF/Ideation/` | Research, product analysis, value model, risk analysis, and consolidated product specification. | Round001 analysis and Round002 product specification. |
+| Ideation | `Products-SCF/Ideation/` | Research, product analysis, value model, risk analysis, and consolidated product specification. | Consolidated Round001 product specification and supporting analysis. |
 | Use Cases | `Products-SCF/UseCases/` | Convert product concepts into actor-centered behaviors and acceptance criteria. | UC files and fine-grained sub-use cases. |
 | Roadmap of Impl Plan | `Products-SCF/ImplPlan/` | Schedule selected use cases into implementation phases, sprints, priorities, and delivery checkpoints. | MVP implementation roadmap. |
 
@@ -147,7 +145,7 @@ Deferred use cases:
 
 ### Goal
 
-Convert the Round002 product specification into implementation-ready decisions.
+Convert the consolidated Round001 product specification into implementation-ready decisions.
 
 ### Sprint 0.1: Foundation Planning
 
