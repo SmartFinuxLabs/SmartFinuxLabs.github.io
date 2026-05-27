@@ -28,6 +28,7 @@
 
       html {
         scroll-behavior: smooth;
+        scroll-padding-top: 28px;
       }
 
       body {
@@ -118,6 +119,48 @@
         padding-top: 0.55%;
         font-size: clamp(0.44rem, 0.68vw, 0.64rem);
         color: var(--muted);
+      }
+
+      .slide-nav {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+      }
+
+      .slide-arrow {
+        position: absolute;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        width: clamp(34px, 4.2vw, 48px);
+        height: clamp(34px, 4.2vw, 48px);
+        transform: translateY(-50%);
+        border: 1px solid rgba(22, 32, 31, 0.18);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--dark);
+        font-size: clamp(1.3rem, 2.6vw, 2.05rem);
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        box-shadow: 0 10px 24px rgba(22, 32, 31, 0.12);
+        pointer-events: auto;
+      }
+
+      .slide-arrow:hover,
+      .slide-arrow:focus-visible {
+        background: var(--dark);
+        color: var(--white);
+        outline: 0;
+      }
+
+      .slide-arrow.prev {
+        left: 1.2%;
+      }
+
+      .slide-arrow.next {
+        right: 1.2%;
       }
 
       .cover {
@@ -476,6 +519,11 @@
           border-right: 0;
           box-shadow: none;
         }
+
+        .slide-arrow {
+          width: 34px;
+          height: 34px;
+        }
       }
 
       @media print {
@@ -494,21 +542,25 @@
           border: 0;
           box-shadow: none;
         }
+
+        .slide-nav {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
     <main class="deck" aria-label="Verity Supply Chain Finance Overview HTML slide deck">
-      <section class="slide" aria-label="Slide 1">
+      <section class="slide" id="slide-1" tabindex="-1" aria-label="Slide 1">
         <div class="slide-inner cover">
           <div class="brand">Smart Finux Labs</div>
           <div class="cover-copy">
             <h1>Verity</h1>
-            <h2>On-chain supply chain finance for buyer-supplier Capital Due Value</h2>
+            <h2>On-chain supply chain finance for Capital Due Value</h2>
             <p>Verity turns invoice claims into accounting-valid obligations, then coordinates factoring, USDC escrow, settlement, and payment profile evidence across suppliers, buyers, and investors.</p>
             <div class="principle">
               <p class="eyebrow">Product principle</p>
-              <strong>Only buyer-accepted Due Value is financeable.</strong>
+              <strong>Make Capital Due Value is financeable.</strong>
             </div>
           </div>
           <div class="actor-panel">
@@ -533,13 +585,17 @@
               <div class="actor-card bg-rose">Distributes advance, repayment, yield, and residual</div>
             </div>
           </div>
-          <div class="footer"><span>Smart Finux Labs - Verity SCF</span><span>01</span></div>
+          <div class="footer"><span>Smart Finux Labs &middot; Verity SCF</span><span>01</span></div>
         </div>
+        <nav class="slide-nav" aria-label="Slide navigation">
+          <a class="slide-arrow prev" href="#slide-5" title="Previous slide" aria-label="Previous slide">&lsaquo;</a>
+          <a class="slide-arrow next" href="#slide-2" title="Next slide" aria-label="Next slide">&rsaquo;</a>
+        </nav>
       </section>
 
-      <section class="slide" aria-label="Slide 2">
+      <section class="slide" id="slide-2" tabindex="-1" aria-label="Slide 2">
         <div class="slide-inner">
-          <p class="eyebrow">Value Resolution Layer</p>
+          <p class="eyebrow">VALUE RESOLUTION LAYER</p>
           <h2>The platform resolves commercial value before it releases finance.</h2>
           <div class="state-track" aria-label="Value state machine">
             <div class="state bg-sky" style="border-color: var(--blue);"><div><strong class="blue">REQUEST</strong><span>PO intent</span></div></div>
@@ -563,13 +619,17 @@
               <p>USDC escrow distributes principal, yield, fees, and residual balances.</p>
             </div>
           </div>
-          <div class="footer"><span>Smart Finux Labs - Verity SCF</span><span>02</span></div>
+          <div class="footer"><span>Smart Finux Labs &middot; Verity SCF</span><span>02</span></div>
         </div>
+        <nav class="slide-nav" aria-label="Slide navigation">
+          <a class="slide-arrow prev" href="#slide-1" title="Previous slide" aria-label="Previous slide">&lsaquo;</a>
+          <a class="slide-arrow next" href="#slide-3" title="Next slide" aria-label="Next slide">&rsaquo;</a>
+        </nav>
       </section>
 
-      <section class="slide" aria-label="Slide 3">
+      <section class="slide" id="slide-3" tabindex="-1" aria-label="Slide 3">
         <div class="slide-inner">
-          <p class="eyebrow">System visualization</p>
+          <p class="eyebrow">SYSTEM VISUALIZATION</p>
           <h2>Architecture connects invoice truth, wallet funding, and settlement execution.</h2>
           <div class="architecture-layout">
             <figure class="image-frame">
@@ -586,13 +646,17 @@
               <div class="asset-note">Required visual asset embedded</div>
             </aside>
           </div>
-          <div class="footer"><span>Smart Finux Labs - Verity SCF</span><span>03</span></div>
+          <div class="footer"><span>Smart Finux Labs &middot; Verity SCF</span><span>03</span></div>
         </div>
+        <nav class="slide-nav" aria-label="Slide navigation">
+          <a class="slide-arrow prev" href="#slide-2" title="Previous slide" aria-label="Previous slide">&lsaquo;</a>
+          <a class="slide-arrow next" href="#slide-4" title="Next slide" aria-label="Next slide">&rsaquo;</a>
+        </nav>
       </section>
 
-      <section class="slide" aria-label="Slide 4">
+      <section class="slide" id="slide-4" tabindex="-1" aria-label="Slide 4">
         <div class="slide-inner">
-          <p class="eyebrow">Operating workflow</p>
+          <p class="eyebrow">OPERATING WORKFLOW</p>
           <h2>Three user surfaces converge on one accepted receivable marketplace.</h2>
           <div class="lane-grid">
             <div class="lane bg-mint" style="border-color: var(--green);">
@@ -615,13 +679,17 @@
             </div>
           </div>
           <p class="control-point"><strong>Control point</strong> Accepted value is separated from face value, making the financed asset auditable.</p>
-          <div class="footer"><span>Smart Finux Labs - Verity SCF</span><span>04</span></div>
+          <div class="footer"><span>Smart Finux Labs &middot; Verity SCF</span><span>04</span></div>
         </div>
+        <nav class="slide-nav" aria-label="Slide navigation">
+          <a class="slide-arrow prev" href="#slide-3" title="Previous slide" aria-label="Previous slide">&lsaquo;</a>
+          <a class="slide-arrow next" href="#slide-5" title="Next slide" aria-label="Next slide">&rsaquo;</a>
+        </nav>
       </section>
 
-      <section class="slide" aria-label="Slide 5">
+      <section class="slide" id="slide-5" tabindex="-1" aria-label="Slide 5">
         <div class="slide-inner">
-          <p class="eyebrow">Roadmap</p>
+          <p class="eyebrow">ROADMAP</p>
           <h2>MVP delivery proves the full Due Value-to-settlement loop.</h2>
           <div class="timeline">
             <div class="phase">
@@ -665,9 +733,42 @@
               <p>Ideation -> Use Cases -> MVP Roadmap, with UC-001 through UC-014 validating the product thesis.</p>
             </div>
           </div>
-          <div class="footer"><span>Smart Finux Labs - Verity SCF</span><span>05</span></div>
+          <div class="footer"><span>Smart Finux Labs &middot; Verity SCF</span><span>05</span></div>
         </div>
+        <nav class="slide-nav" aria-label="Slide navigation">
+          <a class="slide-arrow prev" href="#slide-4" title="Previous slide" aria-label="Previous slide">&lsaquo;</a>
+          <a class="slide-arrow next" href="#slide-1" title="Next slide" aria-label="Next slide">&rsaquo;</a>
+        </nav>
       </section>
     </main>
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+
+      function nearestSlideIndex() {
+        const viewportCenter = window.scrollY + window.innerHeight / 2;
+        return slides.reduce((closest, slide, index) => {
+          const slideCenter = slide.offsetTop + slide.offsetHeight / 2;
+          const distance = Math.abs(slideCenter - viewportCenter);
+          return distance < closest.distance ? { index, distance } : closest;
+        }, { index: 0, distance: Infinity }).index;
+      }
+
+      function goToSlide(index) {
+        const target = slides[(index + slides.length) % slides.length];
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.focus({ preventScroll: true });
+        history.replaceState(null, "", `#${target.id}`);
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+          return;
+        }
+
+        event.preventDefault();
+        const step = event.key === "ArrowRight" ? 1 : -1;
+        goToSlide(nearestSlideIndex() + step);
+      });
+    </script>
   </body>
 </html>
