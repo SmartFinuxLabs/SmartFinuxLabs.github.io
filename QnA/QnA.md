@@ -14,7 +14,12 @@ We started formally working on Verity in May 2026, after exploring how accountin
 
 ## What other companies are solving this problem today or could if they wanted to? Why will you succeed against them?*
 
-Traditional supply chain finance and invoice financing companies include Taulia, C2FO, PrimeRevenue, Tradeshift, Demica, SAP Ariba, banks, and factoring providers. Newer blockchain or stablecoin-adjacent approaches include companies such as Skyscend, InvoFi, Zenia, and other receivables or trade finance platforms. Most competitors start from financing, ERP integration, or payment automation. Verity starts one layer earlier: resolving whether a commercial claim has become an accounting-valid obligation. We believe we can win by making buyer acceptance, duplicate prevention, invoice state history, USDC escrow, yield calculation, and verifiable payment profiles part of one workflow, instead of treating financing and settlement as separate tools bolted onto invoices.
+Traditional supply chain finance and invoice financing companies include: 
+ Taulia, C2FO, PrimeRevenue, Tradeshift, Demica, SAP Ariba, banks, and factoring providers. 
+Newer blockchain or stablecoin-adjacent approaches include companies such as:
+ Skyscend, InvoFi, Zenia, and other receivables or trade finance platforms. 
+ Most competitors start from financing, ERP integration, or payment automation. 
+ Verity starts one layer earlier: resolving whether a commercial claim has become an accounting-valid obligation. We believe we can win by making buyer acceptance, duplicate prevention, invoice state history, USDC escrow, yield calculation, and verifiable payment profiles part of one workflow, instead of treating financing and settlement as separate tools bolted onto invoices.
 
 ## What’s your current traction?*
 
