@@ -117,6 +117,29 @@
         font-weight: 700;
       }
 
+      .links {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .links a {
+        display: block;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .links a:hover,
+      .links a:focus-visible {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: var(--accent);
+        outline: 0;
+      }
+
       .members li {
         grid-column: span 2;
       }
@@ -147,6 +170,15 @@
         <p>Modern commerce depends on:</p>
         <div class="flow">Sourcing -> Producing -> Storage -> Trading -> Transportation -> Payment -> Settlement</div>
         <p>Our product suite explores how programmable finance infrastructure can support real-world business processes such as invoicing, receivables, settlement, treasury coordination, and cross-border value movement.</p>
+      </section>
+
+      <section>
+        <h2>Web Views</h2>
+        <div class="links">
+          <a href="cdsc/">CDSC Commerce Chapter</a>
+          <a href="cdsc/factoring/">CDSC Factoring Architecture</a>
+          <a href="verity/">Verity Supply Chain Finance Overview</a>
+        </div>
       </section>
 
       <section class="meta" aria-label="Company profile">

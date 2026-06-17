@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Factoring Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Node Animations */
+        .diagram-node {
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+        .diagram-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        
+        /* Dimming effect for interactivity */
+        .diagram-container.dimmed .diagram-node:not(.active) { opacity: 0.3; filter: grayscale(100%); }
+        .diagram-container.dimmed .svg-connection:not(.active) { opacity: 0.1; }
+        
+        /* SVG Line styling */
+        .svg-connection {
+            transition: all 0.3s ease;
+            stroke-dasharray: 6;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash { to { stroke-dashoffset: -1000; } }
+        
+        /* Specific Node Colors */
+        .bg-entity { background: #ffffff; border: 1px solid #e2e8f0; }
+        .bg-platform { background: #fdf4ff; border: 1px solid #f0abfc; color: #701a75; }
+        .bg-core { background: #f0fdfa; border: 1px solid #5eead4; color: #134e4a; }
+        .bg-wallet { background: #f8fafc; border: 1px dashed #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white px-6 py-4 shadow-md z-20 flex-shrink-0 flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold tracking-tight"><i class="fa-solid fa-network-wired mr-2 text-blue-400"></i> Deterministic Factoring & Netting Architecture</h1>
+            <p class="text-slate-400 text-xs mt-1">Modeling Invoice Submission, Confirmation, Factoring, and Swap Accounting Settement.</p>
+        </div>
+        <div class="text-xs font-mono bg-slate-800 text-slate-300 px-3 py-1 rounded border border-slate-700">
+            STATUS: <span class="text-emerald-400">ACTIVE SYSTEM</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- Sidebar / Process Description -->
+        <aside class="w-1/3 max-w-sm bg-white border-r border-slate-200 p-6 flex flex-col shadow-sm z-20 overflow-hidden">
+            <h2 class="text-sm uppercase tracking-wider font-semibold border-b border-slate-100 pb-3 mb-4 text-slate-500">Interactive Process Flow</h2>
+            <p class="text-xs text-slate-500 mb-6">Hover over steps to highlight the corresponding architecture components and data flows.</p>
+            
+            <div class="steps-container flex-1 overflow-y-auto pr-2 space-y-4 text-sm" id="step-list">
+                
+                <!-- Step 1 -->
+                <div class="step-item p-3 rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-colors" data-step="1">
+                    <div class="flex items-start gap-3">
+                        <div class="bg-blue-100 text-blue-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Trade & Submission</h3>
+                            <p class="mt-1 text-slate-600 text-xs">The <strong>Vendor (Supplier)</strong> submits the initial invoice into the Cortex platform.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-item p-3 rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-colors" data-step="2">
+                    <div class="flex items-start gap-3">
+                        <div class="bg-indigo-100 text-indigo-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Anchor Confirmation</h3>
+                            <p class="mt-1 text-slate-600 text-xs">Data syncs to Verity. The <strong>Anchor (Buyer)</strong> confirms the invoice, creating a programmable, immutable liability.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-item p-3 rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-colors" data-step="3">
+                    <div class="flex items-start gap-3">
+                        <div class="bg-purple-100 text-purple-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Factoring Initiation</h3>
+                            <p class="mt-1 text-slate-600 text-xs">The <strong>Factor (Investor)</strong> steps in to refinance the confirmed invoice on the Verity platform.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-item p-3 rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-colors" data-step="4">
+                    <div class="flex items-start gap-3">
+                        <div class="bg-orange-100 text-orange-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">4</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Payment Instructions</h3>
+                            <p class="mt-1 text-slate-600 text-xs">Factoring generates underlying instruction sets sent to the CLOB (Advance to Vendor, Repayment from Anchor).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-item p-3 rounded-lg border border-transparent hover:bg-slate-50 hover:border-slate-200 cursor-pointer transition-colors" data-step="5">
+                    <div class="flex items-start gap-3">
+                        <div class="bg-emerald-100 text-emerald-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">5</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Swap Accounting & Netting</h3>
+                            <p class="mt-1 text-slate-600 text-xs">The Facilitator Netting Engine routes funds via a <strong>Swap Accounting Journal</strong>. This ensures an immutable audit trail for every leg before final AP/AR wallet settlement.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Diagram Area -->
+        <section class="flex-1 bg-slate-50 overflow-auto relative p-8" id="diagram-scroll-area">
+            <div id="diagram-container" class="diagram-container relative w-full min-w-[800px] min-h-[700px] max-w-5xl mx-auto h-full">
+                
+                <!-- SVG layer for connecting lines -->
+                <svg id="lines-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0"></svg>
+
+                <!-- ================= ROW 1: ENTITIES ================= -->
+                <div class="absolute top-[2%] left-[10%] w-40 diagram-node bg-entity p-3 rounded shadow-sm text-center" id="node-vendor" data-steps="1,5">
+                    <div class="text-blue-500 mb-1"><i class="fa-solid fa-truck"></i></div>
+                    <div class="font-semibold text-sm">Vendor (Supplier)</div>
+                    <div class="text-[10px] text-slate-500">Invoice Originator</div>
+                </div>
+
+                <div class="absolute top-[2%] left-[50%] -translate-x-1/2 w-40 diagram-node bg-entity p-3 rounded shadow-sm text-center" id="node-factor" data-steps="3,5">
+                    <div class="text-purple-500 mb-1"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                    <div class="font-semibold text-sm">Factor (Investor)</div>
+                    <div class="text-[10px] text-slate-500">Liquidity Provider</div>
+                </div>
+
+                <div class="absolute top-[2%] right-[10%] w-40 diagram-node bg-entity p-3 rounded shadow-sm text-center" id="node-anchor" data-steps="2,5">
+                    <div class="text-indigo-500 mb-1"><i class="fa-solid fa-building"></i></div>
+                    <div class="font-semibold text-sm">Anchor (Buyer)</div>
+                    <div class="text-[10px] text-slate-500">Liability Holder</div>
+                </div>
+
+
+                <!-- ================= ROW 2: PLATFORMS ================= -->
+                <div class="absolute top-[20%] left-[10%] w-48 diagram-node bg-platform p-4 rounded-lg shadow text-center" id="node-cortex" data-steps="1">
+                    <div class="text-xs uppercase font-bold text-fuchsia-800 opacity-70 mb-2 border-b border-fuchsia-200 pb-1">Cortex Platform</div>
+                    <div class="bg-white rounded p-2 text-sm shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-file-lines text-fuchsia-600"></i> Submit Invoice
+                    </div>
+                </div>
+
+                <div class="absolute top-[20%] right-[10%] w-80 diagram-node bg-platform p-4 rounded-lg shadow text-center flex flex-col items-center" id="node-verity" data-steps="2,3">
+                    <div class="text-xs uppercase font-bold text-fuchsia-800 opacity-70 mb-2 border-b border-fuchsia-200 pb-1 w-full text-left px-1">Verity Platform</div>
+                    <div class="flex gap-4 w-full">
+                        <div class="bg-white rounded p-2 text-sm shadow-sm flex-1 flex items-center justify-center gap-2" id="node-confirm" data-steps="2">
+                            <i class="fa-solid fa-check-double text-indigo-600"></i> Confirm
+                        </div>
+                        <div class="bg-white rounded p-2 text-sm shadow-sm flex-1 flex items-center justify-center gap-2" id="node-refinance" data-steps="3">
+                            <i class="fa-solid fa-link text-purple-600"></i> Refinance
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ================= ROW 3: INSTRUCTIONS ================= -->
+                <div class="absolute top-[42%] left-[50%] -translate-x-1/2 w-64 diagram-node bg-orange-50 border border-orange-200 p-3 rounded shadow-sm text-center" id="node-pi" data-steps="4">
+                    <div class="text-orange-600 mb-1"><i class="fa-solid fa-scroll"></i></div>
+                    <div class="font-semibold text-sm text-orange-900">Payment Instructions</div>
+                    <div class="text-[10px] text-orange-700 mt-1 flex justify-between px-2">
+                        <span>[ Advance Leg ]</span>
+                        <span>[ Repayment Leg ]</span>
+                    </div>
+                </div>
+
+
+                <!-- ================= ROW 4: NETTING & SWAP ================= -->
+                <!-- Big background box for Facilitator Netting Engine -->
+                <div class="absolute top-[58%] left-[50%] -translate-x-1/2 w-[80%] h-48 bg-slate-100 border-2 border-slate-200 rounded-xl pointer-events-none z-0" id="box-clob">
+                    <div class="absolute top-2 left-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Facilitator / CLOB Netting Engine</div>
+                </div>
+
+                <div class="absolute top-[65%] left-[50%] -translate-x-1/2 w-64 diagram-node bg-core p-4 rounded-lg shadow text-center" id="node-swap" data-steps="5">
+                    <div class="text-teal-600 mb-1 text-lg"><i class="fa-solid fa-book-journal-whills"></i></div>
+                    <div class="font-bold text-sm text-teal-900">Swap Accounting Journal</div>
+                    <div class="text-[10px] text-teal-700 mt-1">(Immutable Audit Transit)</div>
+                </div>
+
+
+                <!-- ================= ROW 5: WALLETS ================= -->
+                <div class="absolute top-[85%] left-[5%] w-44 diagram-node bg-wallet p-3 rounded shadow-sm text-center" id="node-ar-vendor" data-steps="5">
+                    <div class="font-bold text-slate-700 text-sm mb-1">Vendor Wallet / AR</div>
+                    <div class="bg-emerald-100 text-emerald-800 text-[10px] py-1 rounded">Receives Advance (e.g. 95%)</div>
+                </div>
+
+                <div class="absolute top-[85%] left-[50%] -translate-x-1/2 w-48 diagram-node bg-wallet p-3 rounded shadow-sm text-center" id="node-wallet-factor" data-steps="5">
+                    <div class="font-bold text-slate-700 text-sm mb-1">Factor Wallet</div>
+                    <div class="flex gap-1 text-[10px]">
+                        <div class="bg-red-100 text-red-800 py-1 px-2 rounded flex-1">Pays 95%</div>
+                        <div class="bg-emerald-100 text-emerald-800 py-1 px-2 rounded flex-1">Gets 100%</div>
+                    </div>
+                </div>
+
+                <div class="absolute top-[85%] right-[5%] w-44 diagram-node bg-wallet p-3 rounded shadow-sm text-center" id="node-ap-anchor" data-steps="5">
+                    <div class="font-bold text-slate-700 text-sm mb-1">Anchor Wallet / AP</div>
+                    <div class="bg-red-100 text-red-800 text-[10px] py-1 rounded">Pays at Maturity (100%)</div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const svg = document.getElementById('lines-svg');
+            const container = document.getElementById('diagram-container');
+            const stepItems = document.querySelectorAll('.step-item');
+            
+            // Define the logical connections between nodes
+            const connections = [
+                { from: 'node-vendor', to: 'node-cortex', step: '1', label: '1. Submits', color: '#64748b' },
+                { from: 'node-cortex', to: 'node-confirm', step: '2', label: 'Data Sync', color: '#94a3b8', dashed: true },
+                { from: 'node-anchor', to: 'node-confirm', step: '2', label: '2. Confirms', color: '#64748b' },
+                { from: 'node-factor', to: 'node-refinance', step: '3', label: '3. Factors', color: '#64748b' },
+                { from: 'node-confirm', to: 'node-refinance', step: '3', label: 'State Check', color: '#94a3b8', dashed: true },
+                { from: 'node-refinance', to: 'node-pi', step: '4', label: '4. Triggers PIs', color: '#f97316' },
+                
+                // Netting / Swap flows (Step 5)
+                { from: 'node-pi', to: 'node-swap', step: '5', label: 'Route Instructions', color: '#0d9488' },
+                { from: 'node-wallet-factor', to: 'node-swap', step: '5', label: 'Sends Advance', color: '#ef4444', curve: 'left' },
+                { from: 'node-swap', to: 'node-ar-vendor', step: '5', label: 'Releases Advance', color: '#10b981' },
+                { from: 'node-ap-anchor', to: 'node-swap', step: '5', label: 'Pays Maturity', color: '#ef4444' },
+                { from: 'node-swap', to: 'node-wallet-factor', step: '5', label: 'Settles Maturity', color: '#10b981', curve: 'right' }
+            ];
+
+            let pathElements = [];
+
+            function drawLines() {
+                // Clear existing
+                svg.innerHTML = '';
+                pathElements = [];
+
+                // Create definitions for arrowheads
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                
+                // Create a marker for each unique color used
+                const colors = [...new Set(connections.map(c => c.color))];
+                colors.forEach(color => {
+                    const cleanColor = color.replace('#', '');
+                    const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                    marker.setAttribute('id', `arrow-${cleanColor}`);
+                    marker.setAttribute('markerWidth', '10');
+                    marker.setAttribute('markerHeight', '7');
+                    marker.setAttribute('refX', '9');
+                    marker.setAttribute('refY', '3.5');
+                    marker.setAttribute('orient', 'auto');
+                    
+                    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+                    polygon.setAttribute('fill', color);
+                    
+                    marker.appendChild(polygon);
+                    defs.appendChild(marker);
+                });
+                svg.appendChild(defs);
+
+                const containerRect = container.getBoundingClientRect();
+
+                connections.forEach((conn, index) => {
+                    const el1 = document.getElementById(conn.from);
+                    const el2 = document.getElementById(conn.to);
+                    
+                    if (!el1 || !el2) return;
+
+                    const rect1 = el1.getBoundingClientRect();
+                    const rect2 = el2.getBoundingClientRect();
+
+                    // Calculate centers relative to container
+                    const startX = rect1.left - containerRect.left + rect1.width / 2;
+                    const startY = rect1.top - containerRect.top + rect1.height / 2;
+                    const endX = rect2.left - containerRect.left + rect2.width / 2;
+                    const endY = rect2.top - containerRect.top + rect2.height / 2;
+
+                    // Calculate path (vertical bezier by default)
+                    let d = `M ${startX} ${startY + (rect1.height/2 * (startY < endY ? 1 : -1))} `;
+                    
+                    // Specific routing for wallets to avoid overlapping the central swap box completely
+                    if (conn.curve === 'left') {
+                        d += `C ${startX - 50} ${startY - 50}, ${endX} ${endY + 50}, ${endX} ${endY + (rect2.height/2)}`;
+                    } else if (conn.curve === 'right') {
+                         d += `C ${startX + 50} ${startY - 50}, ${endX} ${endY + 50}, ${endX} ${endY + (rect2.height/2)}`;
+                    } else {
+                        // Standard smooth vertical curve
+                        const offset = Math.abs(endY - startY) / 2;
+                        d += `C ${startX} ${startY + offset}, ${endX} ${endY - offset}, ${endX} ${endY - (rect2.height/2 * (startY < endY ? 1 : -1))}`;
+                    }
+
+                    // For lateral connections (same Y roughly)
+                    if (Math.abs(startY - endY) < 20) {
+                        d = `M ${startX + (rect1.width/2 * (startX < endX ? 1 : -1))} ${startY} 
+                             C ${startX + Math.abs(endX-startX)/2} ${startY}, ${endX - Math.abs(endX-startX)/2} ${endY}, ${endX - (rect2.width/2 * (startX < endX ? 1 : -1))} ${endY}`;
+                    }
+
+
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    g.setAttribute('class', 'svg-connection');
+                    g.setAttribute('data-step', conn.step);
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('stroke', conn.color);
+                    path.setAttribute('stroke-width', '2');
+                    if (conn.dashed) {
+                         path.setAttribute('stroke-dasharray', '4 4');
+                         path.style.animation = 'none'; // stop animation on structural dashes
+                    }
+                    
+                    const cleanColor = conn.color.replace('#', '');
+                    path.setAttribute('marker-end', `url(#arrow-${cleanColor})`);
+                    
+                    g.appendChild(path);
+
+                    // Add Label
+                    if (conn.label) {
+                        const midX = (startX + endX) / 2;
+                        const midY = (startY + endY) / 2;
+                        
+                        const textBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        
+                        text.setAttribute('x', midX);
+                        text.setAttribute('y', midY);
+                        text.setAttribute('text-anchor', 'middle');
+                        text.setAttribute('dominant-baseline', 'middle');
+                        text.setAttribute('fill', conn.color);
+                        text.setAttribute('font-size', '10px');
+                        text.setAttribute('font-family', 'Inter, sans-serif');
+                        text.setAttribute('font-weight', '600');
+                        text.textContent = conn.label;
+
+                        // Estimate text width for background (rough)
+                        const estimatedWidth = conn.label.length * 6 + 10; 
+                        textBg.setAttribute('x', midX - estimatedWidth/2);
+                        textBg.setAttribute('y', midY - 8);
+                        textBg.setAttribute('width', estimatedWidth);
+                        textBg.setAttribute('height', '16');
+                        textBg.setAttribute('fill', '#ffffff');
+                        textBg.setAttribute('rx', '4');
+
+                        g.appendChild(textBg);
+                        g.appendChild(text);
+                    }
+
+                    svg.appendChild(g);
+                    pathElements.push({ group: g, step: conn.step });
+                });
+            }
+
+            // Initialization
+            // Delay slightly to ensure fonts/layout are rendered
+            setTimeout(() => {
+                drawLines();
+                window.addEventListener('resize', drawLines);
+            }, 100);
+
+            // Interactivity / Highlighting
+            stepItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    const stepId = item.getAttribute('data-step');
+                    container.classList.add('dimmed');
+                    
+                    // Highlight nodes
+                    document.querySelectorAll('.diagram-node').forEach(node => {
+                        const steps = node.getAttribute('data-steps');
+                        if (steps && steps.split(',').includes(stepId)) {
+                            node.classList.add('active');
+                        } else {
+                            node.classList.remove('active');
+                        }
+                    });
+
+                    // Highlight paths
+                    pathElements.forEach(p => {
+                        if (p.step === stepId) {
+                            p.group.classList.add('active');
+                            p.group.style.opacity = '1';
+                        } else {
+                            p.group.classList.remove('active');
+                        }
+                    });
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    container.classList.remove('dimmed');
+                    document.querySelectorAll('.diagram-node').forEach(n => n.classList.remove('active'));
+                    pathElements.forEach(p => {
+                        p.group.classList.remove('active');
+                        p.group.style.opacity = '1';
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
