@@ -633,7 +633,7 @@
         </section>
 
         <!-- Featured Article Card: Verity -->
-        <a href="verity/index.html" class="featured-card" data-category="scf" data-search="verity on-chain supply chain finance capital due value invoice validation">
+        <div class="featured-card" data-category="scf" data-search="verity on-chain supply chain finance capital due value invoice validation" style="cursor: pointer;" onclick="if(!event.target.closest('a')){ window.location.href='verity/index.html'; }">
             <div class="featured-img-area">
                 <span class="featured-img-badge">Flagship Project</span>
                 <div class="featured-abstract-icon">
@@ -646,14 +646,22 @@
                     <span>•</span>
                     <span>12 Min Read</span>
                 </div>
-                <h2>Verity: On-Chain Supply Chain Finance for Capital Due Value</h2>
+                <h2><a href="verity/index.html" style="text-decoration: none; color: inherit;">Verity: On-Chain Supply Chain Finance for Capital Due Value</a></h2>
                 <p>An architectural blueprint that resolves real-world commercial value before releasing capital. Learn how Verity bridges invoice truth, buyer-seller consensus, wallet funding, and settlement execution.</p>
-                <div class="author-box">
-                    <div class="author-avatar" title="Haroël Lee, Ph.D.">HL</div>
-                    <div class="author-name">Dr. Haroël Lee</div>
+                <div class="author-box" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                    <a href="https://github.com/hejunion" target="_blank" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;" class="author-link">
+                        <div class="author-avatar" title="Tørence">TJ</div>
+                        <div class="author-name" style="transition: var(--transition-smooth); display: flex; align-items: center; gap: 4px;">
+                            Tørence <i class="fa-brands fa-github" style="font-size: 0.85rem; opacity: 0.7;"></i>
+                        </div>
+                    </a>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="author-avatar" title="Haroël Lee, Ph.D.">HL</div>
+                        <div class="author-name">Dr. Haroël Lee</div>
+                    </div>
                 </div>
             </div>
-        </a>
+        </div>
 
         <!-- Controls Row: Search & Filters -->
         <div class="controls-row">
