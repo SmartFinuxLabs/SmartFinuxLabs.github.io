@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ILP Peering, Clearing, & Settlement Lifecycle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .node-card { transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .node-card.active { box-shadow: 0 0 0 4px #6366f1, 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #4f46e5; transform: translateY(-2px); }
+        .node-card.trigger-alert { box-shadow: 0 0 0 4px #ef4444, 0 10px 15px -3px rgba(239, 68, 68, 0.3); border-color: #ef4444; animation: shake 0.5s ease-in-out; }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .balance-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s ease; }
+        
+        /* ILP Packet Flow Animation */
+        @keyframes dash-flow { to { stroke-dashoffset: -20; } }
+        .ilp-flow-path { stroke-dasharray: 6, 6; animation: dash-flow 0.5s linear infinite; opacity: 0; transition: opacity 0.3s; }
+        .ilp-flow-path.active { opacity: 1; }
+
+        /* Ledger Funds Movement */
+        @keyframes ledgerTransfer {
+            0% { left: 15%; opacity: 0; transform: scale(0.8); }
+            10% { opacity: 1; transform: scale(1); }
+            80% { left: 80%; opacity: 1; transform: scale(1); }
+            90% { left: 80%; opacity: 0; transform: scale(0.8); }
+            100% { left: 80%; opacity: 0; transform: scale(0.8); }
+        }
+        .ledger-token {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            display: none; z-index: 20;
+        }
+        .ledger-token.transit { display: flex; animation: ledgerTransfer 3s ease-in-out infinite; }
+        .ledger-token.settled { display: flex; left: 80%; opacity: 1; animation: none; transform: translateY(-50%) scale(1); }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden text-slate-800">
+
+    <header class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm z-50 shrink-0">
+        <h1 class="text-2xl font-bold text-slate-900"><i class="fa-solid fa-scale-balanced text-indigo-500 mr-2"></i>Interledger Peering, Clearing & Settling</h1>
+        <p class="text-sm text-slate-600 mt-1">12-Step Lifecycle: High-speed accounting vs. On-chain settlement.</p>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Main Diagram Area -->
+        <main class="flex-1 relative bg-slate-50 overflow-y-auto p-8 flex flex-col items-center">
+            
+            <div class="w-full max-w-5xl relative flex-1 flex flex-col justify-between min-h-[600px]">
+                
+                <!-- SVG Connections -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-10">
+                    <defs>
+                        <marker id="arrow-indigo" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+                            <polygon points="0 0, 6 2, 0 4" fill="#6366f1" />
+                        </marker>
+                    </defs>
+                    <!-- Alice to Bob ILP Flow -->
+                    <path d="M 300 180 L 700 180" stroke="#cbd5e1" stroke-width="4" />
+                    <path d="M 300 180 L 700 180" stroke="#6366f1" stroke-width="4" class="ilp-flow-path" id="ilp-flow" marker-end="url(#arrow-indigo)" />
+                    <text x="500" y="165" text-anchor="middle" class="text-xs font-bold fill-indigo-600 font-mono opacity-0 transition-opacity" id="ilp-label">ILP Packets (Clearing)</text>
+                </svg>
+
+                <!-- Top Row: Connectors & Accounts -->
+                <div class="flex justify-between w-full relative z-20">
+                    
+                    <!-- Alice Node -->
+                    <div class="w-80 node-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col" id="node-alice">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg">A</div>
+                            <div>
+                                <h2 class="font-bold text-slate-800">Alice's Connector</h2>
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest">Debtor / Sender</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Configuration -->
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-200 mb-4">
+                            <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-2">Configuration (For Bob)</h3>
+                            <div class="flex flex-col mb-3">
+                                <div class="flex justify-between text-xs font-mono text-slate-600">
+                                    <span>settlement_threshold:</span> <span class="font-bold text-rose-500">-$100</span>
+                                </div>
+                                <div class="text-[9.5px] text-rose-500/80 italic mt-1 leading-tight"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1 text-[8px]"></i>Debtor's risk level (triggers settlement to avoid being cut off)</div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-600">
+                                <span>settle_to:</span> <span class="font-bold text-indigo-500">$0</span>
+                            </div>
+                        </div>
+
+                        <!-- Internal Ledger -->
+                        <div class="mt-auto">
+                            <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-1">Internal Ledger (Bob's Acct)</h3>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-xs text-slate-500">Balance:</span>
+                                <span class="text-2xl font-bold font-mono transition-colors" id="alice-bal">$0</span>
+                            </div>
+                            <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex justify-end">
+                                <div class="h-full bg-slate-300 balance-fill" id="alice-bar" style="width: 0%;"></div>
+                            </div>
+                            
+                            <!-- Trigger Alert -->
+                            <div id="alice-trigger" class="mt-3 bg-rose-100 text-rose-700 text-xs font-bold p-2 rounded border border-rose-200 text-center hidden">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Risk Level Exceeded! S.E. Activated
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bob Node -->
+                    <div class="w-80 node-card bg-white border border-slate-200 rounded-2xl p-5 flex flex-col" id="node-bob">
+                        <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">B</div>
+                            <div>
+                                <h2 class="font-bold text-slate-800">Bob's Connector</h2>
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest">Creditor / Receiver</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Configuration -->
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-200 mb-4">
+                            <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-2">Configuration (For Alice)</h3>
+                            <div class="flex flex-col mb-3">
+                                <div class="flex justify-between text-xs font-mono text-slate-600">
+                                    <span>maximum_balance:</span> <span class="font-bold text-emerald-500">$1000</span>
+                                </div>
+                                <div class="text-[9.5px] text-emerald-600/80 italic mt-1 leading-tight"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1 text-[8px]"></i>Creditor's credit line extended to Debtor (protects against infinite debt)</div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-600">
+                                <span>settle_to:</span> <span class="font-bold text-indigo-500">$0</span>
+                            </div>
+                        </div>
+
+                        <!-- Internal Ledger -->
+                        <div class="mt-auto">
+                            <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-1">Internal Ledger (Alice's Acct)</h3>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-xs text-slate-500">Balance:</span>
+                                <span class="text-2xl font-bold font-mono transition-colors" id="bob-bal">$0</span>
+                            </div>
+                            <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-300 balance-fill" id="bob-bar" style="width: 0%;"></div>
+                            </div>
+                            
+                            <!-- Credit Alert -->
+                            <div id="bob-credit" class="mt-3 bg-emerald-100 text-emerald-700 text-xs font-bold p-2 rounded border border-emerald-200 text-center hidden">
+                                <i class="fa-solid fa-check mr-1"></i> Funds Verified! Crediting Account.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Row: Settlement Ledger -->
+                <div class="w-full relative z-20 mt-12 mb-6">
+                    <div class="w-full h-24 bg-slate-800 rounded-2xl border-2 border-slate-700 flex flex-col items-center justify-center text-slate-300 relative shadow-inner overflow-hidden node-card" id="node-ledger">
+                        <div class="font-bold uppercase tracking-widest text-sm text-slate-200"><i class="fa-brands fa-ethereum mr-2"></i>Core Settlement Ledger</div>
+                        <div class="text-[10px] font-mono text-slate-400 mt-1">Slow, irrevocable on-chain transfers</div>
+                        
+                        <!-- Animated Funds Token -->
+                        <div class="ledger-token bg-emerald-500 text-white font-bold font-mono text-sm px-4 py-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] border-2 border-emerald-300" id="funds-token">
+                            <i class="fa-solid fa-money-bill-transfer mr-2"></i>$110
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Sidebar Steps Control -->
+        <aside class="w-[380px] bg-white border-l border-slate-200 shadow-[-4px_0_24px_rgba(0,0,0,0.02)] flex flex-col z-30 shrink-0">
+            <div class="p-6 border-b border-slate-100 bg-slate-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="step-counter" class="text-xs font-bold text-slate-500 uppercase tracking-widest bg-white px-3 py-1 rounded border border-slate-200 shadow-sm">Step 1/12</span>
+                </div>
+                <h2 class="text-lg font-bold text-indigo-600 mb-2" id="step-title">1. Peering Established</h2>
+                <p class="text-sm text-slate-600 leading-relaxed" id="step-desc">Alice and Bob establish a peering relationship. Internal ledger balances are set to $0.</p>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-6 bg-white">
+                <div class="space-y-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 class="text-[10px] font-bold uppercase text-slate-400 mb-2">System Status</h4>
+                        <ul class="text-xs space-y-2 font-mono text-slate-600">
+                            <li class="flex justify-between"><span>Phase:</span> <strong id="status-phase" class="text-slate-800">Setup</strong></li>
+                            <li class="flex justify-between"><span>Active Component:</span> <strong id="status-comp" class="text-slate-800">None</strong></li>
+                            <li class="flex justify-between"><span>Trigger Condition:</span> <strong id="status-trig" class="text-slate-800">Safe</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-slate-200 bg-white grid grid-cols-2 gap-3">
+                <button id="btn-prev" onclick="changeStep(-1)" class="py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Prev
+                </button>
+                <button id="btn-next" onclick="changeStep(1)" class="py-3 rounded-xl font-bold text-sm bg-indigo-600 text-white hover:bg-indigo-700 shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const steps = [
+            { 
+                t: "1. Peering Established", 
+                desc: "Alice and Bob establish a peering relationship. Their independent internal accounting ledgers are set to $0.", 
+                aBal: 0, bBal: 0, activeNodes: ['node-alice', 'node-bob'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Setup', comp: 'Internal Ledgers', trig: 'Safe'
+            },
+            { 
+                t: "2. Alice clears $50", 
+                desc: "Alice routes a high-speed $50 packet to Bob. Alice's balance for Bob drops to -$50. Bob's balance for Alice increases to $50.", 
+                aBal: -50, bBal: 50, activeNodes: ['node-alice', 'node-bob'], 
+                ilpFlow: true, ledgerState: 'hidden', phase: 'Clearing', comp: 'Accounting Systems', trig: 'Safe'
+            },
+            { 
+                t: "3. Alice clears $40", 
+                desc: "Alice routes a $40 packet to Bob. Alice's balance hits -$90. Bob's balance hits $90.", 
+                aBal: -90, bBal: 90, activeNodes: ['node-alice', 'node-bob'], 
+                ilpFlow: true, ledgerState: 'hidden', phase: 'Clearing', comp: 'Accounting Systems', trig: 'Approaching Threshold'
+            },
+            { 
+                t: "4. Alice clears $20", 
+                desc: "Alice routes a $20 packet. Alice's balance drops to -$110. Bob's balance hits $110.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-alice', 'node-bob'], 
+                ilpFlow: true, ledgerState: 'hidden', phase: 'Clearing', comp: 'Accounting Systems', trig: 'Threshold Breached!'
+            },
+            { 
+                t: "5. Settlement Triggered", 
+                desc: "Trigger Condition Met: Alice's balance (-$110) has crossed her settlement_threshold risk level (-$100). Her Settlement Engine is immediately activated to clear the debt before Bob cuts off her credit.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-alice', 'node-alice.trigger-alert'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Settlement Prep', comp: 'Alice Settlement Engine', trig: 'Triggered'
+            },
+            { 
+                t: "6. Alice Prepares Transfer", 
+                desc: "Alice's Settlement Engine calculates the required amount to reach her settle_to configuration ($0). Amount to settle = $110.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-alice'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Settlement Prep', comp: 'Alice Settlement Engine', trig: 'Active'
+            },
+            { 
+                t: "7. Ledger Transfer Initiated", 
+                desc: "Alice initiates a $110 transfer on the underlying Core Ledger (e.g. XRP, Ethereum, Bank Rail) addressed to Bob.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-alice', 'node-ledger'], 
+                ilpFlow: false, ledgerState: 'transit', phase: 'Settling', comp: 'Core Ledger', trig: 'Executing'
+            },
+            { 
+                t: "8. Funds in Transit", 
+                desc: "The $110 is physically processing on the Core Ledger, awaiting block confirmation or finality.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-ledger'], 
+                ilpFlow: false, ledgerState: 'transit', phase: 'Settling', comp: 'Core Ledger', trig: 'Executing'
+            },
+            { 
+                t: "9. Ledger Finalization", 
+                desc: "The Core Ledger confirms the transaction. Bob's Settlement Engine observes the incoming $110 and verifies the cryptographic proof.", 
+                aBal: -110, bBal: 110, activeNodes: ['node-bob', 'node-ledger'], 
+                ilpFlow: false, ledgerState: 'settled', phase: 'Settling', comp: 'Bob Settlement Engine', trig: 'Resolving'
+            },
+            { 
+                t: "10. Bob Credits Account", 
+                desc: "Bob's Settlement Engine informs his Accounting System via HTTP API. Bob credits Alice's peering account by $110.", 
+                aBal: -110, bBal: 0, activeNodes: ['node-bob', 'node-bob.credit'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Reconciliation', comp: 'Bob Accounting System', trig: 'Resolved'
+            },
+            { 
+                t: "11. Alice Updates Account", 
+                desc: "Alice confirms the settlement succeeded and resets her internal balance for Bob back to the settle_to amount ($0).", 
+                aBal: 0, bBal: 0, activeNodes: ['node-alice'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Reconciliation', comp: 'Alice Accounting System', trig: 'Safe'
+            },
+            { 
+                t: "12. Clearing Resumes", 
+                desc: "Both peering accounts are reset to $0. Alice's credit line is restored, and high-speed clearing of ILP packets resumes seamlessly.", 
+                aBal: 0, bBal: 0, activeNodes: ['node-alice', 'node-bob'], 
+                ilpFlow: false, ledgerState: 'hidden', phase: 'Clearing', comp: 'Accounting Systems', trig: 'Safe'
+            }
+        ];
+
+        let currentStep = 0;
+
+        function changeStep(dir) {
+            currentStep += dir;
+            if (currentStep < 0) currentStep = 0;
+            if (currentStep >= steps.length) currentStep = steps.length - 1;
+            renderStep();
+        }
+
+        function renderStep() {
+            const data = steps[currentStep];
+
+            // 1. Text & UI Updates
+            document.getElementById('step-counter').innerText = `Step ${currentStep + 1}/12`;
+            document.getElementById('step-title').innerText = data.t;
+            document.getElementById('step-desc').innerText = data.desc;
+            
+            document.getElementById('status-phase').innerText = data.phase;
+            document.getElementById('status-comp').innerText = data.comp;
+            document.getElementById('status-trig').innerText = data.trig;
+
+            // 2. Balance Numbers & Colors
+            const aVal = document.getElementById('alice-bal');
+            const bVal = document.getElementById('bob-bal');
+            
+            aVal.innerText = data.aBal === 0 ? '$0' : `-$${Math.abs(data.aBal)}`;
+            bVal.innerText = data.bBal === 0 ? '$0' : `+$${data.bBal}`;
+
+            // Alice color logic (Red when approaching/hitting -100)
+            if (data.aBal <= -100) { aVal.className = 'text-2xl font-bold font-mono transition-colors text-rose-600'; }
+            else if (data.aBal < 0) { aVal.className = 'text-2xl font-bold font-mono transition-colors text-rose-400'; }
+            else { aVal.className = 'text-2xl font-bold font-mono transition-colors text-slate-800'; }
+
+            // Bob color logic (Green when receiving)
+            if (data.bBal > 0) { bVal.className = 'text-2xl font-bold font-mono transition-colors text-emerald-600'; }
+            else { bVal.className = 'text-2xl font-bold font-mono transition-colors text-slate-800'; }
+
+            // 3. Balance Bars (Max scaled to 150 for visual headroom)
+            const maxScale = 150;
+            const aBar = document.getElementById('alice-bar');
+            const bBar = document.getElementById('bob-bar');
+            
+            aBar.style.width = `${(Math.abs(data.aBal) / maxScale) * 100}%`;
+            bBar.style.width = `${(Math.abs(data.bBal) / maxScale) * 100}%`;
+            
+            aBar.className = `h-full balance-fill ${data.aBal <= -100 ? 'bg-rose-500' : 'bg-rose-300'}`;
+            bBar.className = `h-full balance-fill ${data.bBal > 0 ? 'bg-emerald-400' : 'bg-slate-300'}`;
+
+            // 4. Highlight Active Nodes & Triggers
+            document.querySelectorAll('.node-card').forEach(n => { n.classList.remove('active', 'trigger-alert'); });
+            document.getElementById('alice-trigger').classList.add('hidden');
+            document.getElementById('bob-credit').classList.add('hidden');
+
+            data.activeNodes.forEach(nodeStr => {
+                if(nodeStr === 'node-alice.trigger-alert') {
+                    document.getElementById('node-alice').classList.add('trigger-alert');
+                    document.getElementById('alice-trigger').classList.remove('hidden');
+                } else if(nodeStr === 'node-bob.credit') {
+                    document.getElementById('node-bob').classList.add('active');
+                    document.getElementById('bob-credit').classList.remove('hidden');
+                } else {
+                    const el = document.getElementById(nodeStr);
+                    if(el) el.classList.add('active');
+                }
+            });
+
+            // 5. ILP Packet Flow Animation
+            const ilpFlow = document.getElementById('ilp-flow');
+            const ilpLabel = document.getElementById('ilp-label');
+            if(data.ilpFlow) {
+                ilpFlow.classList.add('active');
+                ilpLabel.classList.replace('opacity-0', 'opacity-100');
+            } else {
+                ilpFlow.classList.remove('active');
+                ilpLabel.classList.replace('opacity-100', 'opacity-0');
+            }
+
+            // 6. Ledger Funds Animation
+            const token = document.getElementById('funds-token');
+            token.className = `ledger-token bg-emerald-500 text-white font-bold font-mono text-sm px-4 py-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] border-2 border-emerald-300`;
+            if (data.ledgerState === 'transit') {
+                token.classList.add('transit');
+            } else if (data.ledgerState === 'settled') {
+                token.classList.add('settled');
+            } else {
+                token.style.display = 'none';
+            }
+
+            // 7. Button States
+            document.getElementById('btn-prev').disabled = currentStep === 0;
+            document.getElementById('btn-next').disabled = currentStep === steps.length - 1;
+        }
+
+        // Initialize
+        renderStep();
+    </script>
+</body>
+</html>

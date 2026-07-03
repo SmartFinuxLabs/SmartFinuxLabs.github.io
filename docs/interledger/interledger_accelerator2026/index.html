@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcCommerce Accelerator Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP (Dark FinTech Theme) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0f172a; /* slate-900 */
+            display: grid;
+            gap: 40px;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            padding: 40px 0;
+            place-items: center;
+        }
+
+        /* 1.1 SLIDE CONTAINER */
+        .slide-container {
+            align-items: center;
+            background-color: #1e293b; /* slate-800 */
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+            width: 1280px;
+        }
+
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.05), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(52, 211, 153, 0.05), transparent 50%);
+            z-index: 0;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. CONSISTENT TYPOGRAPHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #f8fafc; /* slate-50 */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        .slide-container p,
+        .slide-container li {
+            color: #cbd5e1; /* slate-300 */
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .slide-container h1 { font-size: 64px; letter-spacing: -1px; line-height: 1.1; }
+        .slide-container h2.slide-title { font-size: 42px; margin-bottom: 40px; text-align: left; width: 100%; color: #f8fafc; }
+        .slide-container h3 { font-size: 24px; margin-bottom: 16px; color: #38bdf8; /* cyan-400 */ }
+        .slide-container .subtitle { font-size: 24px; color: #94a3b8; /* slate-400 */ font-weight: 400; margin-top: 20px; }
+        
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* 3. LAYOUT DEFINITIONS */
+        
+        /* Full Background Image */
+        .full-bg-image {
+            background-position: center;
+            background-size: cover;
+            padding: 80px;
+            justify-content: flex-end; /* Align content to bottom */
+            align-items: flex-start;
+        }
+        
+        .full-bg-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 100%);
+            z-index: 0;
+        }
+
+        .full-bg-image .content-overlay {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .full-bg-image h1 { color: #ffffff; text-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .full-bg-image .subtitle { color: #38bdf8; font-weight: 500; }
+
+        /* Bleed Image Right */
+        .bleed-image-layout {
+            align-items: start;
+            display: grid;
+            gap: 60px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+        }
+        .bleed-image-layout > .content-container { padding: 80px 0 80px 80px; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .bleed-image-layout > .image-container { height: 100%; overflow: hidden; width: 100%; }
+        .bleed-image-layout img.bleed-image-side { display: block; height: 720px; object-fit: cover; object-position: center; width: 100%; }
+        .bleed-text-side p { margin-bottom: 24px; font-size: 20px; }
+
+        /* Timeline Layout */
+        .timeline-layout {
+            align-items: stretch;
+            display: flex;
+            height: stretch;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+            margin-top: 40px;
+        }
+        .timeline-layout .timeline-line {
+            background: linear-gradient(90deg, #38bdf8, #34d399);
+            height: 4px; left: 0; position: absolute; top: 50%; transform: translateY(-2px); width: 100%; z-index: 0;
+            border-radius: 2px;
+        }
+        .timeline-item { position: relative; text-align: center; width: 23%; }
+        .timeline-item::after {
+            background-color: #0f172a; border-radius: 50%; border: 4px solid #38bdf8;
+            content: ''; height: 24px; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 24px; z-index: 1;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+        }
+        .timeline-item .content-wrapper { left: 0; position: absolute; width: 100%; padding: 0 10px; }
+        .timeline-item:nth-child(odd) .content-wrapper { bottom: 50%; margin-bottom: 40px; }
+        .timeline-item:nth-child(even) .content-wrapper { margin-top: 40px; top: 50%; }
+        .timeline-item h3 { color: #f8fafc; font-size: 22px; margin-bottom: 8px; }
+        .timeline-item p { font-size: 16px; color: #94a3b8; line-height: 1.4; }
+        .timeline-item .month-badge { 
+            display: inline-block; background: rgba(56, 189, 248, 0.1); color: #38bdf8; 
+            padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 12px; border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Tiled Text With Icons */
+        .tiled-content {
+            align-items: stretch;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        .tile {
+            background-color: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 40px 30px;
+            text-align: left;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .tile:hover { transform: translateY(-5px); border-color: #475569; }
+        .tile .icon {
+            align-items: center; justify-content: center; display: flex;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(52, 211, 153, 0.1));
+            color: #38bdf8; font-size: 32px; margin-bottom: 24px;
+            width: 64px; height: 64px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .tile:nth-child(2) .icon { color: #34d399; border-color: rgba(52, 211, 153, 0.2); }
+        .tile:nth-child(3) .icon { color: #f43f5e; border-color: rgba(244, 63, 94, 0.2); background: rgba(244, 63, 94, 0.05); }
+        .tile:nth-child(3) h3 { color: #f43f5e; }
+        .tile h3 { font-size: 24px; color: #f8fafc; margin-bottom: 16px; }
+        .tile p { font-size: 17px; color: #cbd5e1; }
+        .tile strong { color: #f8fafc; font-weight: 600; }
+
+        /* Budget Table Styles */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: rgba(30, 41, 59, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .budget-table th, .budget-table td {
+            border-bottom: 1px solid #334155;
+            padding: 18px 24px;
+            text-align: left;
+        }
+        .budget-table th {
+            color: #38bdf8;
+            font-weight: 600;
+            font-size: 18px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border-bottom: 2px solid #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .budget-table td {
+            font-size: 16px;
+            color: #cbd5e1;
+        }
+        .budget-table td:nth-child(1) {
+            font-weight: 500;
+            color: #f8fafc;
+            width: 30%;
+        }
+        .budget-table td:nth-child(2) {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            color: #34d399;
+            width: 20%;
+        }
+        .budget-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .budget-table tbody tr:hover {
+            background-color: rgba(51, 65, 85, 0.4);
+            transition: background-color 0.2s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title Slide (Full Background Image) -->
+    <div class="slide-container full-bg-image" id="slide1" style="background-image: url('http://googleusercontent.com/image_collection/image_retrieval/18355473969583534627');">
+        <div class="content-overlay">
+            <h1>ArcCommerce</h1>
+            <p class="subtitle" style="font-size: 32px; margin-top: 10px;">4-Month Accelerator Roadmap</p>
+            <p style="margin-top: 20px; font-size: 20px; color: #cbd5e1; max-width: 600px;">
+                Proof of Concept Implementation: Integrating AP/AR, Autonomous Netting, ILP APIs, and Stablecoin Settlement.
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Executive Summary (Bleed Image Right) -->
+    <div class="slide-container bleed-image-layout" id="slide2">
+        <div class="content-container">
+            <h2 class="slide-title">Program Objective</h2>
+            <div class="content-area bleed-text-side">
+                <p>
+                    We are building a deterministic on-chain accounting and netting system to bridge the $2T global trade finance gap.
+                </p>
+                <p>
+                    This 4-month timeline outlines our path to proving that autonomous netting and factoring can be safely deployed over open, interoperable networks using the Interledger Protocol (ILP).
+                </p>
+                <p style="color: #38bdf8; font-weight: 500; margin-top: 20px;">
+                    <i class="fa-solid fa-bullseye" style="margin-right: 10px;"></i> Goal: End-to-End Trade Finance PoC
+                </p>
+            </div>
+        </div>
+        <div class="image-container">
+            <img class="bleed-image-side" src="http://googleusercontent.com/image_collection/image_retrieval/14616386788720007530" alt="Modern sleek dashboard interface showing financial data, dark mode, abstract">
+        </div>
+    </div>
+
+    <!-- Slide 3: Timeline Overview -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">Implementation Timeline</h2>
+        <div class="content-area">
+            <div class="timeline-layout">
+                <div class="timeline-line"></div>
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <span class="month-badge">Month 1</span>
+                        <h3>Foundation & Accounting</h3>
+                        <p>Invoice Verification, AR/AP Ledger State Machine</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <span class="month-badge">Month 2</span>
+                        <h3>Netting & Open Payments</h3>
+                        <p>Netting Engine Logic, ILP API & peer.settle proxying</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <span class="month-badge">Month 3</span>
+                        <h3>Stablecoin Settlement</h3>
+                        <p>Settlement Engine decoupling, CDSC Adoption</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <span class="month-badge">Month 4</span>
+                        <h3>Hardening & Demo</h3>
+                        <p>Stress Testing, Edge Case Mitigation, Final Demo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Month 1 Details -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">Month 1: Foundation & Accounting</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h3>Key Activities</h3>
+                    <p>Develop <strong>Invoice Verification</strong> workflows within the core platform. Establish programmable <strong>Account Receivable (AR)</strong> and <strong>Account Payable (AP)</strong> ledger structures to mathematically represent trade debt.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-box-open"></i></div>
+                    <h3>Deliverables</h3>
+                    <p>A functional off-chain accounting state machine. It will accurately map trade liabilities and assets between counterparties without prematurely exposing metadata to public on-chain networks.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Risk & Mitigation</h3>
+                    <p><strong>Risk:</strong> State divergence between buyer and supplier accounting nodes.<br><br><strong>Mitigation:</strong> Implement strict schema validation and double-entry transit journals to ensure cryptographic ledger alignment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Month 2 Details -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Month 2: Netting & Open Payments</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3>Key Activities</h3>
+                    <p>Build the <strong>Netting Engine</strong> logic to autonomously aggregate AP/AR balances. Integrate <strong>Open Payment / ILP APIs</strong> to enable cross-node message proxying and intent signaling.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-satellite-dish"></i></div>
+                    <h3>Deliverables</h3>
+                    <p>An active ILP Router implementation capable of processing <code>peer.settle</code> packets. This establishes the critical communication layer to sync settlement intents between disparate accounting nodes.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3>Risk & Mitigation</h3>
+                    <p><strong>Risk:</strong> Complex ILP routing failures and dropped packets during netting.<br><br><strong>Mitigation:</strong> Keep node configurations simple via direct peering for the PoC; implement exponential backoff for all API retries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Month 3 Details -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Month 3: Stablecoin Settlement</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-brands fa-ethereum"></i></div>
+                    <h3>Key Activities</h3>
+                    <p>Connect the abstract Settlement Engine to a live testnet ledger. Implement <strong>Stablecoin (CDSC) adoption</strong> mechanisms to handle the irrevocable, cross-border transfer of value.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                    <h3>Deliverables</h3>
+                    <p>An end-to-end automated settlement process where an ILP Fulfill packet successfully triggers a programmatic stablecoin transaction, clearing the off-chain AP/AR debt.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-stopwatch"></i></div>
+                    <h3>Risk & Mitigation</h3>
+                    <p><strong>Risk:</strong> Underlying ledger latency causing ILP packet timeouts.<br><br><strong>Mitigation:</strong> Strictly decouple the Settlement Engine from the Accounting Node; utilize asynchronous webhook listeners for ledger finality.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Month 4 Details -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">Month 4: Hardening & Demo</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-flask-vial"></i></div>
+                    <h3>Key Activities</h3>
+                    <p>Conduct rigorous end-to-end scenario testing covering the full lifecycle (Invoice -> Netting -> ILP -> CDSC). Polish the user interface and prepare the final demo script.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-presentation-screen"></i></div>
+                    <h3>Deliverables</h3>
+                    <p>A production-ready Proof of Concept demonstrating seamless, autonomous supply chain factoring and netting to accelerator stakeholders and potential investors.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-bug"></i></div>
+                    <h3>Risk & Mitigation</h3>
+                    <p>Risk: Unhandled edge cases and logical loops in the autonomous netting algorithm.<br><br>Mitigation: Execute comprehensive unit test coverage and deliberately restrict the PoC scope to predefined happy and sad paths.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Budget Plan -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Budget Plan (4-Month Accelerator)</h2>
+        <div class="content-area">
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>ILF-Requested Expenses</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Personnel / Salaries</td>
+                        <td>$ 48,000</td>
+                        <td>Compensation for core development team (Lead Engineer, Backend Dev, and QA Specialist) crucial for building the AP/AR Ledger and executing comprehensive unit test coverage.</td>
+                    </tr>
+                    <tr>
+                        <td>Technology & Tools</td>
+                        <td>$ 6,500</td>
+                        <td>Hardware security modules (HSM) for key management, dedicated testing devices, and robust unit testing frameworks to mitigate edge cases in the netting algorithm.</td>
+                    </tr>
+                    <tr>
+                        <td>Software / License / Hosting / Subscriptions</td>
+                        <td>$ 4,500</td>
+                        <td>Cloud infrastructure (AWS/GCP) for hosting isolated ILP test nodes, CI/CD pipeline subscriptions for automated testing, and developer tool licenses.</td>
+                    </tr>
+                    <tr>
+                        <td>Marketing & Outreach</td>
+                        <td>$ 3,000</td>
+                        <td>Creation of demo materials, explainer videos, and community engagement assets to showcase the end-to-end PoC to stakeholders.</td>
+                    </tr>
+                    <tr>
+                        <td>Project Materials</td>
+                        <td>$ 1,500</td>
+                        <td>UI/UX design assets, technical architecture diagramming tools, and presentation software for the final accelerator demo.</td>
+                    </tr>
+                    <tr>
+                        <td>Miscellaneous / Contingency</td>
+                        <td>$ 5,000</td>
+                        <td>Buffer allocated for unexpected API integration hurdles, extended debugging sessions, or additional infrastructure needs during ILP routing.</td>
+                    </tr>
+                    <tr>
+                        <td>Other expenses</td>
+                        <td>$ 0</td>
+                        <td>No additional expenses anticipated at this phase.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
+```

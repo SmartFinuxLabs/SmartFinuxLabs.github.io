@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interledger Space - SmartFinux Labs</title>
+    <meta name="description" content="Interactive navigation hub for Interledger Protocol (ILP) architecture, clearing mechanics, settlement engines, and case studies by SmartFinux Labs.">
+    
+    <!-- Modern Typography & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Modern Design System & Variables */
+        :root {
+            --bg-deep: #060913;
+            --bg-surface: rgba(15, 22, 42, 0.6);
+            --bg-surface-hover: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --secondary: #06b6d4; /* Cyan */
+            --secondary-glow: rgba(6, 182, 212, 0.15);
+            --accent: #10b981; /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --violet: #8b5cf6;
+            --violet-glow: rgba(139, 92, 246, 0.15);
+            
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Canvas & Blobs */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            animation: float-blob 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: 10%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            animation-duration: 25s;
+        }
+
+        .blob-2 {
+            bottom: 10%;
+            right: 5%;
+            width: 600px;
+            height: 600px;
+            background: var(--violet);
+            animation-duration: 30s;
+        }
+
+        .blob-3 {
+            top: 40%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            animation-duration: 20s;
+        }
+
+        @keyframes float-blob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(80px, 50px) scale(1.1); }
+            100% { transform: translate(-40px, -80px) scale(0.95); }
+        }
+
+        /* Container Layout */
+        .wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        /* Top Header */
+        header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            animation: pulse-glow 3s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.7); }
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Live Network Status Bar */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 32px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Search & Filter Controls */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 48px;
+            background: rgba(15, 22, 42, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        @media (min-width: 768px) {
+            .controls-panel {
+                flex-direction: row;
+                align-items: center;
+                justify-content: justify;
+            }
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: var(--text-muted);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px var(--primary-glow);
+        }
+
+        /* Blog Navigation Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 30px;
+        }
+
+        /* Cards Styling */
+        .blog-card {
+            position: relative;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--hover-color, var(--border-hover));
+            box-shadow: 0 20px 40px var(--shadow-glow, var(--primary-glow));
+            background: var(--bg-surface-hover);
+        }
+
+        .blog-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .card-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 100px;
+            background: var(--badge-bg, rgba(99, 102, 241, 0.1));
+            color: var(--badge-color, var(--primary));
+            border: 1px solid var(--badge-border, rgba(99, 102, 241, 0.2));
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--icon-bg, rgba(99, 102, 241, 0.05));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-color, var(--primary));
+            border: 1px solid var(--icon-border, rgba(99, 102, 241, 0.1));
+            font-size: 1.25rem;
+            transition: var(--transition-smooth);
+        }
+
+        .blog-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: #fff;
+            transition: var(--transition-smooth);
+        }
+
+        .blog-card:hover .card-body h3 {
+            color: var(--hover-text, var(--primary));
+        }
+
+        .card-body p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .read-more {
+            font-family: var(--font-body);
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+        }
+
+        .read-more i {
+            transition: var(--transition-smooth);
+        }
+
+        .blog-card:hover .read-more i {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 120px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        /* Specific Hover Themes for Visual Distinction */
+        .theme-indigo {
+            --hover-color: var(--primary);
+            --shadow-glow: var(--primary-glow);
+            --hover-text: var(--primary);
+            --badge-bg: rgba(99, 102, 241, 0.1);
+            --badge-color: #818cf8;
+            --badge-border: rgba(99, 102, 241, 0.2);
+            --icon-bg: rgba(99, 102, 241, 0.05);
+            --icon-color: #818cf8;
+            --icon-border: rgba(99, 102, 241, 0.1);
+        }
+
+        .theme-cyan {
+            --hover-color: var(--secondary);
+            --shadow-glow: var(--secondary-glow);
+            --hover-text: var(--secondary);
+            --badge-bg: rgba(6, 182, 212, 0.1);
+            --badge-color: #22d3ee;
+            --badge-border: rgba(6, 182, 212, 0.2);
+            --icon-bg: rgba(6, 182, 212, 0.05);
+            --icon-color: #22d3ee;
+            --icon-border: rgba(6, 182, 212, 0.1);
+        }
+
+        .theme-emerald {
+            --hover-color: var(--accent);
+            --shadow-glow: var(--accent-glow);
+            --hover-text: var(--accent);
+            --badge-bg: rgba(16, 185, 129, 0.1);
+            --badge-color: #34d399;
+            --badge-border: rgba(16, 185, 129, 0.2);
+            --icon-bg: rgba(16, 185, 129, 0.05);
+            --icon-color: #34d399;
+            --icon-border: rgba(16, 185, 129, 0.1);
+        }
+
+        .theme-violet {
+            --hover-color: var(--violet);
+            --shadow-glow: var(--violet-glow);
+            --hover-text: var(--violet);
+            --badge-bg: rgba(139, 92, 246, 0.1);
+            --badge-color: #a78bfa;
+            --badge-border: rgba(139, 92, 246, 0.2);
+            --icon-bg: rgba(139, 92, 246, 0.05);
+            --icon-color: #a78bfa;
+            --icon-border: rgba(139, 92, 246, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas Background for Interactive Network Connections -->
+    <canvas id="canvas-bg"></canvas>
+
+    <!-- Floating Background Shapes -->
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <div class="wrapper">
+        <header>
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-network-wired text-white" style="font-size: 14px; color: #fff;"></i>
+                </div>
+                <span class="logo-text">SmartFinux Labs</span>
+            </div>
+            <h1>Interledger Portal</h1>
+            <p class="subtitle">An educational framework and visual playground exploring value movement, peering, clearing, and multi-ledger settlement mechanics.</p>
+            
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-dot"></span>
+                    <span>ILP Network Online</span>
+                </div>
+                <span>•</span>
+                <div>10 Modules Available</div>
+            </div>
+        </header>
+
+        <!-- Filter and Search controls -->
+        <section class="controls-panel">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Search architecture, settlement engines, flow models...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Modules</button>
+                <button class="filter-btn" data-filter="learning-1">Core Learning</button>
+                <button class="filter-btn" data-filter="learning-2">Settlement Flows</button>
+                <button class="filter-btn" data-filter="cases">Case Studies & Roadmap</button>
+            </div>
+        </section>
+
+        <!-- Navigation Grid -->
+        <main class="blog-grid" id="modules-grid">
+            
+            <!-- Card 1 -->
+            <a href="interledger_learning2026/1_interledger_protocol_architecture.html" class="blog-card theme-indigo" data-category="learning-1">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Module 01</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-circle-nodes"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>ILP Protocol Architecture</h3>
+                        <p>Discover packet-routing concepts, cryptographic preimages, and how Senders, Connectors, and Receivers securely move value.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>10 Min Read • Interactive</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 2 -->
+            <a href="interledger_learning2026/2_interledger_protocol_stack_architecture.html" class="blog-card theme-indigo" data-category="learning-1">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Module 02</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>ILP Stack Architecture</h3>
+                        <p>Analyze layering analogous to the TCP/IP stack. Understand the Application, Transport, Interledger, and Ledger layers.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>8 Min Read • Interactive</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="interledger_learning2026/3_ilp_clearing_and_settlement_architecture.html" class="blog-card theme-indigo" data-category="learning-1">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Module 03</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Clearing & Settlement</h3>
+                        <p>Examine the relationship between trust lines, balance trackers, clearing, and the eventual settling of peer obligations.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>12 Min Read • Interactive</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 4 -->
+            <a href="interledger_learning2026/4_settlement_engines_architecture.html" class="blog-card theme-indigo" data-category="learning-1">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Module 04</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Settlement Engines</h3>
+                        <p>Deep dive into out-of-band settlement engine design. Learn how assets are transferred across underlying ledgers dynamically.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>11 Min Read • Interactive</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 5 -->
+            <a href="interledger_learning2026/index.html" class="blog-card theme-violet" data-category="learning-1">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Portal</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Core Learning Guide</h3>
+                        <p>The centralized educational roadmap combining all four foundational modules into a cohesive structured curriculum.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Index Page</span>
+                    <span class="read-more">Open Portal <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 6 -->
+            <a href="interledger_learning2026_02/alice_and_bob_settlement_example-1.html" class="blog-card theme-cyan" data-category="learning-2">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Flow 01</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Alice & Bob Settlement</h3>
+                        <p>Walk through a real-world scenario of clearing and settling peer-to-peer relationships using localized token assets.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Interactive Simulation</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 7 -->
+            <a href="interledger_learning2026_02/ilp_settlement_mechanics.html" class="blog-card theme-cyan" data-category="learning-2">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Flow 02</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>ILP Peering & Clearing</h3>
+                        <p>Visualize how ledger balances update as packets move, and how thresholds trigger settlement engine cycles.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Interactive Simulation</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 8 -->
+            <a href="interledger_learning2026_02/interledger_peering_clearing_and_settlement_flow-2.html" class="blog-card theme-cyan" data-category="learning-2">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Flow 03</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-diagram-project"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Clearing Lifecycle</h3>
+                        <p>Detailed process representation of the step-by-step handshake between peer accounting systems during clearing.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Interactive Simulation</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 9 -->
+            <a href="interledger_learning2026_02/open_payments_animated_ase_collaboration.html" class="blog-card theme-cyan" data-category="learning-2">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Flow 04</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Open Payments + ASE</h3>
+                        <p>Explore collaboration between Open Payments API endpoints and the Autonomous Settlement Engine (ASE) layer.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Interactive Simulation</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 10 -->
+            <a href="cases/universalized_token_logistics_open_account_settlement-1.html" class="blog-card theme-emerald" data-category="cases">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Case Study</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-truck-ramp-box"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Universalized Token Logistics</h3>
+                        <p>A practical case study exploring open account settlement mechanisms applied directly to global logistics & supply chain finance.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Case Overview</span>
+                    <span class="read-more">Launch Flow <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 11 -->
+            <a href="interledger_accelerator2026/index.html" class="blog-card theme-emerald" data-category="cases">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Roadmap</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-map"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>ArcCommerce Accelerator Roadmap</h3>
+                        <p>Explore the strategic timelines, upcoming integrations, and roadmap metrics for the ArcCommerce initiative.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Milestones View</span>
+                    <span class="read-more">Open Roadmap <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2026 SmartFinux Labs. All rights reserved. Go back to <a href="../index.html">SmartFinux Labs Home</a>.</p>
+        </footer>
+    </div>
+
+    <!-- Script for Live Search, Filtering, and Canvas Network Animation -->
+    <script>
+        // 1. Interactive Canvas Network Animation
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Particle configuration representing financial nodes/packets
+        const particleCount = 45;
+        const particles = [];
+        const colors = ['#6366f1', '#06b6d4', '#8b5cf6', '#10b981'];
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.radius = Math.random() * 2 + 1.5;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.pulseSpeed = Math.random() * 0.02 + 0.005;
+                this.pulseVal = Math.random();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.pulseVal += this.pulseSpeed;
+
+                // Bounce off boundaries slightly
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                const opacity = 0.15 + Math.sin(this.pulseVal) * 0.1;
+                ctx.arc(this.x, this.y, this.radius + Math.sin(this.pulseVal) * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = opacity;
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Draw connections
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 180) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        // Fades line based on distance
+                        const opacity = (1 - dist / 180) * 0.08;
+                        ctx.strokeStyle = '#fff';
+                        ctx.globalAlpha = opacity;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            drawConnections();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // 2. Filter & Search Functionality
+        const searchInput = document.getElementById('search-input');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.blog-card');
+
+        function filterAndSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const category = card.getAttribute('data-category');
+
+                const matchesSearch = title.includes(query) || desc.includes(query);
+                const matchesFilter = activeFilter === 'all' || category === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'flex';
+                    // Smooth entrance
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                }
+            });
+        }
+
+        // Bind filter button click events
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterAndSearch();
+            });
+        });
+
+        // Bind search input event
+        searchInput.addEventListener('input', filterAndSearch);
+    </script>
+</body>
+</html>

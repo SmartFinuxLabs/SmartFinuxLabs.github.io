@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universalized Token Logistics (Open Account Settlement)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; 
+            color: #f8fafc;
+            overflow: hidden;
+        }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* General Node Styling */
+        .diagram-node {
+            position: absolute;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* T-Account Styling */
+        .t-account {
+            position: relative;
+            width: 70px;
+            height: 40px;
+            border-top: 2px solid #64748b;
+            margin: 0 auto;
+        }
+        .t-account::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            width: 2px; height: 100%;
+            background: #64748b;
+            transform: translateX(-50%);
+        }
+        .t-left { position: absolute; left: 4px; top: 4px; font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;}
+        .t-right { position: absolute; right: 4px; top: 4px; font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;}
+        .t-label { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap; color: #cbd5e1; }
+
+        /* Focus & Dimming Logic */
+        .diagram-node.active {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2), 0 10px 25px rgba(0,0,0,0.5);
+            transform: translateY(-2px);
+            z-index: 30;
+        }
+        .diagram-node.active-supplier { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
+        .diagram-node.active-logistics { border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2); }
+        
+        .dimmed .diagram-node:not(.active):not(.active-supplier):not(.active-logistics) {
+            opacity: 0.25; filter: grayscale(80%);
+        }
+
+        /* SVG Connections */
+        .svg-connection path {
+            fill: none; stroke: #475569; stroke-width: 2; transition: all 0.3s;
+        }
+        .svg-connection.active path.base { stroke: #38bdf8; stroke-width: 3; }
+        .svg-connection.active-supplier path.base { stroke: #10b981; stroke-width: 3; }
+        
+        .flow-dash {
+            stroke-dasharray: 6 6; opacity: 0; transition: opacity 0.3s;
+        }
+        .svg-connection.active path.flow-dash { stroke: #38bdf8; opacity: 1; animation: dash 1s linear infinite; }
+        .svg-connection.active-supplier path.flow-dash { stroke: #10b981; opacity: 1; animation: dash 1s linear infinite; }
+        @keyframes dash { to { stroke-dashoffset: -24; } }
+        
+        .dimmed .svg-connection:not(.active):not(.active-supplier) { opacity: 0.1; }
+
+        /* Full End-to-End Logistics Animation */
+        @keyframes fullJourney {
+            0%   { transform: translate(175px, 260px) scale(0.6); opacity: 0; }
+            5%   { transform: translate(175px, 260px) scale(1); opacity: 1; }     /* Starts at Buyer Cust Acct */
+            20%  { transform: translate(175px, 395px) scale(1); opacity: 1; }     /* Down to Buyer SE Clear Acct */
+            30%  { transform: translate(305px, 395px) scale(1); opacity: 1; }     /* Containerized in Buyer Wallet */
+            60%  { transform: translate(645px, 395px) scale(1); opacity: 1; }     /* Across the Ocean / Ledger */
+            70%  { transform: translate(775px, 395px) scale(1); opacity: 1; }     /* Unpacked to Seller SE Clear Acct */
+            85%  { transform: translate(775px, 260px) scale(1); opacity: 1; }     /* Up to Seller Cust Acct */
+            95%  { transform: translate(775px, 260px) scale(1); opacity: 0; }
+            100% { transform: translate(775px, 260px) scale(0.6); opacity: 0; }
+        }
+
+        .shipping-container {
+            display: none; position: absolute; top: 0; left: 0;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border: 1px solid #c084fc; border-radius: 4px;
+            padding: 4px 8px; font-size: 10px; font-weight: bold; color: white;
+            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.4);
+            z-index: 50;
+        }
+        .shipping-container::before {
+            content: 'ILP PACKET'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            font-size: 8px; color: #d8b4fe; white-space: nowrap;
+        }
+        .shipping-container::after { 
+            content: ''; position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.1) 4px, rgba(0,0,0,0.1) 8px);
+        }
+        .active-logistics .shipping-container { display: flex; animation: fullJourney 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        
+        /* Step Badge */
+        .step-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border-radius: 4px; font-size: 11px; font-weight: bold;
+            margin-right: 8px; flex-shrink: 0;
+        }
+        
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 shadow-md z-50 shrink-0 flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold text-white"><i class="fa-solid fa-ship text-purple-500 mr-3"></i>Universalized Token Logistics</h1>
+            <p class="text-xs text-slate-400 mt-1">Open Account Settlement using standardized Interledger "Containers"</p>
+        </div>
+        <div class="flex gap-4">
+            <span class="text-[10px] font-bold uppercase text-sky-400"><i class="fa-solid fa-building mr-1"></i> Buyer (Importer)</span>
+            <span class="text-[10px] font-bold uppercase text-emerald-400"><i class="fa-solid fa-industry mr-1"></i> Supplier (Exporter)</span>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Sidebar Narrative -->
+        <aside class="w-[380px] bg-slate-900 border-r border-slate-800 flex flex-col z-40 shrink-0 shadow-2xl overflow-y-auto">
+            <div class="p-6 border-b border-slate-800">
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Process Flow</h2>
+                <p class="text-sm text-slate-300">Hover over the steps to trace the Open Account settlement and observe the token logistics.</p>
+            </div>
+            
+            <div class="p-4 space-y-2 flex-1" id="step-triggers">
+                
+                <!-- Step 0 -->
+                <div class="p-4 rounded-xl border border-transparent hover:bg-slate-800 hover:border-slate-700 cursor-pointer transition-colors group" data-step="0">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-slate-700 text-slate-300 group-hover:bg-slate-600">0</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-200">Invoice Exchange</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Supplier issues an Invoice. The Buyer records the initial Accounts Payable (AP). The Supplier records Accounts Receivable (AR).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="p-4 rounded-xl border border-transparent hover:bg-slate-800 hover:border-slate-700 cursor-pointer transition-colors group" data-step="1">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-sky-900/50 text-sky-400 group-hover:bg-sky-800 border border-sky-800">1</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-sky-400">Payment Delivery Trigger</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">The Buyer debits AP to clear the liability, moving funds into the <strong>Pmt Delivery</strong> transit account, subsequently instructing their <strong>Customer Account</strong> (Bank Deposit) to initiate payment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="p-4 rounded-xl border border-transparent hover:bg-slate-800 hover:border-slate-700 cursor-pointer transition-colors group" data-step="2">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-sky-900/50 text-sky-400 group-hover:bg-sky-800 border border-sky-800">2</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-sky-400">Port Loading (Clear to Wallet)</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Funds exit the Customer Account into the Settlement Engine. They pass through the <strong>Clear Acct</strong> and <strong>Plt Acct</strong> to be "containerized" by the Wallet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 (The Core Analogy) -->
+                <div class="p-4 rounded-xl border border-purple-900/30 bg-purple-900/10 hover:bg-purple-900/20 hover:border-purple-800 cursor-pointer transition-colors group" data-step="3">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.5)] border border-purple-400">3</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-purple-300">Universalized Logistics (End-to-End)</h3>
+                            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                                Observe the token journey: Value leaves the Buyer's Deposit, gets packed into an <strong>ILP Packet</strong> (the standardized container) at the Wallet, crosses the "Ocean" (Ledger), is unpacked, and lands in the Supplier's Deposit.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="p-4 rounded-xl border border-transparent hover:bg-slate-800 hover:border-slate-700 cursor-pointer transition-colors group" data-step="4">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-emerald-900/50 text-emerald-400 group-hover:bg-emerald-800 border border-emerald-800">4</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-emerald-400">Port Unloading & Pmt Receiver</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">The Supplier's Wallet receives the container. Funds hit the Settlement Engine, rise up to credit the Supplier's <strong>Customer Account</strong>, and trigger the <strong>Pmt Receiver</strong> transit account.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="p-4 rounded-xl border border-transparent hover:bg-slate-800 hover:border-slate-700 cursor-pointer transition-colors group" data-step="5">
+                    <div class="flex items-start">
+                        <div class="step-badge bg-emerald-900/50 text-emerald-400 group-hover:bg-emerald-800 border border-emerald-800">5</div>
+                        <div>
+                            <h3 class="font-bold text-sm text-emerald-400">Final Settlement (Pmt Stock)</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Feedback loops confirm execution. Funds are moved from Pmt Receiver into final <strong>Pmt Stock</strong> (Treasury/Cash). The invoice is definitively reconciled and paid.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Main Diagram Area -->
+        <main class="flex-1 relative bg-[#0f172a] overflow-hidden" id="diagram-container">
+            <!-- Grid Background -->
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0); background-size: 32px 32px;"></div>
+
+            <!-- SVG Connecting Lines -->
+            <svg id="connections-svg" class="absolute inset-0 w-full h-full pointer-events-none z-10">
+                <defs>
+                    <marker id="arrow-sky" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#38bdf8" /></marker>
+                    <marker id="arrow-emerald" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#10b981" /></marker>
+                    <marker id="arrow-slate" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#475569" /></marker>
+                    <marker id="arrow-purple" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#a855f7" /></marker>
+                </defs>
+
+                <!-- Step 0 Lines -->
+                <g class="svg-connection step-0">
+                    <path class="base" d="M 704 60 L 296 60" marker-end="url(#arrow-slate)" />
+                    <path class="base" d="M 200 80 L 200 120" marker-end="url(#arrow-slate)" />
+                    <path class="base" d="M 800 80 L 800 120" marker-end="url(#arrow-slate)" />
+                </g>
+
+                <!-- Step 1 Lines -->
+                <g class="svg-connection step-1">
+                    <path class="base" d="M 200 232 L 200 240" />
+                    <path class="flow-dash" d="M 200 232 L 200 240" marker-end="url(#arrow-sky)" />
+                    <text x="212" y="236" class="text-[10px] fill-sky-400 font-bold">Trigger</text>
+                    
+                    <!-- Internal GL logic lines (AP to Pmt Delivery) -->
+                    <path class="base" d="M 130 190 C 130 210, 200 210, 200 190" stroke-dasharray="2 2" stroke-width="1" />
+                </g>
+
+                <!-- Step 2 Lines (Customer Acct to SE to Wallet) -->
+                <g class="svg-connection step-2">
+                    <path class="base" d="M 200 336 L 200 370" />
+                    <path class="flow-dash" d="M 200 336 L 200 370" marker-end="url(#arrow-sky)" />
+                    
+                    <path class="base" d="M 235 410 L 255 410" />
+                    <path class="flow-dash" d="M 235 410 L 255 410" marker-end="url(#arrow-sky)" />
+                    
+                    <path class="base" d="M 305 410 L 315 410" />
+                    <path class="flow-dash" d="M 305 410 L 315 410" marker-end="url(#arrow-sky)" />
+
+                    <!-- Internal GL logic lines (Pmt Delivery to Pmt Recipient) -->
+                    <path class="base" d="M 220 190 C 220 210, 290 210, 290 190" stroke-dasharray="2 2" stroke-width="1" />
+                </g>
+
+                <!-- Step 3 Lines (Universalized Transport) -->
+                <g class="svg-connection step-3 active-logistics">
+                    <path class="base" d="M 350 410 L 630 410" stroke="#a855f7" stroke-dasharray="4 4" />
+                </g>
+
+                <!-- Step 4 Lines (Wallet to SE to Customer Acct to GL) -->
+                <g class="svg-connection step-4 active-supplier">
+                    <path class="base" d="M 685 410 L 695 410" />
+                    <path class="flow-dash" d="M 685 410 L 695 410" marker-end="url(#arrow-emerald)" />
+                    
+                    <path class="base" d="M 765 410 L 780 410" />
+                    <path class="flow-dash" d="M 765 410 L 780 410" marker-end="url(#arrow-emerald)" />
+
+                    <path class="base" d="M 800 370 L 800 336" />
+                    <path class="flow-dash" d="M 800 370 L 800 336" marker-end="url(#arrow-emerald)" />
+                    
+                    <path class="base" d="M 800 240 L 800 232" />
+                    <path class="flow-dash" d="M 800 240 L 800 232" marker-end="url(#arrow-emerald)" />
+
+                    <!-- Internal GL logic lines (AR to Pmt Receiver) -->
+                    <path class="base" d="M 690 190 C 690 210, 760 210, 760 190" stroke-dasharray="2 2" stroke-width="1" />
+                </g>
+
+                <!-- Step 5 Lines (Final Settlement Feedback) -->
+                <g class="svg-connection step-5">
+                    <path class="base" d="M 200 370 C 200 280, 270 280, 270 232" marker-end="url(#arrow-slate)" />
+                    <path class="base" d="M 800 370 C 800 280, 870 280, 870 232" marker-end="url(#arrow-slate)" />
+                    
+                    <!-- Internal GL logic lines (Pmt Receiver to Pmt Stock) -->
+                    <path class="base" d="M 790 190 C 790 210, 860 210, 860 190" stroke-dasharray="2 2" stroke-width="1" />
+                </g>
+            </svg>
+
+            <!-- ================= BUYER SIDE (LEFT) ================= -->
+            
+            <div class="diagram-node step-0 w-48 h-12 left-[104px] top-[20px] text-center" id="b-invoice">
+                <div class="text-xs font-bold text-slate-300">Invoice (Buyer)</div>
+            </div>
+
+            <!-- Buyer GL -->
+            <div class="diagram-node step-0 step-1 step-2 step-5 w-[300px] h-28 left-[50px] top-[120px] p-3" id="b-gl">
+                <div class="text-[11px] font-bold text-slate-300 text-center mb-3">GL/AP Control<br><span class="text-[9px] text-slate-500 font-normal">Debit Risk Level</span></div>
+                <div class="flex justify-around mt-2">
+                    <div class="t-account"><div class="t-label">AP</div><div class="t-left text-rose-400">100</div></div>
+                    <div class="t-account"><div class="t-label">Pmt Delivery</div><div class="t-left">100</div><div class="t-right text-sky-400">100</div></div>
+                    <div class="t-account"><div class="t-label">Pmt Recipient</div><div class="t-right text-indigo-400">100</div></div>
+                </div>
+            </div>
+
+            <!-- Buyer Customer Account (T-Account Format) -->
+            <div class="diagram-node step-1 step-2 w-48 h-24 left-[104px] top-[240px] p-3 flex flex-col items-center" id="b-cust">
+                <div class="text-[11px] font-bold text-sky-400 text-center mb-2">Customer Account<br><span class="text-[9px] text-slate-400 font-normal border-b border-sky-900 pb-0.5">Bank Deposit</span></div>
+                <div class="t-account mt-1">
+                    <div class="t-label text-slate-300">Balance</div>
+                    <div class="t-right text-sky-400">100</div>
+                </div>
+            </div>
+
+            <!-- Buyer Settlement Engine -->
+            <div class="diagram-node step-2 step-3 step-5 w-[320px] h-32 left-[40px] top-[370px] border-dashed border-sky-800 bg-sky-900/10" id="b-se">
+                <div class="absolute -top-3 left-4 bg-slate-900 px-2 text-[10px] font-bold text-sky-500">Settlement Engine (The Port)</div>
+                <!-- Elements absolutely positioned relative to SE container for precise alignment -->
+                <div class="absolute top-[40px] left-[125px] t-account"><div class="t-label">Clear Acct</div><div class="t-left text-sky-300">100</div><div class="t-right">100</div></div>
+                <div class="absolute top-[40px] left-[195px] t-account"><div class="t-label">Plt Acct</div><div class="t-left text-sky-300">100</div><div class="t-right">100</div></div>
+                <div class="absolute top-[36px] left-[266px] w-12 h-12 bg-slate-800 rounded-full border border-slate-600 flex items-center justify-center">
+                    <i class="fa-solid fa-wallet text-sky-400"></i>
+                    <div class="absolute -top-5 text-[9px] font-bold text-slate-400">Wallet</div>
+                </div>
+            </div>
+
+
+            <!-- ================= SUPPLIER SIDE (RIGHT) ================= -->
+            
+            <div class="diagram-node step-0 w-48 h-12 left-[704px] top-[20px] text-center" id="s-invoice">
+                <div class="text-xs font-bold text-slate-300">Invoice (Supplier)</div>
+            </div>
+
+            <!-- Supplier GL -->
+            <div class="diagram-node step-0 step-4 step-5 w-[300px] h-28 left-[650px] top-[120px] p-3" id="s-gl">
+                <div class="text-[11px] font-bold text-slate-300 text-center mb-3">GL/AR Control<br><span class="text-[9px] text-slate-500 font-normal">Credit Balance for Buyer</span></div>
+                <div class="flex justify-around mt-2">
+                    <div class="t-account"><div class="t-label">AR</div><div class="t-right text-emerald-400">100</div></div>
+                    <div class="t-account"><div class="t-label">Pmt Receiver</div><div class="t-left text-emerald-400">100</div><div class="t-right text-slate-400">100</div></div>
+                    <div class="t-account"><div class="t-label">Pmt Stock</div><div class="t-left text-indigo-400">100</div></div>
+                </div>
+            </div>
+
+            <!-- Supplier Customer Account (T-Account Format) -->
+            <div class="diagram-node step-4 w-48 h-24 left-[704px] top-[240px] p-3 flex flex-col items-center" id="s-cust">
+                <div class="text-[11px] font-bold text-emerald-400 text-center mb-2">Customer Account<br><span class="text-[9px] text-slate-400 font-normal border-b border-emerald-900 pb-0.5">Bank Deposit</span></div>
+                <div class="t-account mt-1">
+                    <div class="t-label text-slate-300">Balance</div>
+                    <div class="t-left text-emerald-400">100</div>
+                </div>
+            </div>
+
+            <!-- Supplier Settlement Engine -->
+            <div class="diagram-node step-3 step-4 step-5 w-[320px] h-32 left-[640px] top-[370px] border-dashed border-emerald-800 bg-emerald-900/10" id="s-se">
+                <div class="absolute -top-3 right-4 bg-slate-900 px-2 text-[10px] font-bold text-emerald-500">Settlement Engine (The Port)</div>
+                <!-- Elements absolutely positioned relative to SE container for precise alignment -->
+                <div class="absolute top-[36px] left-[6px] w-12 h-12 bg-slate-800 rounded-full border border-slate-600 flex items-center justify-center">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i>
+                    <div class="absolute -top-5 text-[9px] font-bold text-slate-400">Wallet</div>
+                </div>
+                <div class="absolute top-[40px] left-[55px] t-account"><div class="t-label">Plt Acct</div><div class="t-left text-emerald-300">100</div><div class="t-right">100</div></div>
+                <div class="absolute top-[40px] left-[125px] t-account"><div class="t-label">Clear Acct</div><div class="t-left text-emerald-300">100</div><div class="t-right">100</div></div>
+            </div>
+
+            <!-- ================= THE OCEAN / LEDGER ================= -->
+            <div class="diagram-node step-3 w-80 h-16 left-[340px] top-[480px] text-center border-2 border-slate-700 bg-[#0f172a]" id="ledger">
+                <div class="text-sm font-bold text-slate-300 uppercase tracking-widest">Underlying Ledger</div>
+                <div class="text-[9px] text-slate-500 font-mono">The "Ocean" (Bitcoin, XRP, Fiat Rail)</div>
+            </div>
+
+            <!-- ================= THE CONTAINER (ILP PACKET) ================= -->
+            <!-- Absolute to the parent container to travel everywhere -->
+            <div class="shipping-container font-mono">
+                [ $100 ]
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stepTriggers = document.querySelectorAll('#step-triggers > div');
+            const container = document.getElementById('diagram-container');
+
+            function clearActive() {
+                container.classList.remove('dimmed');
+                document.querySelectorAll('.diagram-node, .svg-connection, .shipping-container').forEach(el => {
+                    el.classList.remove('active', 'active-supplier', 'active-logistics');
+                });
+                // Explicitly stop the animation class on the parent
+                container.classList.remove('active-logistics');
+            }
+
+            stepTriggers.forEach(trigger => {
+                trigger.addEventListener('mouseenter', () => {
+                    clearActive();
+                    container.classList.add('dimmed');
+                    
+                    const step = trigger.getAttribute('data-step');
+                    
+                    document.querySelectorAll(`.step-${step}`).forEach(el => {
+                        if(step === '4' || step === '5') { 
+                            el.classList.add('active-supplier');
+                        } else if (step === '3') {
+                            el.classList.add('active-logistics');
+                            container.classList.add('active-logistics'); // trigger the full journey CSS
+                        } else {
+                            el.classList.add('active');
+                        }
+                    });
+                });
+
+                trigger.addEventListener('mouseleave', clearActive);
+            });
+        });
+    </script>
+</body>
+</html>
