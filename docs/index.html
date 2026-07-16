@@ -617,12 +617,13 @@
                     <i class="fa-solid fa-layer-group"></i>
                 </div>
                 <div class="logo-text">
-                    SmartFinux <span>Signal</span>
+                    The Finux <span>Signal</span>
                 </div>
             </a>
             <div class="nav-links">
                 <a href="about.html" class="nav-link">About Labs</a>
                 <a href="interledger/index.html" class="nav-link">Interledger Portal</a>
+                <a href="gtt/index.html" class="nav-link">GTT Explorer</a>
                 <a href="verity/index.html" class="nav-link">Verity</a>
                 <a href="cdsc/index.html" class="nav-link">CDSC</a>
                 <a href="https://github.com/SmartFinuxLabs" target="_blank" class="nav-btn">GitHub <i class="fa-brands fa-github"></i></a>
@@ -639,6 +640,23 @@
             <h1>The Agentic Commerce</h1>
             <p>High-fidelity specifications, clearing mechanics, and programmable finance structures built by Smart Finux Labs.</p>
         </section>
+
+        <!-- Featured Article Card: GTT Explorer -->
+        <div class="featured-card" data-category="scf" data-search="gtt explorer global trade treasury on-chain scf supply chain finance ada usdc stablecoin" style="cursor: pointer; margin-bottom: 24px;" onclick="if(!event.target.closest('a')){ window.location.href='gtt/index.html'; }">
+            <div class="featured-img-area" style="padding: 0; overflow: hidden; position: relative;">
+                <img src="gtt/GttWeb.png" alt="Gtt Explorer" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                <span class="featured-img-badge" style="z-index: 2; background: var(--primary);">LAUNCHING</span>
+            </div>
+            <div class="featured-content">
+                <div class="card-meta">
+                    <span class="tag-pill tag-scf">Supply Chain Finance</span>
+                    <span>•</span>
+                    <span>8 Min Read</span>
+                </div>
+                <h2><a href="gtt/index.html" style="text-decoration: none; color: inherit;">Global Trade Treasury: GTT Explorer</a></h2>
+                <p>Modernizing supply chain finance with on-chain Accounts of Digital Assets (ADA). GTT eliminates opaque ledgers and delayed settlements, providing cryptographic certainty and automated accounting for Suppliers, Buyers, and Investors.</p>
+            </div>
+        </div>
 
         <!-- Featured Article Card: Verity -->
         <div class="featured-card" data-category="scf" data-search="verity on-chain supply chain finance capital due value invoice validation" style="cursor: pointer;" onclick="if(!event.target.closest('a')){ window.location.href='verity/index.html'; }">
@@ -932,7 +950,7 @@
                         <i class="fa-solid fa-layer-group"></i>
                     </div>
                     <div class="logo-text">
-                        SmartFinux <span>Labs</span>
+                        The Finux <span>Labs</span>
                     </div>
                 </a>
                 <p>Modernizing how value, accounting, and settlement work across digital and traditional financial systems.</p>
@@ -942,6 +960,7 @@
                 <div class="footer-group">
                     <h4>Pillars</h4>
                     <ul class="footer-list">
+                        <li><a href="gtt/index.html">GTT Explorer (On-Chain SCF)</a></li>
                         <li><a href="verity/index.html">Verity (Supply Chain Finance)</a></li>
                         <li><a href="cdsc/index.html">CDSC Commerce</a></li>
                         <li><a href="interledger/index.html">Interledger Stack</a></li>
@@ -968,7 +987,7 @@
             const filterButtons = document.querySelectorAll('.filter-btn');
             const searchInput = document.getElementById('search-input');
             const articles = document.querySelectorAll('.article-card');
-            const featuredCard = document.querySelector('.featured-card');
+            const featuredCards = document.querySelectorAll('.featured-card');
             const emptyState = document.getElementById('empty-state');
             
             let currentFilter = 'all';
@@ -994,18 +1013,20 @@
             function applyFilterAndSearch() {
                 let visibleArticlesCount = 0;
 
-                // 1. Process Featured Card
-                const featuredCategory = featuredCard.getAttribute('data-category');
-                const featuredSearchData = featuredCard.getAttribute('data-search').toLowerCase();
-                const matchesFeaturedFilter = (currentFilter === 'all' || featuredCategory === currentFilter);
-                const matchesFeaturedSearch = (searchQuery === '' || featuredSearchData.includes(searchQuery));
+                // 1. Process Featured Cards
+                featuredCards.forEach(featuredCard => {
+                    const featuredCategory = featuredCard.getAttribute('data-category');
+                    const featuredSearchData = featuredCard.getAttribute('data-search').toLowerCase();
+                    const matchesFeaturedFilter = (currentFilter === 'all' || featuredCategory === currentFilter);
+                    const matchesFeaturedSearch = (searchQuery === '' || featuredSearchData.includes(searchQuery));
 
-                if (matchesFeaturedFilter && matchesFeaturedSearch) {
-                    featuredCard.style.display = 'grid';
-                    visibleArticlesCount++;
-                } else {
-                    featuredCard.style.display = 'none';
-                }
+                    if (matchesFeaturedFilter && matchesFeaturedSearch) {
+                        featuredCard.style.display = 'grid';
+                        visibleArticlesCount++;
+                    } else {
+                        featuredCard.style.display = 'none';
+                    }
+                });
 
                 // 2. Process Grid Cards
                 articles.forEach(card => {

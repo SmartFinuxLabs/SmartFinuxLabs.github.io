@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTT Alpha: On-Chain SCF Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfb;
+            color: #1c1c1c;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .t-account-grid {
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            border-top: 2px solid #1c1c1c;
+        }
+
+        .step-active {
+            border-color: #10b981;
+            background-color: #ecfdf5;
+            transform: scale(1.02);
+        }
+
+        .glass-nav {
+            background: rgba(252, 252, 251, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="fixed top-0 w-full z-50 glass-nav border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center text-white font-bold">G</div>
+                    <span class="text-xl font-bold tracking-tight text-stone-800 uppercase">GTT Alpha</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                    <a href="#liquidity" class="hover:text-emerald-600 transition">Liquidity Flow</a>
+                    <a href="#advance-payment" class="hover:text-emerald-600 transition">Advance Payment Flow</a>
+                    <a href="#accounting" class="hover:text-emerald-600 transition">Accounting</a>
+                    <a href="#ecosystem" class="hover:text-emerald-600 transition">Ecosystem</a>
+                </div>
+                <a href="https://gtt-alpha.connextium.xyz/" target="_blank" class="bg-stone-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-stone-800 transition">Explore GTT</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-12">
+        
+        <header class="max-w-4xl mx-auto px-6 text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 leading-tight">
+                Modernizing Supply Chain Finance with <span class="text-emerald-600">On-Chain ADA</span>
+            </h1>
+            <p class="text-lg text-stone-600 mb-8 leading-relaxed">
+                GTT eliminates opaque ledgers and delayed settlements. By leveraging Account of Digital Assets (ADA) and USDC stablecoins, we provide cryptographic certainty for Suppliers, Buyers, and Investors in a unified, automated environment.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="flex items-center space-x-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Stablecoin Settlements</span>
+                </div>
+                <div class="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Programmable Escrow</span>
+                </div>
+                <div class="flex items-center space-x-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Automated Accounting</span>
+                </div>
+            </div>
+        </header>
+
+        <section id="liquidity" class="max-w-6xl mx-auto px-6 py-16 border-t border-stone-100">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4">ADA Liquidity Flow</h2>
+                    <p class="text-stone-600 mb-6">
+                        In the GTT ecosystem, liquidity moves through programmable vaults called Accounts of Digital Assets (ADA). This section demonstrates how funds transition from investor capital to supplier liquidity, ensuring every party has visibility into the location and status of funds.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div id="liq-step-1" class="p-4 border-l-4 border-stone-200 cursor-pointer transition-all hover:bg-stone-50" onclick="updateLiquidityView(1)">
+                            <h4 class="font-bold text-stone-800">1. Capital Provision</h4>
+                            <p class="text-sm text-stone-500">Investor USDC flows into the Platform ADA (Escrow) to advance 80-90% of the invoice value.</p>
+                        </div>
+                        <div id="liq-step-2" class="p-4 border-l-4 border-stone-200 cursor-pointer transition-all hover:bg-stone-50" onclick="updateLiquidityView(2)">
+                            <h4 class="font-bold text-stone-800">2. Debt Fulfillment</h4>
+                            <p class="text-sm text-stone-500">At maturity, the Anchor Buyer pays 100% of the invoice into the Platform ADA Settlement Vault.</p>
+                        </div>
+                        <div id="liq-step-3" class="p-4 border-l-4 border-stone-200 cursor-pointer transition-all hover:bg-stone-50" onclick="updateLiquidityView(3)">
+                            <h4 class="font-bold text-stone-800">3. Distribution & Yield</h4>
+                            <p class="text-sm text-stone-500">The platform distributes principal + yield to the Investor and the final holdback to the Supplier.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 relative overflow-hidden h-[500px]">
+                    <div class="absolute inset-0 flex flex-col items-center justify-around py-8">
+                        <div id="viz-investor" class="text-center opacity-40 transition-opacity">
+                            <div class="w-16 h-16 bg-stone-100 rounded-full mx-auto flex items-center justify-center border-2 border-stone-300">
+                                <span class="text-2xl">👤</span>
+                            </div>
+                            <span class="text-xs font-bold uppercase mt-2 block">Investor ADA</span>
+                        </div>
+                        
+                        <div id="viz-platform" class="text-center transition-all">
+                            <div class="w-24 h-24 bg-emerald-600 rounded-2xl mx-auto flex flex-col items-center justify-center text-white shadow-lg shadow-emerald-200">
+                                <span class="text-3xl">🏦</span>
+                                <span class="text-[10px] font-bold uppercase mt-1">Platform ADA</span>
+                            </div>
+                            <div id="flow-indicator" class="h-8 w-1 bg-emerald-400 mx-auto my-2 opacity-0"></div>
+                        </div>
+
+                        <div class="flex justify-between w-full px-8">
+                            <div id="viz-supplier" class="text-center opacity-40 transition-opacity">
+                                <div class="w-16 h-16 bg-stone-100 rounded-full mx-auto flex items-center justify-center border-2 border-stone-300">
+                                    <span class="text-2xl">🏭</span>
+                                </div>
+                                <span class="text-xs font-bold uppercase mt-2 block">Supplier ADA</span>
+                            </div>
+                            <div id="viz-buyer" class="text-center opacity-40 transition-opacity">
+                                <div class="w-16 h-16 bg-stone-100 rounded-full mx-auto flex items-center justify-center border-2 border-stone-300">
+                                    <span class="text-2xl">🏢</span>
+                                </div>
+                                <span class="text-xs font-bold uppercase mt-2 block">Buyer ADA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="status-bubble" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-stone-900 text-white px-4 py-2 rounded-full text-xs font-semibold">
+                        Select a step to visualize flow
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supplier Advance Payment Diagram Section -->
+        <section id="advance-payment" class="max-w-6xl mx-auto px-6 py-16 border-t border-stone-100">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Supplier Advance Payment Flow</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Visual tracking model charting the sequence of actions and value states from invoice generation, discount triggers, funding vault approvals, and final supplier payout.
+                </p>
+            </div>
+            <div class="bg-white p-4 md:p-6 rounded-2xl border border-stone-200 shadow-sm flex justify-center items-center">
+                <img src="SupplierAdvancePayment.png" alt="Supplier Advance Payment Flowchart" class="max-w-2xl w-full h-auto rounded-xl hover:scale-[1.01] transition-transform duration-300">
+            </div>
+        </section>
+
+        <section id="accounting" class="bg-stone-100 py-20 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4">Buyer-Side Accounting Journey</h2>
+                    <p class="text-stone-600 max-w-2xl mx-auto">
+                        Witness how GTT modernizes the double-entry accounting process for an Anchor Buyer. Clicking through the events below reveals how liabilities are reclassified and eventually cleared using digital assets.
+                    </p>
+                </div>
+
+                <div class="flex justify-center mb-8 space-x-2">
+                    <button onclick="updateAccounting(1)" id="acc-tab-1" class="px-6 py-2 rounded-full bg-white text-stone-800 font-semibold shadow-sm border border-stone-200 hover:border-emerald-500 transition">Event 1: Recognition</button>
+                    <button onclick="updateAccounting(2)" id="acc-tab-2" class="px-6 py-2 rounded-full bg-stone-50 text-stone-400 font-semibold border border-stone-200 hover:border-emerald-500 transition">Event 2: Financing</button>
+                    <button onclick="updateAccounting(3)" id="acc-tab-3" class="px-6 py-2 rounded-full bg-stone-50 text-stone-400 font-semibold border border-stone-200 hover:border-emerald-500 transition">Event 3: Settlement</button>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-white p-8 rounded-2xl border border-stone-200">
+                        <h3 id="acc-title" class="text-xl font-bold mb-4">Invoice Recognition</h3>
+                        <p id="acc-desc" class="text-stone-600 text-sm mb-8 leading-relaxed">
+                            Upon receiving the invoice and completing the 3-way match, the buyer recognizes a standard operational liability on their books.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Debit Entry</h4>
+                                <div id="acc-dr" class="flex justify-between items-center p-3 bg-stone-50 rounded border-l-4 border-stone-400">
+                                    <span class="font-medium text-stone-800">Inventory / Expense</span>
+                                    <span class="font-bold text-stone-900">$1,000.00</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Credit Entry</h4>
+                                <div id="acc-cr" class="flex justify-between items-center p-3 bg-stone-50 rounded border-l-4 border-emerald-500">
+                                    <span class="font-medium text-stone-800">Accounts Payable (AP)</span>
+                                    <span class="font-bold text-stone-900">$1,000.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                            <h4 class="text-xs font-bold text-stone-400 uppercase mb-4">Live Ledger Visualization</h4>
+                            <div class="t-account-grid p-2">
+                                <div class="p-4 text-center">
+                                    <span class="text-xs font-bold text-stone-400 uppercase">Debits</span>
+                                    <div id="t-dr" class="text-lg font-bold mt-2 text-emerald-600">$1,000</div>
+                                </div>
+                                <div class="bg-stone-200 h-full"></div>
+                                <div class="p-4 text-center">
+                                    <span class="text-xs font-bold text-stone-400 uppercase">Credits</span>
+                                    <div id="t-cr" class="text-lg font-bold mt-2 text-stone-300">$1,000</div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4 border-t border-stone-100 pt-4">
+                                <span id="t-account-name" class="text-sm font-bold text-stone-700">Standard AP Ledger</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecosystem" class="max-w-7xl mx-auto px-6 py-20">
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="md:w-1/3">
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4">Actor Ecosystem Matrix</h2>
+                    <p class="text-stone-600 mb-6">
+                        The GTT architecture partitions responsibilities into functional blocks. Each actor manages specific control accounts that ensure the integrity of the total pool.
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="speedChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-6 bg-white border border-stone-200 rounded-xl hover:shadow-md transition">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <span class="p-2 bg-blue-50 text-blue-600 rounded">🏢</span>
+                            <h4 class="font-bold">Buyer Block</h4>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-2">Controls recognition and debt acceptance.</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">L20200</span>
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">A11000</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-white border border-stone-200 rounded-xl hover:shadow-md transition">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <span class="p-2 bg-amber-50 text-amber-600 rounded">🏭</span>
+                            <h4 class="font-bold">Supplier Block</h4>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-2">Manages advance obligations and payments.</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">L20100</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-white border border-stone-200 rounded-xl hover:shadow-md transition">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <span class="p-2 bg-emerald-50 text-emerald-600 rounded">👤</span>
+                            <h4 class="font-bold">Investor Block</h4>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-2">Escrow claims and matching asset vaults.</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">A10100</span>
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">L20400</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-white border border-stone-200 rounded-xl hover:shadow-md transition">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <span class="p-2 bg-indigo-50 text-indigo-600 rounded">🔗</span>
+                            <h4 class="font-bold">Circle Block</h4>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-2">External custody evidence and reconciliation.</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">A10020</span>
+                            <span class="px-2 py-1 bg-stone-100 rounded text-[10px] font-mono">A10150</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-emerald-600 rounded flex items-center justify-center text-white font-bold text-xs">G</div>
+                    <span class="text-lg font-bold tracking-tight uppercase">GTT Alpha</span>
+                </div>
+                <p class="text-stone-400 text-sm mt-2">The Future of On-Chain Supply Chain Finance.</p>
+            </div>
+            <div class="flex space-x-6 text-sm">
+                <a href="https://gtt-alpha.connextium.xyz/" class="text-stone-400 hover:text-emerald-400 transition">Launch App</a>
+                <a href="#" class="text-stone-400 hover:text-emerald-400 transition">Technical Docs</a>
+                <a href="#" class="text-stone-400 hover:text-emerald-400 transition">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialization
+        let distributionChartInstance = null;
+        let speedChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateLiquidityView(1);
+            updateAccounting(1);
+        });
+
+        function initCharts() {
+            // Distribution Chart (Donut)
+            const ctx1 = document.getElementById('distributionChart').getContext('2d');
+            distributionChartInstance = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Supplier Advance', 'Holdback/Escrow', 'Platform Yield'],
+                    datasets: [{
+                        data: [900, 90, 10],
+                        backgroundColor: ['#10b981', '#cbd5e1', '#059669'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 20,
+                                font: { size: 10 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Typical $1,000 Transaction Breakdown',
+                            font: { weight: 'bold' }
+                        }
+                    }
+                }
+            });
+
+            // Speed Chart (Bar)
+            const ctx2 = document.getElementById('speedChart').getContext('2d');
+            speedChartInstance = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Traditional Rails', 'GTT On-Chain'],
+                    datasets: [{
+                        label: 'Settlement Days',
+                        data: [5, 0.05],
+                        backgroundColor: ['#e7e5e4', '#10b981'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Settlement Efficiency (Days)',
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Module: Liquidity Logic
+        function updateLiquidityView(step) {
+            // Reset styles
+            ['liq-step-1', 'liq-step-2', 'liq-step-3'].forEach(id => {
+                document.getElementById(id).classList.remove('step-active');
+            });
+            ['viz-investor', 'viz-platform', 'viz-supplier', 'viz-buyer'].forEach(id => {
+                document.getElementById(id).classList.add('opacity-40');
+                document.getElementById(id).classList.remove('scale-110');
+            });
+
+            const status = document.getElementById('status-bubble');
+            const flow = document.getElementById('flow-indicator');
+
+            document.getElementById(`liq-step-${step}`).classList.add('step-active');
+            
+            if (step === 1) {
+                document.getElementById('viz-investor').classList.remove('opacity-40');
+                document.getElementById('viz-platform').classList.remove('opacity-40');
+                status.innerText = "Investor → Platform ADA: Provisioning $900 USDC";
+                flow.className = "h-8 w-1 bg-blue-400 mx-auto my-2 opacity-100 animate-bounce";
+            } else if (step === 2) {
+                document.getElementById('viz-buyer').classList.remove('opacity-40');
+                document.getElementById('viz-platform').classList.remove('opacity-40');
+                status.innerText = "Buyer → Platform ADA: Settling $1000 USDC";
+                flow.className = "h-8 w-1 bg-amber-400 mx-auto my-2 opacity-100 rotate-180 animate-pulse";
+            } else if (step === 3) {
+                document.getElementById('viz-platform').classList.remove('opacity-40');
+                document.getElementById('viz-supplier').classList.remove('opacity-40');
+                document.getElementById('viz-investor').classList.remove('opacity-40');
+                status.innerText = "Platform → Distribution: Yield & Holdback Release";
+                flow.className = "h-8 w-1 bg-emerald-400 mx-auto my-2 opacity-100 animate-ping";
+            }
+        }
+
+        // Module: Accounting Logic
+        const accountingData = {
+            1: {
+                title: "Event 1: Invoice Recognition",
+                desc: "The buyer receives the invoice and completes their standard review. This creates an initial operational liability.",
+                dr: "Inventory / Expense",
+                cr: "Accounts Payable (AP)",
+                tdr: "$1,000",
+                tcr: "$1,000",
+                tname: "Standard AP Ledger",
+                activeColor: "text-stone-300"
+            },
+            2: {
+                title: "Event 2: Financed AP Status",
+                desc: "At Debt Acceptance, standard AP is cleared and moved to a specifically designated 'Financed AP' vault on-chain.",
+                dr: "Accounts Payable (AP)",
+                cr: "Financed AP (SCF)",
+                tdr: "$1,000",
+                tcr: "$1,000",
+                tname: "Financed AP Control Account",
+                activeColor: "text-blue-500"
+            },
+            3: {
+                title: "Event 3: Final Settlement",
+                desc: "The buyer transfers 100% USDC to the platform. This clears the financed liability and reduces the cash balance.",
+                dr: "Financed AP (SCF)",
+                cr: "Cash / USDC Asset",
+                tdr: "$1,000",
+                tcr: "$1,000",
+                tname: "Digital Asset Settlement Hub",
+                activeColor: "text-emerald-500"
+            }
+        };
+
+        function updateAccounting(event) {
+            const data = accountingData[event];
+            
+            // UI Updates
+            document.getElementById('acc-title').innerText = data.title;
+            document.getElementById('acc-desc').innerText = data.desc;
+            document.getElementById('acc-dr').querySelector('span:first-child').innerText = data.dr;
+            document.getElementById('acc-cr').querySelector('span:first-child').innerText = data.cr;
+            document.getElementById('t-dr').innerText = data.tdr;
+            document.getElementById('t-cr').innerText = data.tcr;
+            document.getElementById('t-cr').className = `text-lg font-bold mt-2 ${data.activeColor}`;
+            document.getElementById('t-account-name').innerText = data.tname;
+
+            // Tab Styles
+            [1, 2, 3].forEach(num => {
+                const btn = document.getElementById(`acc-tab-${num}`);
+                if (num === event) {
+                    btn.classList.add('bg-white', 'text-stone-800');
+                    btn.classList.remove('bg-stone-50', 'text-stone-400');
+                } else {
+                    btn.classList.remove('bg-white', 'text-stone-800');
+                    btn.classList.add('bg-stone-50', 'text-stone-400');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
