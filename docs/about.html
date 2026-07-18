@@ -1,249 +1,258 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Smart Finux Labs</title>
-    <style>
-      :root {
-        color-scheme: light;
-        --ink: #17211f;
-        --muted: #5f6d69;
-        --line: #d9e3de;
-        --wash: #f6faf8;
-        --accent: #1f7a5c;
-        --accent-soft: #e1f3eb;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Finux Labs</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17211f;
+      --muted: #5f6d69;
+      --line: #d9e3de;
+      --wash: #f6faf8;
+      --accent: #1f7a5c;
+      --accent-soft: #e1f3eb;
+    }
 
-      body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        color: var(--ink);
-        background: var(--wash);
-        line-height: 1.6;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--wash);
+      line-height: 1.6;
+    }
+
+    main {
+      width: min(920px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 56px 0 64px;
+    }
+
+    header {
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.4rem, 7vw, 4.6rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 40px 0 14px;
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 22px 0 10px;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    p {
+      max-width: 760px;
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .lead {
+      max-width: 780px;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    .flow {
+      display: inline-block;
+      margin: 8px 0 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .meta section {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .meta h2 {
+      margin-top: 0;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .links {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .links a {
+      display: block;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .links a:hover,
+    .links a:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      outline: 0;
+    }
+
+    .members li {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 560px) {
       main {
-        width: min(920px, calc(100% - 40px));
-        margin: 0 auto;
-        padding: 56px 0 64px;
-      }
-
-      header {
-        padding-bottom: 28px;
-        border-bottom: 1px solid var(--line);
-      }
-
-      h1 {
-        margin: 0 0 16px;
-        font-size: clamp(2.4rem, 7vw, 4.6rem);
-        line-height: 1;
-        letter-spacing: 0;
-      }
-
-      h2 {
-        margin: 40px 0 14px;
-        font-size: 1.6rem;
-        line-height: 1.2;
-      }
-
-      h3 {
-        margin: 22px 0 10px;
-        font-size: 1.1rem;
-        color: var(--accent);
-      }
-
-      p {
-        max-width: 760px;
-        margin: 0 0 18px;
-        color: var(--muted);
-      }
-
-      .lead {
-        max-width: 780px;
-        font-size: 1.2rem;
-        color: var(--ink);
-      }
-
-      .flow {
-        display: inline-block;
-        margin: 8px 0 20px;
-        padding: 14px 18px;
-        border: 1px solid var(--line);
-        background: #fff;
-        font-weight: 700;
-        color: var(--ink);
-      }
-
-      ul {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 10px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      li {
-        padding: 10px 12px;
-        border: 1px solid var(--line);
-        background: #fff;
-      }
-
-      .meta {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 14px;
-      }
-
-      .meta section {
-        padding: 18px;
-        border: 1px solid var(--line);
-        background: #fff;
-      }
-
-      .meta h2 {
-        margin-top: 0;
-        font-size: 1rem;
-        color: var(--accent);
-      }
-
-      a {
-        color: var(--accent);
-        font-weight: 700;
-      }
-
-      .links {
-        display: grid;
-        gap: 12px;
-        margin-top: 16px;
-      }
-
-      .links a {
-        display: block;
-        padding: 14px 16px;
-        border: 1px solid var(--line);
-        background: #fff;
-        color: var(--ink);
-        text-decoration: none;
-      }
-
-      .links a:hover,
-      .links a:focus-visible {
-        border-color: var(--accent);
-        background: var(--accent-soft);
-        color: var(--accent);
-        outline: 0;
+        width: min(100% - 28px, 920px);
+        padding-top: 36px;
       }
 
       .members li {
-        grid-column: span 2;
+        grid-column: span 1;
       }
+    }
+  </style>
+</head>
 
-      @media (max-width: 560px) {
-        main {
-          width: min(100% - 28px, 920px);
-          padding-top: 36px;
-        }
+<body>
+  <main>
+    <header>
+      <h1>Smart Finux Labs</h1>
+      <p class="lead">Smart Finux Labs is focused on modernizing how value, accounting, and settlement work across
+        digital and traditional financial systems.</p>
+    </header>
 
-        .members li {
-          grid-column: span 1;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <header>
-        <h1>Smart Finux Labs</h1>
-        <p class="lead">Smart Finux Labs is focused on modernizing how value, accounting, and settlement work across digital and traditional financial systems.</p>
-      </header>
+    <section>
+      <h2>Overview</h2>
+      <h3>Description</h3>
+      <p>We are building a commerce, supply chain, and financial infrastructure suite under Smart Finux, designed to
+        transform how business obligations, accounting truth, and payment settlement converge.</p>
+      <p>Modern commerce depends on:</p>
+      <div class="flow">Sourcing -> Producing -> Storage -> Trading -> Transportation -> Payment -> Settlement</div>
+      <p>Our product suite explores how programmable finance infrastructure can support real-world business processes
+        such as invoicing, receivables, settlement, treasury coordination, and cross-border value movement.</p>
+    </section>
 
-      <section>
-        <h2>Overview</h2>
-        <h3>Description</h3>
-        <p>We are building a commerce, supply chain, and financial infrastructure suite under Smart Finux, designed to transform how business obligations, accounting truth, and payment settlement converge.</p>
-        <p>Modern commerce depends on:</p>
-        <div class="flow">Sourcing -> Producing -> Storage -> Trading -> Transportation -> Payment -> Settlement</div>
-        <p>Our product suite explores how programmable finance infrastructure can support real-world business processes such as invoicing, receivables, settlement, treasury coordination, and cross-border value movement.</p>
-      </section>
+    <section>
+      <h2>Startup</h2>
+      <div class="meta" aria-label="Company profile">
+        <section>
+          <h2>Industry</h2>
+          <p>FinTech</p>
+        </section>
+        <section>
+          <h2>Funding Stage</h2>
+          <p>Pre-seed</p>
+        </section>
+        <section>
+          <h2>Product Stage</h2>
+          <p>MVP</p>
+        </section>
+      </div>
+    </section>
 
-      <section>
-        <h2>Startup</h2>
-        <div class="meta" aria-label="Company profile">
-          <section>
-            <h2>Industry</h2>
-            <p>FinTech</p>
-          </section>
-          <section>
-            <h2>Funding Stage</h2>
-            <p>Pre-seed</p>
-          </section>
-          <section>
-            <h2>Product Stage</h2>
-            <p>MVP</p>
-          </section>
-        </div>
-      </section>
+    <section>
+      <h2>Web Views</h2>
+      <div class="links">
+        <a href="cdsc/">CDSC Commerce Chapter</a>
+        <a href="cdsc/factoring/">CDSC Factoring Architecture</a>
+        <a href="verity/">Verity Supply Chain Finance Overview</a>
+      </div>
+    </section>
 
-      <section>
-        <h2>Web Views</h2>
-        <div class="links">
-          <a href="cdsc/">CDSC Commerce Chapter</a>
-          <a href="cdsc/factoring/">CDSC Factoring Architecture</a>
-          <a href="verity/">Verity Supply Chain Finance Overview</a>
-        </div>
-      </section>
+    <section>
+      <h2>Specialties</h2>
+      <ul>
+        <li>Accounting</li>
+        <li>Management Consulting</li>
+        <li>Banking</li>
+        <li>Financial Services</li>
+        <li>Investment Management</li>
+        <li>International Trade &amp; Development</li>
+        <li>Information Technology &amp; Services</li>
+        <li>Logistics &amp; Supply Chain</li>
+        <li>SaaS</li>
+        <li>Machine Learning</li>
+        <li>LLMs</li>
+        <li>Generative AI</li>
+        <li>AR/VR</li>
+        <li>Blockchain</li>
+        <li>Data &amp; Analytics</li>
+        <li>Decentralised Finance</li>
+        <li>Digital Accounting</li>
+        <li>Digital Banking</li>
+        <li>Digital Identity</li>
+        <li>Digital Insurance Services</li>
+        <li>Digital Lending</li>
+        <li>Digital Payments</li>
+        <li>Digital Savings</li>
+        <li>Digital Trading</li>
+        <li>E-Commerce</li>
+        <li>Open Banking</li>
+      </ul>
+    </section>
 
-      <section>
-        <h2>Specialties</h2>
-        <ul>
-          <li>Accounting</li>
-          <li>Management Consulting</li>
-          <li>Banking</li>
-          <li>Financial Services</li>
-          <li>Investment Management</li>
-          <li>International Trade &amp; Development</li>
-          <li>Information Technology &amp; Services</li>
-          <li>Logistics &amp; Supply Chain</li>
-          <li>SaaS</li>
-          <li>Machine Learning</li>
-          <li>LLMs</li>
-          <li>Generative AI</li>
-          <li>AR/VR</li>
-          <li>Blockchain</li>
-          <li>Data &amp; Analytics</li>
-          <li>Decentralised Finance</li>
-          <li>Digital Accounting</li>
-          <li>Digital Banking</li>
-          <li>Digital Identity</li>
-          <li>Digital Insurance Services</li>
-          <li>Digital Lending</li>
-          <li>Digital Payments</li>
-          <li>Digital Savings</li>
-          <li>Digital Trading</li>
-          <li>E-Commerce</li>
-          <li>Open Banking</li>
-        </ul>
-      </section>
+    <section>
+      <h2>GitHub Profile</h2>
+      <p><strong>Organization:</strong> SmartFinuxLabs</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/SmartFinuxLabs">https://github.com/SmartFinuxLabs</a></p>
+      <p><strong>Public repositories:</strong> None</p>
+      <h3>Building members</h3>
+      <p><strong>Cohort 2026</strong></p>
+      <ul class="members">
+        <li><strong>@zttofficial</strong><br>Haroël Lee, Ph.D. · they/them<br>Zentrita is the personal brand of Dr.
+          Haroël, a builder at the intersection of technology, language, and creative expression.</li>
+        <li><strong>@hejunion</strong><br>Tørence Juhe - He/Him<br>Working on digital solution implementation on cloud
+          platform, expertise in distribution and DLT stacks.</li>
+        <li><strong>@ihaventcomeupanameyet</strong><br>Song, building systems at the intersection of AI, graphics, and
+          backend engineering, Computer Science in UBC</li>
+      </ul>
+    </section>
+  </main>
+</body>
 
-      <section>
-        <h2>GitHub Profile</h2>
-        <p><strong>Organization:</strong> SmartFinuxLabs</p>
-        <p><strong>GitHub:</strong> <a href="https://github.com/SmartFinuxLabs">https://github.com/SmartFinuxLabs</a></p>
-        <p><strong>Cohort:</strong> Cohort 2026</p>
-        <p><strong>Public repositories:</strong> None</p>
-        <h3>Building members</h3>
-        <ul class="members">
-          <li><strong>@zttofficial</strong><br>Haroël Lee, Ph.D. · they/them<br>Zentrita is the personal brand of Dr. Haroël, a builder at the intersection of technology, language, and creative expression.</li>
-          <li><strong>@hejunion</strong><br>Tørence Juhe - He/Him<br>Working on digital solution implementation on cloud platform, expertise in distribution and DLT stacks.</li>
-          <li><strong>@ihaventcomeupanameyet</strong><br>Song, building systems at the intersection of AI, graphics, and backend engineering, Computer Science in UBC</li>
-        </ul>
-      </section>
-    </main>
-  </body>
 </html>
