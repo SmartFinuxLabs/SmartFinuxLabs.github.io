@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: #0f172a;
         }
+
         .chart-container {
             position: relative;
             width: 100%;
@@ -24,29 +27,35 @@
             height: 320px;
             max-height: 400px;
         }
+
         @media (min-width: 768px) {
             .chart-container {
                 height: 350px;
             }
         }
+
         .tab-btn.active {
             border-bottom: 3px solid #059669;
             color: #059669;
             font-weight: 700;
         }
+
         .glass-nav {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
         }
+
         .card-hover {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .card-hover:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 24px -10px rgba(16, 185, 129, 0.15);
         }
     </style>
 </head>
+
 <body class="antialiased text-slate-800 bg-slate-50">
 
     <!-- Top Navigation Bar -->
@@ -54,20 +63,29 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center space-x-3">
-                    <a href="../index.html" class="flex items-center space-x-2 text-slate-500 hover:text-emerald-600 transition font-medium text-xs sm:text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <a href="../index.html"
+                        class="flex items-center space-x-2 text-slate-500 hover:text-emerald-600 transition font-medium text-xs sm:text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
                         <span>Back to GTT Explorer</span>
                     </a>
                     <span class="text-slate-300">|</span>
                     <div class="flex items-center space-x-2">
-                        <div class="w-7 h-7 bg-emerald-600 rounded flex items-center justify-center text-white font-bold text-xs">G</div>
-                        <span class="text-base font-extrabold tracking-tight text-slate-900 uppercase">Router Design Hub</span>
+                        <div
+                            class="w-7 h-7 bg-emerald-600 rounded flex items-center justify-center text-white font-bold text-xs">
+                            G</div>
+                        <span class="text-base font-extrabold tracking-tight text-slate-900 uppercase">Router Design
+                            Hub</span>
                     </div>
                 </div>
                 <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
                     <a href="#overview" class="hover:text-emerald-600 transition">Overview</a>
-                    <a href="#external-route" class="hover:text-indigo-600 font-semibold transition text-indigo-700">1. External Route</a>
-                    <a href="#fiat-redemption" class="hover:text-amber-600 font-semibold transition text-amber-700">2. Fiat Redemption</a>
+                    <a href="#external-route" class="hover:text-indigo-600 font-semibold transition text-indigo-700">1.
+                        External Route</a>
+                    <a href="#fiat-redemption" class="hover:text-amber-600 font-semibold transition text-amber-700">2.
+                        Fiat Redemption</a>
                     <a href="#visualizer" class="hover:text-emerald-600 transition">Visualizer Suite</a>
                 </div>
 
@@ -80,21 +98,31 @@
 
         <!-- Hero Header -->
         <header class="max-w-6xl mx-auto px-6 text-center mb-16" id="overview">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-emerald-200/60">
+            <div
+                class="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border border-emerald-200/60">
                 <span>⚡ GTT Payment Orchestration & Ledger Engine</span>
             </div>
             <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
-                Router Design & <span class="text-emerald-600">Double-Entry Ledger Architecture</span>
+                Router Design & <span class="text-emerald-600">Ledger Architecture</span>
             </h1>
             <p class="text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed mb-8">
-                The GTT Payment Router decouples transaction decision policy from physical execution rails. By evaluating real-time telemetry—liquidity depth, gas costs, latency, and provider reliability—the engine deterministically selects payment paths while keeping internal double-entry ledgers cryptographically synchronized.
+                The GTT Payment Router decouples transaction decision policy from physical execution rails. By
+                evaluating real-time telemetry—liquidity depth, gas costs, latency, and provider reliability—the engine
+                deterministically selects payment paths while keeping internal double-entry ledgers cryptographically
+                synchronized.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="#visualizer" class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-500 transition shadow-md flex items-center space-x-2 text-sm">
+                <a href="#visualizer"
+                    class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-500 transition shadow-md flex items-center space-x-2 text-sm">
                     <span>⚡ Launch Interactive Routing Visualizer</span>
                 </a>
-                <a href="system_architecture_event_flow.html" class="bg-white text-slate-800 px-6 py-3 rounded-xl font-semibold hover:bg-slate-100 transition border border-slate-200 flex items-center space-x-2 text-sm shadow-sm">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <a href="system_architecture_event_flow.html"
+                    class="bg-white text-slate-800 px-6 py-3 rounded-xl font-semibold hover:bg-slate-100 transition border border-slate-200 flex items-center space-x-2 text-sm shadow-sm">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
                     <span>View Architecture Event Diagrams</span>
                 </a>
             </div>
@@ -103,104 +131,134 @@
         <!-- Router Architecture Deep-Dive Modules (Categorized in 2 Example Groups) -->
         <section id="modules" class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-200">
             <div class="text-center mb-12">
-                <div class="inline-flex items-center space-x-2 px-3 py-1 bg-slate-200/60 text-slate-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
+                <div
+                    class="inline-flex items-center space-x-2 px-3 py-1 bg-slate-200/60 text-slate-700 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
                     <span>📚 Categorized Architecture Suite</span>
                 </div>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">Router Architecture Example Groups</h2>
+                <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-3">Router Architecture Example Groups
+                </h2>
                 <p class="text-slate-600 max-w-2xl mx-auto text-sm">
-                    Select an example category below to explore detailed specifications, sequence diagrams, lifecycle walkthroughs, and interactive simulators.
+                    Select an example category below to explore detailed specifications, sequence diagrams, lifecycle
+                    walkthroughs, and interactive simulators.
                 </p>
             </div>
 
             <!-- Group 1: External Route Architecture Examples -->
-            <div id="external-route" class="mb-14 bg-white p-6 sm:p-8 rounded-3xl border border-indigo-100 shadow-sm relative overflow-hidden scroll-mt-24">
+            <div id="external-route"
+                class="mb-14 bg-white p-6 sm:p-8 rounded-3xl border border-indigo-100 shadow-sm relative overflow-hidden scroll-mt-24">
                 <div class="absolute top-0 left-0 w-2 h-full bg-indigo-600"></div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 mb-6 border-b border-slate-100 gap-4">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 mb-6 border-b border-slate-100 gap-4">
                     <div>
-                        <div class="flex items-center space-x-2 text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">
+                        <div
+                            class="flex items-center space-x-2 text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">
                             <span>🌐 Category 1</span>
                             <span>•</span>
                             <span>On-Chain USDC Rails</span>
                         </div>
                         <h3 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
                             <span>External Route Architecture</span>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-200/60">4 Modules</span>
+                            <span
+                                class="text-xs bg-indigo-50 text-indigo-700 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-200/60">4
+                                Modules</span>
                         </h3>
                         <p class="text-xs text-slate-500 mt-1 max-w-2xl">
-                            Architecture, lifecycle walkthroughs, dynamic scoring models, and interactive execution simulators for cross-chain and on-chain USDC settlement routes.
+                            Architecture, lifecycle walkthroughs, dynamic scoring models, and interactive execution
+                            simulators for cross-chain and on-chain USDC settlement routes.
                         </p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    
+
                     <!-- Module: Interactive Visualizer -->
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
-                                <span class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-base">⚡</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded">Visualizer</span>
+                                <span
+                                    class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-base">⚡</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded">Visualizer</span>
                             </div>
                             <h4 class="text-sm font-bold text-slate-900 mb-1.5">Interactive Routing Visualizer</h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
-                                5-section executive suite with live formula scoring, multi-rail comparison charts, dynamic T-accounts, and encumbrance steppers.
+                                5-section executive suite with live formula scoring, multi-rail comparison charts,
+                                dynamic T-accounts, and encumbrance steppers.
                             </p>
                         </div>
-                        <a href="interactive_architecture_routing_visualizer.html" class="inline-flex items-center justify-between text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-100/60 hover:bg-indigo-100 p-2.5 rounded-xl transition">
+                        <a href="interactive_architecture_routing_visualizer.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-100/60 hover:bg-indigo-100 p-2.5 rounded-xl transition">
                             <span>Open Visualizer</span>
                             <span>➔</span>
                         </a>
                     </div>
 
                     <!-- Module: System Event Flow -->
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
-                                <span class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base">📐</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded">Diagrams</span>
+                                <span
+                                    class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base">📐</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded">Diagrams</span>
                             </div>
                             <h4 class="text-sm font-bold text-slate-900 mb-1.5">System Event Flow & Diagrams</h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
-                                Mermaid flowcharts and sequence diagrams detailing state handoffs between API, Ledger Engine, Circle API, and Destination ADAs.
+                                Mermaid flowcharts and sequence diagrams detailing state handoffs between API, Ledger
+                                Engine, Circle API, and Destination ADAs.
                             </p>
                         </div>
-                        <a href="system_architecture_event_flow.html" class="inline-flex items-center justify-between text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-100/60 hover:bg-blue-100 p-2.5 rounded-xl transition">
+                        <a href="system_architecture_event_flow.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-100/60 hover:bg-blue-100 p-2.5 rounded-xl transition">
                             <span>View Diagrams</span>
                             <span>➔</span>
                         </a>
                     </div>
 
                     <!-- Module: External USDC Transfer Lifecycle -->
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
-                                <span class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-base">🔄</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded">Running Example</span>
+                                <span
+                                    class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-base">🔄</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded">Running
+                                    Example</span>
                             </div>
                             <h4 class="text-sm font-bold text-slate-900 mb-1.5">External USDC Transfer Lifecycle</h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
-                                Complete end-to-end walkthrough covering instruction creation, telemetry resolution, ledger reservation, on-chain execution, and webhooks.
+                                Complete end-to-end walkthrough covering instruction creation, telemetry resolution,
+                                ledger reservation, on-chain execution, and webhooks.
                             </p>
                         </div>
-                        <a href="runningexamples/1 External On-Chain USDC Transfer Lifecycle.html" class="inline-flex items-center justify-between text-xs font-bold text-purple-600 hover:text-purple-700 bg-purple-100/60 hover:bg-purple-100 p-2.5 rounded-xl transition">
+                        <a href="runningexamples/1 External On-Chain USDC Transfer Lifecycle.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-purple-600 hover:text-purple-700 bg-purple-100/60 hover:bg-purple-100 p-2.5 rounded-xl transition">
                             <span>Explore Lifecycle</span>
                             <span>➔</span>
                         </a>
                     </div>
 
                     <!-- Module: External Route Simulator -->
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-indigo-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
-                                <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-base">🧪</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded">Simulator</span>
+                                <span
+                                    class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-base">🧪</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded">Simulator</span>
                             </div>
                             <h4 class="text-sm font-bold text-slate-900 mb-1.5">External Route Simulator</h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
-                                Interactive node stepper executing live simulated state transitions across API, Router, Ledger, and Circle execution providers.
+                                Interactive node stepper executing live simulated state transitions across API, Router,
+                                Ledger, and Circle execution providers.
                             </p>
                         </div>
-                        <a href="simulator/1 external_route_architecture_simulator.html" class="inline-flex items-center justify-between text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-100/60 hover:bg-emerald-100 p-2.5 rounded-xl transition">
+                        <a href="simulator/1 external_route_architecture_simulator.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-100/60 hover:bg-emerald-100 p-2.5 rounded-xl transition">
                             <span>Launch Simulator</span>
                             <span>➔</span>
                         </a>
@@ -210,21 +268,27 @@
             </div>
 
             <!-- Group 2: Fiat Redemption Architecture Examples -->
-            <div id="fiat-redemption" class="bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-sm relative overflow-hidden scroll-mt-24">
+            <div id="fiat-redemption"
+                class="bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-sm relative overflow-hidden scroll-mt-24">
                 <div class="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 mb-6 border-b border-slate-100 gap-4">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 mb-6 border-b border-slate-100 gap-4">
                     <div>
-                        <div class="flex items-center space-x-2 text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">
+                        <div
+                            class="flex items-center space-x-2 text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">
                             <span>🏦 Category 2</span>
                             <span>•</span>
                             <span>Banking & Off-Ramp Settlement</span>
                         </div>
                         <h3 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2">
                             <span>Fiat Redemption Architecture</span>
-                            <span class="text-xs bg-amber-50 text-amber-700 font-semibold px-2.5 py-0.5 rounded-full border border-amber-200/60">2 Modules</span>
+                            <span
+                                class="text-xs bg-amber-50 text-amber-700 font-semibold px-2.5 py-0.5 rounded-full border border-amber-200/60">2
+                                Modules</span>
                         </h3>
                         <p class="text-xs text-slate-500 mt-1 max-w-2xl">
-                            Off-ramp redemption workflows, banking wire integrations, Circle Mint interfacing, and double-entry fiat transit accounting.
+                            Off-ramp redemption workflows, banking wire integrations, Circle Mint interfacing, and
+                            double-entry fiat transit accounting.
                         </p>
                     </div>
                 </div>
@@ -232,36 +296,49 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                     <!-- Module: Fiat Redemption Overview -->
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 hover:border-amber-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 hover:border-amber-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">🏦</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-100/70 px-2.5 py-1 rounded">Running Example</span>
+                                <span
+                                    class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">🏦</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-100/70 px-2.5 py-1 rounded">Running
+                                    Example</span>
                             </div>
-                            <h4 class="text-base font-bold text-slate-900 mb-2">Fiat Redemption Architecture Overview</h4>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Fiat Redemption Architecture Overview
+                            </h4>
                             <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                                Comprehensive off-ramp redemption specifications linking Circle Mint, Silvergate/SEN/Wire banking rails, and automated double-entry ledger reclassifications for fiat settlements.
+                                Comprehensive off-ramp redemption specifications linking Circle Mint,
+                                Silvergate/SEN/Wire banking rails, and automated double-entry ledger reclassifications
+                                for fiat settlements.
                             </p>
                         </div>
-                        <a href="runningexamples/2 Fiat Redemption Architecture and Interfacing Overview.html" class="inline-flex items-center justify-between text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-100/60 hover:bg-amber-100 p-3 rounded-xl transition">
+                        <a href="runningexamples/2 Fiat Redemption Architecture and Interfacing Overview.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-100/60 hover:bg-amber-100 p-3 rounded-xl transition">
                             <span>Explore Fiat Redemption Lifecycle Overview</span>
                             <span>➔</span>
                         </a>
                     </div>
 
                     <!-- Module: Fiat Redemption Simulator -->
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 hover:border-teal-400 transition-all card-hover flex flex-col justify-between">
+                    <div
+                        class="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 hover:border-teal-400 transition-all card-hover flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg">💵</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-100/70 px-2.5 py-1 rounded">Simulator</span>
+                                <span
+                                    class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg">💵</span>
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-100/70 px-2.5 py-1 rounded">Simulator</span>
                             </div>
                             <h4 class="text-base font-bold text-slate-900 mb-2">Fiat Redemption Route Simulator</h4>
                             <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                                Step-by-step interactive simulator for off-ramp USDC-to-USD fiat redemptions, tracking bank transit liabilities, burn notifications, and clearing journal entries.
+                                Step-by-step interactive simulator for off-ramp USDC-to-USD fiat redemptions, tracking
+                                bank transit liabilities, burn notifications, and clearing journal entries.
                             </p>
                         </div>
-                        <a href="simulator/2 fiat_redemption_architecture.html" class="inline-flex items-center justify-between text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-100/60 hover:bg-teal-100 p-3 rounded-xl transition">
+                        <a href="simulator/2 fiat_redemption_architecture.html"
+                            class="inline-flex items-center justify-between text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-100/60 hover:bg-teal-100 p-3 rounded-xl transition">
                             <span>Launch Fiat Redemption Simulator</span>
                             <span>➔</span>
                         </a>
@@ -274,21 +351,32 @@
         <!-- Section: Interactive Routing Engine & Ledger Explorer -->
         <section id="visualizer" class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-200">
             <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
-                
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-slate-800 gap-4">
+
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-slate-800 gap-4">
                     <div>
-                        <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">
+                        <div
+                            class="flex items-center space-x-2 text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">
                             <span>⚡ Live Interactive Suite</span>
                         </div>
-                        <h2 class="text-2xl font-bold text-white">Payment Orchestration Router & Double-Entry Ledger Engine</h2>
+                        <h2 class="text-2xl font-bold text-white">Payment Orchestration Router & Double-Entry Ledger
+                            Engine</h2>
                     </div>
                     <!-- Navigation Tabs -->
-                    <div class="flex overflow-x-auto gap-4 text-xs font-semibold text-slate-400 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
-                        <button onclick="switchTab('tab-architecture')" id="btn-tab-architecture" class="tab-btn active px-3 py-1.5 rounded-lg whitespace-nowrap transition">1. Architecture</button>
-                        <button onclick="switchTab('tab-scoring')" id="btn-tab-scoring" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">2. Route Scoring</button>
-                        <button onclick="switchTab('tab-accounting')" id="btn-tab-accounting" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">3. Ledger Paths</button>
-                        <button onclick="switchTab('tab-lifecycle')" id="btn-tab-lifecycle" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">4. Encumbrance</button>
-                        <button onclick="switchTab('tab-shadow')" id="btn-tab-shadow" class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">5. Audit Log</button>
+                    <div
+                        class="flex overflow-x-auto gap-4 text-xs font-semibold text-slate-400 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                        <button onclick="switchTab('tab-architecture')" id="btn-tab-architecture"
+                            class="tab-btn active px-3 py-1.5 rounded-lg whitespace-nowrap transition">1.
+                            Architecture</button>
+                        <button onclick="switchTab('tab-scoring')" id="btn-tab-scoring"
+                            class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">2. Route
+                            Scoring</button>
+                        <button onclick="switchTab('tab-accounting')" id="btn-tab-accounting"
+                            class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">3. Ledger Paths</button>
+                        <button onclick="switchTab('tab-lifecycle')" id="btn-tab-lifecycle"
+                            class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">4. Encumbrance</button>
+                        <button onclick="switchTab('tab-shadow')" id="btn-tab-shadow"
+                            class="tab-btn px-3 py-1.5 rounded-lg whitespace-nowrap transition">5. Audit Log</button>
                     </div>
                 </div>
 
@@ -298,40 +386,50 @@
                     <!-- Tab 1: Architecture Pipeline -->
                     <div id="tab-architecture" class="space-y-6">
                         <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200">
-                            <h3 class="font-bold text-white text-base mb-1">Decoupled Telemetry & State Handoff Pipeline</h3>
-                            <p class="text-xs text-slate-400">Click any system component below to inspect its data contract, state responsibility, and journal entry trigger.</p>
+                            <h3 class="font-bold text-white text-base mb-1">Decoupled Telemetry & State Handoff Pipeline
+                            </h3>
+                            <p class="text-xs text-slate-400">Click any system component below to inspect its data
+                                contract, state responsibility, and journal entry trigger.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white" onclick="inspectComponent('client')">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white"
+                                onclick="inspectComponent('client')">
                                 <div class="text-xs text-emerald-400 font-bold mb-1">Stage 1</div>
                                 <h4 class="font-bold text-sm">Client / API</h4>
                                 <p class="text-[11px] text-slate-400 mt-1">Issues transfer request & constraints.</p>
                             </div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white" onclick="inspectComponent('router')">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white"
+                                onclick="inspectComponent('router')">
                                 <div class="text-xs text-emerald-400 font-bold mb-1">Stage 2</div>
                                 <h4 class="font-bold text-sm">Payment Router</h4>
-                                <p class="text-[11px] text-slate-400 mt-1">Scores liquidity, cost, latency telemetry.</p>
+                                <p class="text-[11px] text-slate-400 mt-1">Scores liquidity, cost, latency telemetry.
+                                </p>
                             </div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white" onclick="inspectComponent('ledger')">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white"
+                                onclick="inspectComponent('ledger')">
                                 <div class="text-xs text-emerald-400 font-bold mb-1">Stage 3</div>
                                 <h4 class="font-bold text-sm">Double-Entry Ledger</h4>
                                 <p class="text-[11px] text-slate-400 mt-1">Locks balance to Reserved subledger.</p>
                             </div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white" onclick="inspectComponent('provider')">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white"
+                                onclick="inspectComponent('provider')">
                                 <div class="text-xs text-emerald-400 font-bold mb-1">Stage 4</div>
                                 <h4 class="font-bold text-sm">Execution Provider</h4>
                                 <p class="text-[11px] text-slate-400 mt-1">Executes Circle API / On-Chain transfer.</p>
                             </div>
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white" onclick="inspectComponent('recon')">
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-emerald-500 transition cursor-pointer text-white"
+                                onclick="inspectComponent('recon')">
                                 <div class="text-xs text-emerald-400 font-bold mb-1">Stage 5</div>
                                 <h4 class="font-bold text-sm">Reconciliation</h4>
                                 <p class="text-[11px] text-slate-400 mt-1">Finalizes custody clearing on webhook.</p>
                             </div>
                         </div>
 
-                        <div id="component-inspector" class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 text-slate-200 text-xs font-mono">
-                            <span class="text-slate-400">💡 Select a stage card above to inspect live pipeline data specs.</span>
+                        <div id="component-inspector"
+                            class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 text-slate-200 text-xs font-mono">
+                            <span class="text-slate-400">💡 Select a stage card above to inspect live pipeline data
+                                specs.</span>
                         </div>
                     </div>
 
@@ -339,37 +437,43 @@
                     <div id="tab-scoring" class="hidden space-y-6">
                         <div class="grid md:grid-cols-3 gap-6">
                             <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200 space-y-4">
-                                <h3 class="font-bold text-white text-sm border-b border-slate-700 pb-2">Scoring Weights</h3>
+                                <h3 class="font-bold text-white text-sm border-b border-slate-700 pb-2">Scoring Weights
+                                </h3>
                                 <div>
                                     <label class="flex justify-between text-xs text-slate-300 mb-1">
                                         <span>Cost Weight (w_c)</span>
                                         <span id="val-cost" class="font-mono text-emerald-400">0.40</span>
                                     </label>
-                                    <input type="range" id="slide-cost" min="0" max="1" step="0.05" value="0.40" oninput="updateScoring()" class="w-full accent-emerald-500">
+                                    <input type="range" id="slide-cost" min="0" max="1" step="0.05" value="0.40"
+                                        oninput="updateScoring()" class="w-full accent-emerald-500">
                                 </div>
                                 <div>
                                     <label class="flex justify-between text-xs text-slate-300 mb-1">
                                         <span>Speed / Latency (w_l)</span>
                                         <span id="val-latency" class="font-mono text-emerald-400">0.30</span>
                                     </label>
-                                    <input type="range" id="slide-latency" min="0" max="1" step="0.05" value="0.30" oninput="updateScoring()" class="w-full accent-emerald-500">
+                                    <input type="range" id="slide-latency" min="0" max="1" step="0.05" value="0.30"
+                                        oninput="updateScoring()" class="w-full accent-emerald-500">
                                 </div>
                                 <div>
                                     <label class="flex justify-between text-xs text-slate-300 mb-1">
                                         <span>Liquidity Depth (w_q)</span>
                                         <span id="val-liquidity" class="font-mono text-emerald-400">0.20</span>
                                     </label>
-                                    <input type="range" id="slide-liquidity" min="0" max="1" step="0.05" value="0.20" oninput="updateScoring()" class="w-full accent-emerald-500">
+                                    <input type="range" id="slide-liquidity" min="0" max="1" step="0.05" value="0.20"
+                                        oninput="updateScoring()" class="w-full accent-emerald-500">
                                 </div>
                                 <div>
                                     <label class="flex justify-between text-xs text-slate-300 mb-1">
                                         <span>Reliability History (w_r)</span>
                                         <span id="val-reliability" class="font-mono text-emerald-400">0.10</span>
                                     </label>
-                                    <input type="range" id="slide-reliability" min="0" max="1" step="0.05" value="0.10" oninput="updateScoring()" class="w-full accent-emerald-500">
+                                    <input type="range" id="slide-reliability" min="0" max="1" step="0.05" value="0.10"
+                                        oninput="updateScoring()" class="w-full accent-emerald-500">
                                 </div>
                             </div>
-                            <div class="md:col-span-2 bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200">
+                            <div
+                                class="md:col-span-2 bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200">
                                 <h3 class="font-bold text-white text-sm mb-4">Multi-Rail Scoring Comparison</h3>
                                 <div class="chart-container">
                                     <canvas id="scoringChart"></canvas>
@@ -382,28 +486,39 @@
                     <div id="tab-accounting" class="hidden space-y-6">
                         <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200">
                             <h3 class="font-bold text-white text-sm mb-2">Double-Entry Journal Entry Matrices</h3>
-                            <p class="text-xs text-slate-400 mb-4">Every payment instruction is tracked across immutable debit/credit journal entries ensuring sum(debits) == sum(credits).</p>
-                            
+                            <p class="text-xs text-slate-400 mb-4">Every payment instruction is tracked across immutable
+                                debit/credit journal entries ensuring sum(debits) == sum(credits).</p>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
                                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                                    <div class="text-emerald-400 font-bold mb-2">Entry 1: Fund Encumbrance (Reservation)</div>
-                                    <div class="flex justify-between text-slate-300"><span>DR: Customer USDC - Available</span><span class="text-emerald-400">$10,000.00</span></div>
-                                    <div class="flex justify-between text-slate-300"><span>CR: Customer USDC - Reserved</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="text-emerald-400 font-bold mb-2">Entry 1: Fund Encumbrance (Reservation)
+                                    </div>
+                                    <div class="flex justify-between text-slate-300"><span>DR: Customer USDC -
+                                            Available</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>CR: Customer USDC -
+                                            Reserved</span><span class="text-emerald-400">$10,000.00</span></div>
                                 </div>
                                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
                                     <div class="text-emerald-400 font-bold mb-2">Entry 2: Execution In-Flight</div>
-                                    <div class="flex justify-between text-slate-300"><span>DR: Customer USDC - Reserved</span><span class="text-emerald-400">$10,000.00</span></div>
-                                    <div class="flex justify-between text-slate-300"><span>CR: Settlement Transit Liability</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>DR: Customer USDC -
+                                            Reserved</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>CR: Settlement Transit
+                                            Liability</span><span class="text-emerald-400">$10,000.00</span></div>
                                 </div>
                                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                                    <div class="text-emerald-400 font-bold mb-2">Entry 3: Terminal On-Chain Settlement</div>
-                                    <div class="flex justify-between text-slate-300"><span>DR: Settlement Transit Liability</span><span class="text-emerald-400">$10,000.00</span></div>
-                                    <div class="flex justify-between text-slate-300"><span>CR: Circle Custody USDC Asset</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="text-emerald-400 font-bold mb-2">Entry 3: Terminal On-Chain Settlement
+                                    </div>
+                                    <div class="flex justify-between text-slate-300"><span>DR: Settlement Transit
+                                            Liability</span><span class="text-emerald-400">$10,000.00</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>CR: Circle Custody USDC
+                                            Asset</span><span class="text-emerald-400">$10,000.00</span></div>
                                 </div>
                                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
                                     <div class="text-blue-400 font-bold mb-2">Entry 4: Fee Breakdown & Network Gas</div>
-                                    <div class="flex justify-between text-slate-300"><span>DR: Platform Revenue / Fee Reserve</span><span class="text-blue-400">$2.50</span></div>
-                                    <div class="flex justify-between text-slate-300"><span>CR: Gas Expense Reserve</span><span class="text-blue-400">$0.15</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>DR: Platform Revenue / Fee
+                                            Reserve</span><span class="text-blue-400">$2.50</span></div>
+                                    <div class="flex justify-between text-slate-300"><span>CR: Gas Expense
+                                            Reserve</span><span class="text-blue-400">$0.15</span></div>
                                 </div>
                             </div>
                         </div>
@@ -413,15 +528,23 @@
                     <div id="tab-lifecycle" class="hidden space-y-6">
                         <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-slate-200">
                             <h3 class="font-bold text-white text-base mb-4">Balance Bucket Encumbrance Progress</h3>
-                            
+
                             <div class="flex items-center justify-between mb-6">
-                                <button onclick="setEncumbranceStep(1)" id="enc-btn-1" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white">Stage 1: Available</button>
+                                <button onclick="setEncumbranceStep(1)" id="enc-btn-1"
+                                    class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white">Stage 1:
+                                    Available</button>
                                 <div class="h-0.5 w-12 bg-slate-700"></div>
-                                <button onclick="setEncumbranceStep(2)" id="enc-btn-2" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 2: Reserved</button>
+                                <button onclick="setEncumbranceStep(2)" id="enc-btn-2"
+                                    class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 2:
+                                    Reserved</button>
                                 <div class="h-0.5 w-12 bg-slate-700"></div>
-                                <button onclick="setEncumbranceStep(3)" id="enc-btn-3" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 3: Transit</button>
+                                <button onclick="setEncumbranceStep(3)" id="enc-btn-3"
+                                    class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 3:
+                                    Transit</button>
                                 <div class="h-0.5 w-12 bg-slate-700"></div>
-                                <button onclick="setEncumbranceStep(4)" id="enc-btn-4" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 4: Settled</button>
+                                <button onclick="setEncumbranceStep(4)" id="enc-btn-4"
+                                    class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300">Stage 4:
+                                    Settled</button>
                             </div>
 
                             <div class="grid grid-cols-4 gap-4 text-center font-mono text-xs">
@@ -448,7 +571,8 @@
                     <!-- Tab 5: Audit Log -->
                     <div id="tab-shadow" class="hidden space-y-6">
                         <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 text-slate-200">
-                            <h3 class="font-bold text-white text-sm mb-3">Shadow Mode Routing & Audit Drift Detector</h3>
+                            <h3 class="font-bold text-white text-sm mb-3">Shadow Mode Routing & Audit Drift Detector
+                            </h3>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-xs text-left font-mono text-slate-300">
                                     <thead class="bg-slate-900 text-slate-400 uppercase text-[10px]">
@@ -468,7 +592,9 @@
                                             <td class="p-2.5">RC_WIRE_SILVERGATE</td>
                                             <td class="p-2.5">94.5</td>
                                             <td class="p-2.5">82.1</td>
-                                            <td class="p-2.5"><span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded">Aligned</span></td>
+                                            <td class="p-2.5"><span
+                                                    class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded">Aligned</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="p-2.5 text-emerald-400">TX-89211</td>
@@ -476,7 +602,9 @@
                                             <td class="p-2.5">RC_SOLANA_USDC</td>
                                             <td class="p-2.5">91.0</td>
                                             <td class="p-2.5">90.8</td>
-                                            <td class="p-2.5"><span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded">Aligned</span></td>
+                                            <td class="p-2.5"><span
+                                                    class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded">Aligned</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="p-2.5 text-emerald-400">TX-89212</td>
@@ -484,7 +612,9 @@
                                             <td class="p-2.5">RC_CIRCLE_BASE</td>
                                             <td class="p-2.5">88.3</td>
                                             <td class="p-2.5">92.0</td>
-                                            <td class="p-2.5"><span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded">Drift Alert</span></td>
+                                            <td class="p-2.5"><span
+                                                    class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded">Drift
+                                                    Alert</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -499,17 +629,26 @@
 
         <!-- Technical PDF Whitepaper Link -->
         <section id="whitepaper" class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-200">
-            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div
+                class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-2">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">📄 Architecture Reference Specification</span>
-                    <h3 class="text-xl md:text-2xl font-bold text-white">Project ADA Whitepaper & Stablecoins Commerce Stack</h3>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">📄 Architecture
+                        Reference Specification</span>
+                    <h3 class="text-xl md:text-2xl font-bold text-white">Project ADA Whitepaper & Stablecoins Commerce
+                        Stack</h3>
                     <p class="text-slate-300 text-xs md:text-sm max-w-2xl">
-                        Detailed mathematical specs on liquidity scoring functions, double-entry ledger invariant proofs, and balance encumbrance guarantees.
+                        Detailed mathematical specs on liquidity scoring functions, double-entry ledger invariant
+                        proofs, and balance encumbrance guarantees.
                     </p>
                 </div>
-                <a href="../Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf" target="_blank"
-                   class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-xl transition text-sm flex items-center space-x-2 shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <a href="../Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf"
+                    target="_blank"
+                    class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-xl transition text-sm flex items-center space-x-2 shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
                     <span>Read Whitepaper PDF</span>
                 </a>
             </div>
@@ -521,16 +660,20 @@
     <footer class="bg-slate-900 text-white py-10 px-6 border-t border-slate-800 text-xs">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
-                <div class="w-6 h-6 bg-emerald-600 rounded flex items-center justify-center text-white font-bold">G</div>
+                <div class="w-6 h-6 bg-emerald-600 rounded flex items-center justify-center text-white font-bold">G
+                </div>
                 <span class="font-extrabold uppercase tracking-tight text-white">GTT Router Design</span>
                 <span class="text-slate-500">•</span>
                 <span class="text-slate-400">Payment Orchestration & Ledger Engine Hub</span>
             </div>
             <div class="flex space-x-6 text-slate-400">
                 <a href="../index.html" class="hover:text-emerald-400 transition">GTT Explorer</a>
-                <a href="interactive_architecture_routing_visualizer.html" class="hover:text-emerald-400 transition">Routing Visualizer</a>
-                <a href="system_architecture_event_flow.html" class="hover:text-emerald-400 transition">Event Flow Diagrams</a>
-                <a href="../Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf" target="_blank" class="hover:text-emerald-400 transition">PDF Specification</a>
+                <a href="interactive_architecture_routing_visualizer.html"
+                    class="hover:text-emerald-400 transition">Routing Visualizer</a>
+                <a href="system_architecture_event_flow.html" class="hover:text-emerald-400 transition">Event Flow
+                    Diagrams</a>
+                <a href="../Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf"
+                    target="_blank" class="hover:text-emerald-400 transition">PDF Specification</a>
             </div>
         </div>
     </footer>
@@ -624,8 +767,8 @@
         function setEncumbranceStep(step) {
             [1, 2, 3, 4].forEach(s => {
                 const btn = document.getElementById(`enc-btn-${s}`);
-                btn.className = s === step 
-                    ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white" 
+                btn.className = s === step
+                    ? "px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white"
                     : "px-4 py-2 rounded-xl text-xs font-bold bg-slate-700 text-slate-300";
             });
 
@@ -650,4 +793,5 @@
         }
     </script>
 </body>
+
 </html>
