@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Router & Ledger System Architecture</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Minimal custom styling for chart containers and custom elements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #4f46e5;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<!-- Chosen Palette: Warm Slate & Neutral (Background `#f8fafc`, Primary Indigo `#4f46e5`, Emerald `#059669`, Amber `#d97706`, Slate Dark `#0f172a`) -->
+<!-- Application Structure Plan: Designed as a 5-section executive interactive visualizer: 1. System Architecture Pipeline (Event-driven component flow & node inspector), 2. Deterministic Routing Engine (Live scoring simulator with dynamic sliders & Chart.js graph), 3. Accounting Scenarios Matrix (4 journal entry templates with interactive T-accounts), 4. Balance Bucket State Machine (4-stage stepper tracking fund encumbrance across subledgers), 5. Shadow Mode & Audit Log (Replay drift detector). This provides both high-level system understanding and granular accounting precision. -->
+<!-- Visualization & Content Choices:
+    - System Flow: Styled HTML/Tailwind node cards with Unicode state indicators & click-to-inspect state panels. (Goal: System Flow | Method: HTML/CSS Grid | No SVG/Mermaid).
+    - Route Engine Scoring: Sliders updating weights (Cost, Latency, Liquidity, Reliability) driving Chart.js Bar Chart & raw score math. (Goal: Simulate & Compare | Method: Chart.js Canvas).
+    - Accounting Matrix: Interactive scenario tabs rendering double-entry journal entries with auto-balancing debits/credits. (Goal: Organize & Compare | Method: Styled HTML Tables).
+    - Balance Bucket Machine: Interactive progress stepper showing live shifting of $10,000 between Available, Reserved, Transit, and Custody. (Goal: Change Over Time | Method: Tailwind Flex/Meters).
+    - Replay Inspector: Filterable audit log identifying winner drifts and score deltas. (Goal: Auditability | Method: JS Filterable Table).
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 transition">
+                    ← Back to Router Design Hub
+                </a>
+                <span class="text-2xl">⚡</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">Payment Router & Double-Entry Ledger Engine</h1>
+                    <p class="text-xs text-slate-400">Interactive Architecture, Deterministic Routing & Accounting Explorer</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>System State: <strong class="text-emerald-400">Operational</strong></span>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto gap-8 text-sm text-slate-400 border-t border-slate-800">
+            <button onclick="switchTab('tab-architecture')" id="btn-tab-architecture" class="tab-btn active py-3 whitespace-nowrap">1. System Architecture</button>
+            <button onclick="switchTab('tab-scoring')" id="btn-tab-scoring" class="tab-btn py-3 whitespace-nowrap">2. Routing Engine Simulator</button>
+            <button onclick="switchTab('tab-accounting')" id="btn-tab-accounting" class="tab-btn py-3 whitespace-nowrap">3. Ledger Accounting Paths</button>
+            <button onclick="switchTab('tab-lifecycle')" id="btn-tab-lifecycle" class="tab-btn py-3 whitespace-nowrap">4. Balance Bucket Lifecycle</button>
+            <button onclick="switchTab('tab-shadow')" id="btn-tab-shadow" class="tab-btn py-3 whitespace-nowrap">5. Shadow Mode & Audit Log</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= SECTION 1: ARCHITECTURE OVERVIEW ================= -->
+        <section id="tab-architecture" class="space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">System Architecture & Event-Driven Pipeline</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    This section illustrates the decoupled architecture between upstream instruction creation, the dynamic Payment Orchestration Router, the double-entry Ledger Engine, and execution providers. By decoupling routing policy from execution rails, the engine evaluates real-time telemetry (latency, gas fees, liquidity) to select the optimal path before committing financial state changes.
+                </p>
+            </div>
+
+            <!-- Flow Architecture Component Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <!-- Node 1 -->
+                <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 hover:border-indigo-400 transition-all shadow-sm flex flex-col justify-between cursor-pointer" onclick="inspectComponent('client')">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">Stage 1</span>
+                            <span class="text-lg">👤</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-900 text-sm">Client / Upstream</h3>
+                        <p class="text-xs text-slate-500 mt-1">Issues payment instruction with target constraints.</p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-indigo-600 font-medium flex items-center justify-between">
+                        <span>Create Instruction</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Node 2 -->
+                <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 hover:border-indigo-400 transition-all shadow-sm flex flex-col justify-between cursor-pointer" onclick="inspectComponent('router')">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-700">Stage 2</span>
+                            <span class="text-lg">🧠</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-900 text-sm">Router Engine</h3>
+                        <p class="text-xs text-slate-500 mt-1">Evaluates bindings, constraints, & scores candidate rails.</p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-amber-600 font-medium flex items-center justify-between">
+                        <span>Resolve Route</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Node 3 -->
+                <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 hover:border-indigo-400 transition-all shadow-sm flex flex-col justify-between cursor-pointer" onclick="inspectComponent('ledger')">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-700">Stage 3</span>
+                            <span class="text-lg">⚖️</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-900 text-sm">Ledger Engine</h3>
+                        <p class="text-xs text-slate-500 mt-1">Locks balances & executes double-entry journal templates.</p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-purple-600 font-medium flex items-center justify-between">
+                        <span>Encumber & Post</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Node 4 -->
+                <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 hover:border-indigo-400 transition-all shadow-sm flex flex-col justify-between cursor-pointer" onclick="inspectComponent('provider')">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700">Stage 4</span>
+                            <span class="text-lg">🏛️</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-900 text-sm">Circle API Provider</h3>
+                        <p class="text-xs text-slate-500 mt-1">Executes on-chain or fiat mint/burn transactions.</p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-blue-600 font-medium flex items-center justify-between">
+                        <span>Dispatch Transfer</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Node 5 -->
+                <div class="bg-white p-4 rounded-xl border-2 border-indigo-100 hover:border-indigo-400 transition-all shadow-sm flex flex-col justify-between cursor-pointer" onclick="inspectComponent('network')">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Stage 5</span>
+                            <span class="text-lg">⛓️</span>
+                        </div>
+                        <h3 class="font-semibold text-slate-900 text-sm">External Blockchain</h3>
+                        <p class="text-xs text-slate-500 mt-1">Finalizes transfer on Base / Polygon / Ethereum.</p>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-emerald-600 font-medium flex items-center justify-between">
+                        <span>Terminal Finality</span>
+                        <span>✔</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Node Details Inspector -->
+            <div id="component-inspector" class="bg-slate-900 text-white p-6 rounded-xl shadow-md border border-slate-800">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                    <h3 class="text-sm font-bold tracking-wide uppercase text-indigo-400 flex items-center gap-2">
+                        <span>🔍</span> <span id="inspect-title">Component Inspector: Select a Stage Above</span>
+                    </h3>
+                    <span id="inspect-badge" class="px-2 py-0.5 rounded text-xs bg-slate-800 text-slate-300">Overview Mode</span>
+                </div>
+                <div id="inspect-body" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
+                    <div>
+                        <span class="text-slate-500 font-semibold block mb-1">PRIMARY RESPONSIBILITY</span>
+                        <p id="inspect-resp">Click any component card above to view its detailed API contracts, event triggers, and state transitions during a transaction lifecycle.</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-semibold block mb-1">INTERFACING & STATE HASHS</span>
+                        <p id="inspect-interfaces">Exposes REST/gRPC interfaces, publishes async Kafka events, and manipulates specific balance buckets in the database.</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-semibold block mb-1">OUTPUT TRIGGER EVENT</span>
+                        <p id="inspect-event" class="font-mono text-emerald-400">route_resolved | pending_provider | confirmed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: ROUTING ENGINE SIMULATOR ================= -->
+        <section id="tab-scoring" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">Deterministic Scoring & Route Selection Engine</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    The router evaluates eligible execution capabilities by applying normalized scoring math clamped to $[0, 1]$. Adjust the policy weight sliders below to simulate how real-time strategy shifts (e.g., prioritizing low cost vs. high speed) re-rank executable rails in real-time.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Policy Configuration Sliders -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <h3 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex justify-between items-center">
+                        <span>Policy Weight Tuning (<span id="profile-code">RP_GLOBAL_USDC_V3</span>)</span>
+                        <button onclick="resetWeights()" class="text-xs text-indigo-600 hover:text-indigo-800 font-normal">Reset Defaults</button>
+                    </h3>
+
+                    <!-- Weight Slider 1: Cost -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Cost Weight ($w_c$)</span>
+                            <span id="val-cost" class="text-indigo-600 font-mono">0.35</span>
+                        </div>
+                        <input type="range" id="slider-cost" min="0" max="1" step="0.05" value="0.35" oninput="updateScoring()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        <p class="text-[11px] text-slate-400 mt-1">Lower cost increases normalized candidate score ($N_{cost}$).</p>
+                    </div>
+
+                    <!-- Weight Slider 2: Latency -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Latency Weight ($w_l$)</span>
+                            <span id="val-lat" class="text-indigo-600 font-mono">0.25</span>
+                        </div>
+                        <input type="range" id="slider-lat" min="0" max="1" step="0.05" value="0.25" oninput="updateScoring()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        <p class="text-[11px] text-slate-400 mt-1">Lower p95 latency increases normalized candidate score ($N_{lat}$).</p>
+                    </div>
+
+                    <!-- Weight Slider 3: Liquidity -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Liquidity Weight ($w_q$)</span>
+                            <span id="val-liq" class="text-indigo-600 font-mono">0.25</span>
+                        </div>
+                        <input type="range" id="slider-liq" min="0" max="1" step="0.05" value="0.25" oninput="updateScoring()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        <p class="text-[11px] text-slate-400 mt-1">Higher available balance increases normalized candidate score ($N_{liq}$).</p>
+                    </div>
+
+                    <!-- Weight Slider 4: Reliability -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">Reliability Weight ($w_r$)</span>
+                            <span id="val-rel" class="text-indigo-600 font-mono">0.15</span>
+                        </div>
+                        <input type="range" id="slider-rel" min="0" max="1" step="0.05" value="0.15" oninput="updateScoring()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        <p class="text-[11px] text-slate-400 mt-1">Lower 1h failure rate increases reliability score ($R$).</p>
+                    </div>
+
+                    <div class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-800 text-xs flex items-start gap-2">
+                        <span class="text-sm">💡</span>
+                        <span><strong>Formula:</strong> $Final(c) = Base(c) \times P_{health}(c) \times P_{lat}(c)$ where Base is the weighted normalized sum.</span>
+                    </div>
+                </div>
+
+                <!-- Real-Time Scoring Visualization & Chart -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3 flex justify-between items-center">
+                            <span>Candidate Score Ranking Chart</span>
+                            <span id="winner-badge" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">Winner: RC_CIRCLE_ONCHAIN_BASE</span>
+                        </h3>
+                        <!-- Chart Container -->
+                        <div class="chart-container my-4">
+                            <canvas id="scoringChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Breakdown Table -->
+                    <div class="overflow-x-auto text-xs">
+                        <table class="min-w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-600">
+                                    <th class="p-2 rounded-l">Route Code</th>
+                                    <th class="p-2">Est. Cost</th>
+                                    <th class="p-2">Latency</th>
+                                    <th class="p-2">Health</th>
+                                    <th class="p-2 rounded-r text-right">Final Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scoring-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: ACCOUNTING PATHS ================= -->
+        <section id="tab-accounting" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">Ledger Accounting Paths & Double-Entry Templates</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    The Payment Router's selected capability dynamically maps to specific General Ledger (GL) and Subledger account templates. Select a real-world scenario below to inspect how double-entry journal entries debit and credit liability, transit, receivable, and asset buckets.
+                </p>
+            </div>
+
+            <!-- Scenario Selection Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="selectScenario(1)" id="scen-btn-1" class="scen-btn p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-left transition-all">
+                    <div class="text-xs font-bold text-indigo-600 mb-1">Scenario 1</div>
+                    <div class="font-semibold text-slate-900 text-sm">Internal Off-Chain C2C</div>
+                    <div class="text-xs text-slate-500 mt-1">$0 Fee • Instant 0ms • No On-Chain Transit</div>
+                </button>
+                <button onclick="selectScenario(2)" id="scen-btn-2" class="scen-btn p-4 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-all">
+                    <div class="text-xs font-bold text-slate-400 mb-1">Scenario 2</div>
+                    <div class="font-semibold text-slate-900 text-sm">Fiat-to-Crypto ACH Payin</div>
+                    <div class="text-xs text-slate-500 mt-1">1-3 Day Clearing • Deposit Receivable</div>
+                </button>
+                <button onclick="selectScenario(3)" id="scen-btn-3" class="scen-btn p-4 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-all">
+                    <div class="text-xs font-bold text-slate-400 mb-1">Scenario 3</div>
+                    <div class="font-semibold text-slate-900 text-sm">Supplier Payout + Fee Split</div>
+                    <div class="text-xs text-slate-500 mt-1">$5 Revenue Split • External Polygon Rail</div>
+                </button>
+                <button onclick="selectScenario(4)" id="scen-btn-4" class="scen-btn p-4 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-all">
+                    <div class="text-xs font-bold text-slate-400 mb-1">Scenario 4</div>
+                    <div class="font-semibold text-slate-900 text-sm">CCTP Cross-Chain Treasury</div>
+                    <div class="text-xs text-slate-500 mt-1">ETH to ARB • Transit Asset & Gas Fee</div>
+                </button>
+            </div>
+
+            <!-- Selected Scenario Display Box -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span id="scen-tag" class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">Route: RC_INTERNAL_LEDGER</span>
+                        <h3 id="scen-title" class="text-base font-bold text-slate-900 mt-1">Internal Customer-to-Customer Settlement</h3>
+                    </div>
+                    <div class="text-xs text-slate-500 font-mono bg-slate-50 px-3 py-1.5 rounded border border-slate-200">
+                        Rail Type: <span id="scen-rail" class="font-bold text-slate-700">internal_ledger</span>
+                    </div>
+                </div>
+
+                <!-- T-Account Journal Entries Table -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Double-Entry Journal Posting Sequence</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900 text-white">
+                                    <th class="p-3 rounded-l">Step / Event</th>
+                                    <th class="p-3">General Ledger Account Name</th>
+                                    <th class="p-3">Account Type</th>
+                                    <th class="p-3 text-right">Debit ($)</th>
+                                    <th class="p-3 rounded-r text-right">Credit ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="journal-table-body" class="divide-y divide-slate-100 font-mono">
+                                <!-- Dynamic rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Accounting Rationale Note -->
+                <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 leading-relaxed">
+                    <strong class="text-indigo-600 block mb-1">Architectural Takeaway:</strong>
+                    <span id="scen-takeaway">By selecting an internal rail, the Router instructs the Ledger to bypass the Settlement Transit Liability and Circle Custody Asset accounts entirely, achieving instant, zero-cost settlement without external blockchain exposure.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: BALANCE BUCKET LIFECYCLE ================= -->
+        <section id="tab-lifecycle" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">Subledger Balance Bucket Lifecycle</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Customer funds move through four distinct subledger balance buckets during an external USDC payment ($Available \rightarrow Reserved \rightarrow Transit \rightarrow Custody$). Use the interactive stepper below to visualize how total customer ownership is preserved during encumbrance.
+                </p>
+            </div>
+
+            <!-- Lifecycle Stepper Controls -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Transaction Stage Stepper</span>
+                    <span class="text-xs font-mono font-semibold text-indigo-600">Total Customer Balance: $10,000.00 USDC</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                    <button onclick="setLifecycleStep(1)" id="step-btn-1" class="p-3 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition-all">
+                        1. Created
+                    </button>
+                    <button onclick="setLifecycleStep(2)" id="step-btn-2" class="p-3 rounded-lg bg-slate-100 text-slate-600 font-semibold hover:bg-slate-200 transition-all">
+                        2. Route Resolved
+                    </button>
+                    <button onclick="setLifecycleStep(3)" id="step-btn-3" class="p-3 rounded-lg bg-slate-100 text-slate-600 font-semibold hover:bg-slate-200 transition-all">
+                        3. Pending Provider
+                    </button>
+                    <button onclick="setLifecycleStep(4)" id="step-btn-4" class="p-3 rounded-lg bg-slate-100 text-slate-600 font-semibold hover:bg-slate-200 transition-all">
+                        4. Confirmed (Final)
+                    </button>
+                </div>
+
+                <!-- Balance Meters Visualization -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+                    <!-- Bucket 1: Available -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between text-xs font-semibold mb-2">
+                            <span class="text-slate-600">Available Balance</span>
+                            <span id="bucket-avail-val" class="font-mono text-emerald-600">$10,000.00</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="meter-avail" class="bg-emerald-500 h-3 rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Deployable liquidity available for new transactions.</p>
+                    </div>
+
+                    <!-- Bucket 2: Reserved -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between text-xs font-semibold mb-2">
+                            <span class="text-slate-600">Reserved Balance</span>
+                            <span id="bucket-rsvd-val" class="font-mono text-amber-600">$0.00</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="meter-rsvd" class="bg-amber-500 h-3 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Encumbered funds locked during route resolution.</p>
+                    </div>
+
+                    <!-- Bucket 3: Transit -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between text-xs font-semibold mb-2">
+                            <span class="text-slate-600">Settlement Transit</span>
+                            <span id="bucket-transit-val" class="font-mono text-purple-600">$0.00</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="meter-transit" class="bg-purple-500 h-3 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">In-flight on blockchain / pending provider webhook.</p>
+                    </div>
+
+                    <!-- Bucket 4: Custody Write-Down -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex justify-between text-xs font-semibold mb-2">
+                            <span class="text-slate-600">Platform Custody</span>
+                            <span id="bucket-custody-val" class="font-mono text-slate-700">$10,000.00</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                            <div id="meter-custody" class="bg-slate-700 h-3 rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Physical USDC held in platform Circle wallet.</p>
+                    </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-900 leading-relaxed flex items-start gap-3">
+                    <span class="text-base">📌</span>
+                    <div>
+                        <strong id="lifecycle-title" class="block font-bold">Stage 1: Instruction Created (`created`)</strong>
+                        <span id="lifecycle-desc">The instruction is received by the Payment Instruction API. No route is assigned yet, so balances remain 100% available in the source Account of Digital Asset (ADA).</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: SHADOW MODE & AUDIT LOG ================= -->
+        <section id="tab-shadow" class="space-y-6 hidden">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">Shadow Mode & Replay Drift Inspector</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Shadow mode runs proposed routing policy versions in parallel against historical production telemetry (`vw_router_decision_replay`). Search and inspect decision records below to detect winner matches and score drift prior to policy promotion.
+                </p>
+            </div>
+
+            <!-- Audit Search & Filter Bar -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="relative w-full sm:w-80">
+                    <input type="text" id="audit-search" oninput="filterAuditLog()" placeholder="Search instruction ID or route..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs w-full sm:w-auto justify-end">
+                    <label class="flex items-center gap-1.5 cursor-pointer text-slate-600">
+                        <input type="checkbox" id="chk-mismatch-only" onchange="filterAuditLog()" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                        <span>Show Winner Mismatches Only</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Audit Table -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-xs text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-white font-semibold">
+                                <th class="p-3">Instruction ID</th>
+                                <th class="p-3">Persisted Winner</th>
+                                <th class="p-3">Replay Winner (Shadow)</th>
+                                <th class="p-3 text-right">Score Delta</th>
+                                <th class="p-3 text-center">Winner Match?</th>
+                                <th class="p-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-table-body" class="divide-y divide-slate-100 font-mono">
+                            <!-- Populated dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>Payment Orchestration Router & Double-Entry Ledger System Architecture • Single-Page Interactive Visualizer</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Global Application State
+        const state = {
+            activeTab: 'tab-architecture',
+            weights: {
+                cost: 0.35,
+                lat: 0.25,
+                liq: 0.25,
+                rel: 0.15
+            },
+            candidates: [
+                { code: 'RC_CIRCLE_ONCHAIN_BASE', name: 'Circle On-Chain Base', cost: 0.50, lat: 5000, liq: 900000, fail: 0.001, health: 1.0 },
+                { code: 'RC_CIRCLE_ONCHAIN_POLYGON', name: 'Circle On-Chain Polygon', cost: 0.20, lat: 12000, liq: 450000, fail: 0.005, health: 1.0 },
+                { code: 'RC_CIRCLE_MINT_WIRE_USD', name: 'Circle Mint ACH/Wire', cost: 0.00, lat: 86400000, liq: 5000000, fail: 0.000, health: 1.0 },
+                { code: 'RC_CIRCLE_ONCHAIN_MAINNET', name: 'Circle On-Chain Ethereum', cost: 12.50, lat: 15000, liq: 2000000, fail: 0.002, health: 1.0 }
+            ],
+            currentScenario: 1,
+            lifecycleStep: 1,
+            auditLog: [
+                { id: 'inst_8f9a21b0', persisted: 'RC_CIRCLE_ONCHAIN_BASE', replay: 'RC_CIRCLE_ONCHAIN_BASE', delta: '+0.000000', match: true },
+                { id: 'inst_3c4d5e6f', persisted: 'RC_CIRCLE_ONCHAIN_MAINNET', replay: 'RC_CIRCLE_ONCHAIN_BASE', delta: '+14.250110', match: false },
+                { id: 'inst_1a2b3c4d', persisted: 'RC_CIRCLE_MINT_WIRE_USD', replay: 'RC_CIRCLE_MINT_WIRE_USD', delta: '+0.000000', match: true },
+                { id: 'inst_9e8d7c6b', persisted: 'RC_CIRCLE_ONCHAIN_POLYGON', replay: 'RC_CIRCLE_ONCHAIN_BASE', delta: '+3.112450', match: false },
+                { id: 'inst_5f4e3d2c', persisted: 'RC_CIRCLE_ONCHAIN_BASE', replay: 'RC_CIRCLE_ONCHAIN_BASE', delta: '+0.000000', match: true }
+            ],
+            scoringChart: null
+        };
+
+        // Navigation Tab Switching
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + tabId).classList.add('active');
+
+            if (tabId === 'tab-scoring' && !state.scoringChart) {
+                initScoringChart();
+            }
+        }
+
+        // Component Inspector Info (Tab 1)
+        const componentData = {
+            client: {
+                title: "Client / Upstream Business System",
+                resp: "Originates payment intent (e.g. payout, user withdrawal, treasury transfer) and sends a structured Funding Instruction to the platform API.",
+                interfaces: "REST API: POST /funding-instructions | Kafka Event: instruction_created",
+                event: "instruction_created"
+            },
+            router: {
+                title: "Payment Orchestration Router Engine",
+                resp: "Evaluates active policy bindings, filters hard rules (region, health), merges live telemetry, and scores executable capabilities deterministically.",
+                interfaces: "Internal gRPC: resolveRoute() | DB Tables: router_profiles, router_decisions",
+                event: "route_resolved"
+            },
+            ledger: {
+                title: "Double-Entry Ledger Engine",
+                resp: "Acts as financial state machine. Executes funding encumbrance (Available -> Reserved) and applies specific journal entry accounting templates.",
+                interfaces: "PostgreSQL Subledgers | Atomic Journal Posting Engine",
+                event: "pending_provider"
+            },
+            provider: {
+                title: "Execution Provider (Circle API)",
+                resp: "Dispatches the physical money movement instruction (on-chain smart contract call, fiat wire initiation, or CCTP burn).",
+                interfaces: "Circle REST API v1 | Async Webhook Listener",
+                event: "provider_submitted"
+            },
+            network: {
+                title: "External Blockchain Network",
+                resp: "Achieves public consensus on Base/Ethereum/Polygon. Triggers final webhook confirmation back to the platform reconciliation listener.",
+                interfaces: "Public Blockchain Nodes | Block Explorers",
+                event: "confirmed"
+            }
+        };
+
+        function inspectComponent(key) {
+            const data = componentData[key];
+            if (!data) return;
+            document.getElementById('inspect-title').innerText = data.title;
+            document.getElementById('inspect-badge').innerText = "Inspecting Stage";
+            document.getElementById('inspect-resp').innerText = data.resp;
+            document.getElementById('inspect-interfaces').innerText = data.interfaces;
+            document.getElementById('inspect-event').innerText = data.event;
+        }
+
+        // Deterministic Scoring Engine (Tab 2)
+        function updateScoring() {
+            state.weights.cost = parseFloat(document.getElementById('slider-cost').value);
+            state.weights.lat = parseFloat(document.getElementById('slider-lat').value);
+            state.weights.liq = parseFloat(document.getElementById('slider-liq').value);
+            state.weights.rel = parseFloat(document.getElementById('slider-rel').value);
+
+            document.getElementById('val-cost').innerText = state.weights.cost.toFixed(2);
+            document.getElementById('val-lat').innerText = state.weights.lat.toFixed(2);
+            document.getElementById('val-liq').innerText = state.weights.liq.toFixed(2);
+            document.getElementById('val-rel').innerText = state.weights.rel.toFixed(2);
+
+            calculateScores();
+        }
+
+        function resetWeights() {
+            document.getElementById('slider-cost').value = 0.35;
+            document.getElementById('slider-lat').value = 0.25;
+            document.getElementById('slider-liq').value = 0.25;
+            document.getElementById('slider-rel').value = 0.15;
+            updateScoring();
+        }
+
+        function calculateScores() {
+            const c = state.candidates;
+            
+            // Find min/max for normalization math
+            const minCost = Math.min(...c.map(x => x.cost)), maxCost = Math.max(...c.map(x => x.cost));
+            const minLat = Math.min(...c.map(x => x.lat)), maxLat = Math.max(...c.map(x => x.lat));
+            const minLiq = Math.min(...c.map(x => x.liq)), maxLiq = Math.max(...c.map(x => x.liq));
+
+            const totalW = state.weights.cost + state.weights.lat + state.weights.liq + state.weights.rel || 1.0;
+
+            const scored = c.map(item => {
+                // Normalization Math
+                const nCost = maxCost === minCost ? 1 : (maxCost - item.cost) / (maxCost - minCost);
+                const nLat = maxLat === minLat ? 1 : (maxLat - item.lat) / (maxLat - minLat);
+                const nLiq = maxLiq === minLiq ? 1 : (item.liq - minLiq) / (maxLiq - minLiq);
+                const r = Math.max(0, 1 - (item.fail / 0.02));
+
+                const base = 100 * ((state.weights.cost * nCost) + (state.weights.lat * nLat) + (state.weights.liq * nLiq) + (state.weights.rel * r)) / totalW;
+                const final = Math.round(base * item.health * 1000000) / 1000000;
+
+                return { ...item, finalScore: final };
+            });
+
+            scored.sort((a, b) => b.finalScore - a.finalScore);
+
+            document.getElementById('winner-badge').innerText = 'Winner: ' + scored[0].code;
+
+            // Render Table Body
+            const tbody = document.getElementById('scoring-table-body');
+            tbody.innerHTML = scored.map((item, idx) => `
+                <tr class="${idx === 0 ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'}">
+                    <td class="p-2">${item.code} ${idx === 0 ? '🏆' : ''}</td>
+                    <td class="p-2">$${item.cost.toFixed(2)}</td>
+                    <td class="p-2">${(item.lat / 1000).toFixed(1)}s</td>
+                    <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800">Healthy</span></td>
+                    <td class="p-2 text-right font-mono">${item.finalScore.toFixed(4)}</td>
+                </tr>
+            `).join('');
+
+            // Update Chart.js Chart
+            if (state.scoringChart) {
+                state.scoringChart.data.labels = scored.map(s => s.code);
+                state.scoringChart.data.datasets[0].data = scored.map(s => s.finalScore);
+                state.scoringChart.update();
+            }
+        }
+
+        function initScoringChart() {
+            const ctx = document.getElementById('scoringChart').getContext('2d');
+            state.scoringChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Final Score',
+                        data: [],
+                        backgroundColor: ['#059669', '#4f46e5', '#d97706', '#64748b'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Score: ' + context.raw.toFixed(4);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { min: 0, max: 100 }
+                    }
+                }
+            });
+            calculateScores();
+        }
+
+        // Scenario Explorer (Tab 3)
+        const scenarioData = {
+            1: {
+                tag: "Route: RC_INTERNAL_LEDGER",
+                title: "Internal Customer-to-Customer Settlement",
+                rail: "internal_ledger",
+                takeaway: "The Router selected an internal rail, bypassing Settlement Transit Liabilities and Circle Custody Asset accounts entirely to achieve instant 0ms settlement.",
+                rows: [
+                    { step: "1. Route Resolved", account: "Buyer USDC Liability - Available", type: "Liability", dr: "1,000.00", cr: "—" },
+                    { step: "1. Route Resolved", account: "Buyer USDC Liability - Reserved", type: "Liability", dr: "—", cr: "1,000.00" },
+                    { step: "2. Terminal Finality", account: "Buyer USDC Liability - Reserved", type: "Liability", dr: "1,000.00", cr: "—" },
+                    { step: "2. Terminal Finality", account: "Supplier USDC Liability - Available", type: "Liability", dr: "—", cr: "1,000.00" }
+                ]
+            },
+            2: {
+                tag: "Route: RC_CIRCLE_MINT_ACH_USD",
+                title: "Fiat-to-Crypto Payin (ACH Minting)",
+                rail: "fiat_wire",
+                takeaway: "Slow traditional banking rails force the Ledger to utilize temporary Fiat Receivable and Pending Liability accounts to shield the platform during clearing.",
+                rows: [
+                    { step: "1. ACH Initiated", account: "Fiat Deposit Receivable - ACH", type: "Asset", dr: "5,000.00", cr: "—" },
+                    { step: "1. ACH Initiated", account: "Investor USDC Liability - Pending", type: "Liability", dr: "—", cr: "5,000.00" },
+                    { step: "2. Bank Clears", account: "Circle Custody USDC Asset", type: "Asset", dr: "5,000.00", cr: "—" },
+                    { step: "2. Bank Clears", account: "Fiat Deposit Receivable - ACH", type: "Asset", dr: "—", cr: "5,000.00" },
+                    { step: "2. Bank Clears", account: "Investor USDC Liability - Pending", type: "Liability", dr: "5,000.00", cr: "—" },
+                    { step: "2. Bank Clears", account: "Investor USDC Liability - Available", type: "Liability", dr: "—", cr: "5,000.00" }
+                ]
+            },
+            3: {
+                tag: "Route: RC_CIRCLE_ONCHAIN_POLYGON",
+                title: "Supplier Payout with Platform Fee Deduction",
+                rail: "onchain",
+                takeaway: "The Router's cost model splits the journal entry, dispatching $1,995 principal to the external network and crediting $5 revenue directly to the platform revenue account.",
+                rows: [
+                    { step: "1. Route Resolved", account: "Supplier USDC Liability - Available", type: "Liability", dr: "2,000.00", cr: "—" },
+                    { step: "1. Route Resolved", account: "Supplier USDC Liability - Reserved", type: "Liability", dr: "—", cr: "2,000.00" },
+                    { step: "2. Provider Submit", account: "Supplier USDC Liability - Reserved", type: "Liability", dr: "2,000.00", cr: "—" },
+                    { step: "2. Provider Submit", account: "Settlement Transit Liability", type: "Liability", dr: "—", cr: "1,995.00" },
+                    { step: "2. Provider Submit", account: "Platform Fee Revenue", type: "Revenue", dr: "—", cr: "5.00" },
+                    { step: "3. On-Chain Confirm", account: "Settlement Transit Liability", type: "Liability", dr: "1,995.00", cr: "—" },
+                    { step: "3. On-Chain Confirm", account: "Circle Custody USDC Asset", type: "Asset", dr: "—", cr: "1,995.00" }
+                ]
+            },
+            4: {
+                tag: "Route: RC_CIRCLE_CCTP_ETH_TO_ARB",
+                title: "Cross-Chain Treasury Rebalancing",
+                rail: "hybrid_cross_chain",
+                takeaway: "Cross-chain transfers track asset burns on Ethereum and mints on Arbitrum using a Cross-Chain Transit Asset account while booking operational gas expenses.",
+                rows: [
+                    { step: "1. CCTP Burn Initiated", account: "Cross-Chain Transit Asset", type: "Asset", dr: "50,000.00", cr: "—" },
+                    { step: "1. CCTP Burn Initiated", account: "Treasury USDC - Ethereum", type: "Asset", dr: "—", cr: "50,000.00" },
+                    { step: "2. Gas Fee Incurred", account: "Network Fee Expense", type: "Expense", dr: "12.50", cr: "—" },
+                    { step: "2. Gas Fee Incurred", account: "Treasury USDC - Ethereum", type: "Asset", dr: "—", cr: "12.50" },
+                    { step: "3. CCTP Mint Confirmed", account: "Treasury USDC - Arbitrum", type: "Asset", dr: "50,000.00", cr: "—" },
+                    { step: "3. CCTP Mint Confirmed", account: "Cross-Chain Transit Asset", type: "Asset", dr: "—", cr: "50,000.00" }
+                ]
+            }
+        };
+
+        function selectScenario(id) {
+            state.currentScenario = id;
+            const data = scenarioData[id];
+
+            document.querySelectorAll('.scen-btn').forEach((btn, idx) => {
+                if (idx + 1 === id) {
+                    btn.className = "scen-btn p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-left transition-all";
+                } else {
+                    btn.className = "scen-btn p-4 rounded-xl border border-slate-200 bg-white text-left hover:border-slate-300 transition-all";
+                }
+            });
+
+            document.getElementById('scen-tag').innerText = data.tag;
+            document.getElementById('scen-title').innerText = data.title;
+            document.getElementById('scen-rail').innerText = data.rail;
+            document.getElementById('scen-takeaway').innerText = data.takeaway;
+
+            const tbody = document.getElementById('journal-table-body');
+            tbody.innerHTML = data.rows.map(row => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-3 text-slate-500 font-sans">${row.step}</td>
+                    <td class="p-3 font-semibold text-slate-900">${row.account}</td>
+                    <td class="p-3"><span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">${row.type}</span></td>
+                    <td class="p-3 text-right text-emerald-600">${row.dr}</td>
+                    <td class="p-3 text-right text-indigo-600">${row.cr}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Balance Bucket Lifecycle Stepper (Tab 4)
+        const lifecycleData = {
+            1: {
+                title: "Stage 1: Instruction Created (`created`)",
+                desc: "Instruction received by Payment API. No route is assigned yet, so balances remain 100% available in the source Account of Digital Asset (ADA).",
+                avail: 100, rsvd: 0, transit: 0, custody: 100,
+                availVal: "$10,000.00", rsvdVal: "$0.00", transitVal: "$0.00", custodyVal: "$10,000.00"
+            },
+            2: {
+                title: "Stage 2: Route Resolved (`route_resolved`)",
+                desc: "Router selects RC_CIRCLE_ONCHAIN_BASE. The Ledger creates a Funding Reservation, debiting $500 from Available and crediting Reserved to lock deployable liquidity.",
+                avail: 95, rsvd: 5, transit: 0, custody: 100,
+                availVal: "$9,500.00", rsvdVal: "$500.00", transitVal: "$0.00", custodyVal: "$10,000.00"
+            },
+            3: {
+                title: "Stage 3: Provider Submission (`pending_provider`)",
+                desc: "System dispatches transfer to Circle API. Funds shift from Reserved to Settlement Transit Liability. Physical custody asset is not written off yet because transactions can fail.",
+                avail: 95, rsvd: 0, transit: 5, custody: 100,
+                availVal: "$9,500.00", rsvdVal: "$0.00", transitVal: "$500.00", custodyVal: "$10,000.00"
+            },
+            4: {
+                title: "Stage 4: Terminal Finality (`confirmed`)",
+                desc: "Circle webhook returns blockchain terminal success. Transit Liability is extinguished and Circle Custody Asset is written down by $500.",
+                avail: 95, rsvd: 0, transit: 0, custody: 95,
+                availVal: "$9,500.00", rsvdVal: "$0.00", transitVal: "$0.00", custodyVal: "$9,500.00"
+            }
+        };
+
+        function setLifecycleStep(step) {
+            state.lifecycleStep = step;
+            const d = lifecycleData[step];
+
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                if (i === step) {
+                    btn.className = "p-3 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm transition-all";
+                } else {
+                    btn.className = "p-3 rounded-lg bg-slate-100 text-slate-600 font-semibold hover:bg-slate-200 transition-all";
+                }
+            }
+
+            document.getElementById('lifecycle-title').innerText = d.title;
+            document.getElementById('lifecycle-desc').innerText = d.desc;
+
+            document.getElementById('meter-avail').style.width = d.avail + '%';
+            document.getElementById('meter-rsvd').style.width = d.rsvd + '%';
+            document.getElementById('meter-transit').style.width = d.transit + '%';
+            document.getElementById('meter-custody').style.width = d.custody + '%';
+
+            document.getElementById('bucket-avail-val').innerText = d.availVal;
+            document.getElementById('bucket-rsvd-val').innerText = d.rsvdVal;
+            document.getElementById('bucket-transit-val').innerText = d.transitVal;
+            document.getElementById('bucket-custody-val').innerText = d.custodyVal;
+        }
+
+        // Shadow Mode & Audit Log (Tab 5)
+        function filterAuditLog() {
+            const query = document.getElementById('audit-search').value.toLowerCase();
+            const mismatchOnly = document.getElementById('chk-mismatch-only').checked;
+
+            const filtered = state.auditLog.filter(item => {
+                const matchesText = item.id.toLowerCase().includes(query) || item.persisted.toLowerCase().includes(query) || item.replay.toLowerCase().includes(query);
+                const matchesMismatch = mismatchOnly ? !item.match : true;
+                return matchesText && matchesMismatch;
+            });
+
+            const tbody = document.getElementById('audit-table-body');
+            tbody.innerHTML = filtered.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-3 text-indigo-600 font-bold">${item.id}</td>
+                    <td class="p-3 text-slate-700">${item.persisted}</td>
+                    <td class="p-3 text-slate-900 font-semibold">${item.replay}</td>
+                    <td class="p-3 text-right font-mono text-emerald-600">${item.delta}</td>
+                    <td class="p-3 text-center">
+                        ${item.match ? 
+                            '<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">MATCH</span>' : 
+                            '<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 text-[10px] font-bold">DRIFT DETECTED</span>'
+                        }
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="alert('Inspecting Decision Candidate Telemetry Snapshot for ${item.id}')" class="text-xs text-indigo-600 hover:text-indigo-800 font-sans font-medium">Inspect</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Initial Load Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            selectScenario(1);
+            filterAuditLog();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>External USDC Payment Route - Architecture & Lifecycle</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles for Architecture Nodes & Animations */
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        .node-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+        
+        .node-card.active {
+            border-color: #4f46e5; /* Indigo 600 */
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
+            transform: translateY(-4px);
+            background-color: #f5f3ff; /* Indigo 50 */
+        }
+        
+        .node-card.completed {
+            border-color: #10b981; /* Emerald 500 */
+            background-color: #ecfdf5; /* Emerald 50 */
+        }
+
+        .flow-line {
+            stroke: #cbd5e1;
+            stroke-width: 3;
+            fill: none;
+            transition: all 0.5s ease;
+        }
+
+        .flow-line.active {
+            stroke: #4f46e5;
+            stroke-dasharray: 8;
+            animation: dash 1s linear infinite;
+        }
+
+        .flow-line.completed {
+            stroke: #10b981;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -16; }
+        }
+
+        /* Balance Bar Transitions */
+        .balance-fill { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Pulse animation for active states */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        .pulse-indicator {
+            position: relative;
+        }
+        .pulse-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px; top: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%;
+            border: 2px solid #4f46e5;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            display: none;
+        }
+        .active .pulse-indicator::before { display: block; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2 rounded-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">External Route Architecture Simulator</h1>
+                    <p class="text-xs text-slate-400">Visualizing the On-Chain USDC Payment Handoff Lifecycle</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="resetSimulation()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-lg border border-slate-700 transition-colors">
+                    Reset
+                </button>
+                <button id="btn-next-step" onclick="nextStep()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-lg shadow shadow-indigo-900/20 transition-colors flex items-center gap-2">
+                    <span>Execute Next Step</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 w-full">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Current Lifecycle State</span>
+                <h2 id="ui-current-state" class="text-2xl font-black text-slate-900 mt-1 font-mono">1. created</h2>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-600 w-full sm:w-1/2">
+                <span class="font-bold text-indigo-700 block mb-1" id="ui-action-title">Instruction Initiated</span>
+                <span id="ui-action-desc">API receives a $500 USDC external transfer request. Funds sit fully available in the Source ADA.</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 overflow-hidden relative">
+            <h3 class="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wide border-b border-slate-100 pb-2">System Interfacing & Data Flow</h3>
+            
+            <!-- Architecture Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
+                
+                <!-- Node 1: Source ADA -->
+                <div id="node-source" class="node-card active bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">👤</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Source ADA</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Customer Internal Digital Account</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100 text-left">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">Avail:</span>
+                            <span id="node-source-avail" class="text-emerald-600 font-bold">$10,000</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-mono mt-1">
+                            <span class="text-slate-500">Rsvd:</span>
+                            <span id="node-source-rsvd" class="text-amber-600 font-bold">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 2: Router -->
+                <div id="node-router" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">🧠</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Payment Router</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Policy & Decision Engine</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100">
+                        <span id="node-router-status" class="text-[10px] font-mono text-slate-400 font-semibold">Awaiting Scope</span>
+                    </div>
+                </div>
+
+                <!-- Node 3: Ledger -->
+                <div id="node-ledger" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">⚖️</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Internal Ledger</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Accounting State Machine</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100 text-left">
+                         <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">Transit:</span>
+                            <span id="node-ledger-transit" class="text-purple-600 font-bold">$0</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-mono mt-1">
+                            <span class="text-slate-500">Custody:</span>
+                            <span id="node-ledger-custody" class="text-slate-700 font-bold">$10,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 4: Provider -->
+                <div id="node-provider" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">🏛️</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Execution Provider</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Circle API & Custody</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100">
+                        <span id="node-provider-status" class="text-[10px] font-mono text-slate-400 font-semibold">Idle</span>
+                    </div>
+                </div>
+
+                <!-- Node 5: Destination -->
+                <div id="node-destination" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">⛓️</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Destination Wallet</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">External Base Blockchain</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100 text-left">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">Received:</span>
+                            <span id="node-dest-received" class="text-emerald-600 font-bold">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Absolute SVG for connectors (Desktop only for simplicity in demo) -->
+            <svg class="absolute top-0 left-0 w-full h-full pointer-events-none hidden md:block z-0" style="min-height: 250px;">
+                <path id="line-1" d="M 12% 50% L 28% 50%" class="flow-line active" />
+                <path id="line-2" d="M 32% 50% L 48% 50%" class="flow-line" />
+                <path id="line-3" d="M 52% 50% L 68% 50%" class="flow-line" />
+                <path id="line-4" d="M 72% 50% L 88% 50%" class="flow-line" />
+            </svg>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Event Triggers & Interfacing Log -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wide border-b border-slate-100 pb-2 flex items-center gap-2">
+                    <span>📡</span> Event Interfacing Log
+                </h3>
+                <div class="flex-grow overflow-y-auto max-h-80 pr-2 space-y-4" id="event-log-container">
+                    <!-- Event logs will be injected here by JS -->
+                </div>
+            </section>
+
+            <!-- Double-Entry Ledger View -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wide border-b border-slate-100 pb-2 flex items-center gap-2">
+                    <span>📓</span> Double-Entry Journal Postings
+                </h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-xs text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-white">
+                                <th class="p-2 rounded-l">GL Account Name</th>
+                                <th class="p-2">Type</th>
+                                <th class="p-2 text-right">Debit ($)</th>
+                                <th class="p-2 rounded-r text-right">Credit ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-table-body" class="divide-y divide-slate-100 font-mono">
+                            <!-- Empty initial state -->
+                            <tr>
+                                <td colspan="4" class="p-4 text-center text-slate-400 font-sans italic">Awaiting route resolution to post ledger entries.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 p-4 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-900">
+                    <strong class="block mb-1 font-bold">Ledger Rule Active:</strong>
+                    <span id="ledger-rule-desc">No entries are posted during the `created` phase to prevent premature accounting before a route is verified.</span>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script>
+        // --- State Definitions ---
+        const TRANSFER_AMOUNT = 500;
+        let currentStep = 0;
+
+        const steps = [
+            {
+                state: "1. created",
+                title: "Instruction Initiated via API",
+                desc: "An upstream system issues a payment instruction. The source ADA holds $10,000. No route has been assigned, so the ledger remains untouched.",
+                nodes: {
+                    source: { active: true, completed: false, avail: 10000, rsvd: 0 },
+                    router: { active: false, completed: false, status: "Awaiting Scope" },
+                    ledger: { active: false, completed: false, transit: 0, custody: 10000 },
+                    provider: { active: false, completed: false, status: "Idle" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'active', line2: '', line3: '', line4: '' },
+                logs: [
+                    { time: "0ms", event: "POST /funding-instructions", component: "API Gateway", detail: "Received request to transfer $500 USDC externally." },
+                    { time: "+12ms", event: "instruction_created", component: "Instruction API", detail: "Instruction saved in DB. Emitting event to Router." }
+                ],
+                ledger: null,
+                ruleDesc: "No entries are posted during the `created` phase to prevent premature accounting before a route is verified."
+            },
+            {
+                state: "2. route_resolved",
+                title: "Router Decides & Ledger Reserves",
+                desc: "The Router selects an external on-chain capability. The Ledger intercepts this and atomically activates a Funding Reservation to lock $500.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9500, rsvd: 500 },
+                    router: { active: true, completed: false, status: "Winner: RC_CIRCLE_ONCHAIN_BASE" },
+                    ledger: { active: true, completed: false, transit: 0, custody: 10000 },
+                    provider: { active: false, completed: false, status: "Idle" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'completed', line2: 'active', line3: '', line4: '' },
+                logs: [
+                    { time: "+45ms", event: "resolveRoute()", component: "Payment Router", detail: "Evaluated constraints. Selected RC_CIRCLE_ONCHAIN_BASE." },
+                    { time: "+62ms", event: "route_resolved", component: "Payment Router", detail: "Emitted resolution. Triggering Ledger Reservation." },
+                    { time: "+85ms", event: "activate_reservation", component: "Ledger Engine", detail: "Locked $500 from Available to Reserved bucket." }
+                ],
+                ledger: [
+                    { acc: "Customer USDC Liability - Available", type: "Liability", dr: "500.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Customer USDC Liability - Reserved", type: "Liability", dr: "—", cr: "500.00", drClass: "text-slate-400", crClass: "text-indigo-600" }
+                ],
+                ruleDesc: "Total customer ownership hasn't changed. The Ledger reclassifies liabilities internally so the $500 cannot be double-spent while execution proceeds."
+            },
+            {
+                state: "3. pending_provider",
+                title: "Provider Execution Dispatched",
+                desc: "The system submits the payload to the external Circle API. The Ledger moves funds from Reserved to a Settlement Transit liability, awaiting blockchain finality.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9500, rsvd: 0 },
+                    router: { active: false, completed: true, status: "Decision Persisted" },
+                    ledger: { active: false, completed: true, transit: 500, custody: 10000 },
+                    provider: { active: true, completed: false, status: "Executing on Base" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'completed', line2: 'completed', line3: 'active', line4: 'active' },
+                logs: [
+                    { time: "+150ms", event: "POST /v1/transfers", component: "Circle API Client", detail: "Dispatched transaction payload to execution provider." },
+                    { time: "+400ms", event: "pending_provider", component: "Provider Service", detail: "API returned 201 Created. Transaction is in-flight." },
+                    { time: "+420ms", event: "post_transit", component: "Ledger Engine", detail: "Extinguished Reservation, posted to Transit Liability." }
+                ],
+                ledger: [
+                    { acc: "Customer USDC Liability - Reserved", type: "Liability", dr: "500.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Settlement Transit Liability", type: "Liability", dr: "—", cr: "500.00", drClass: "text-slate-400", crClass: "text-indigo-600" }
+                ],
+                ruleDesc: "The Reserved internal state is extinguished. The funds sit in a Transit Liability bucket representing value that has left our application boundary but hasn't reached finality."
+            },
+            {
+                state: "4. confirmed",
+                title: "Terminal Finality Achieved",
+                desc: "Circle sends a webhook confirming the transaction settled on Base. The Ledger extinguishes the transit liability and reduces the platform's custody asset.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9500, rsvd: 0 },
+                    router: { active: false, completed: true, status: "Decision Persisted" },
+                    ledger: { active: false, completed: true, transit: 0, custody: 9500 },
+                    provider: { active: false, completed: true, status: "Tx Terminal" },
+                    dest: { active: true, completed: true, received: 500 }
+                },
+                lines: { line1: 'completed', line2: 'completed', line3: 'completed', line4: 'completed' },
+                logs: [
+                    { time: "+12.4s", event: "POST /webhook", component: "Reconciliation Service", detail: "Received terminal confirmation event from Circle." },
+                    { time: "+12.5s", event: "signature_verified", component: "Reconciliation Service", detail: "Matched idempotency key and hash to instruction." },
+                    { time: "+12.6s", event: "confirmed", component: "Ledger Engine", detail: "Instruction marked complete. Final settlement posted." }
+                ],
+                ledger: [
+                    { acc: "Settlement Transit Liability", type: "Liability", dr: "500.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Circle Custody USDC Asset", type: "Asset", dr: "—", cr: "500.00", drClass: "text-slate-400", crClass: "text-indigo-600" }
+                ],
+                ruleDesc: "Terminal Finality! The transit liability is cleared. ONLY NOW does the platform reduce its physical custody asset, ensuring we don't prematurely write off assets if a blockchain tx drops."
+            }
+        ];
+
+        // --- UI Rendering Functions ---
+
+        function updateUI(stepIdx) {
+            const data = steps[stepIdx];
+
+            // 1. Update Banner
+            document.getElementById('ui-current-state').innerText = data.state;
+            document.getElementById('ui-action-title').innerText = data.title;
+            document.getElementById('ui-action-desc').innerText = data.desc;
+
+            // 2. Update Architecture Nodes
+            updateNode('node-source', data.nodes.source);
+            document.getElementById('node-source-avail').innerText = `$${data.nodes.source.avail.toLocaleString()}`;
+            document.getElementById('node-source-rsvd').innerText = `$${data.nodes.source.rsvd.toLocaleString()}`;
+
+            updateNode('node-router', data.nodes.router);
+            document.getElementById('node-router-status').innerText = data.nodes.router.status;
+            if(data.nodes.router.active) document.getElementById('node-router-status').classList.add('text-indigo-600');
+
+            updateNode('node-ledger', data.nodes.ledger);
+            document.getElementById('node-ledger-transit').innerText = `$${data.nodes.ledger.transit.toLocaleString()}`;
+            document.getElementById('node-ledger-custody').innerText = `$${data.nodes.ledger.custody.toLocaleString()}`;
+
+            updateNode('node-provider', data.nodes.provider);
+            document.getElementById('node-provider-status').innerText = data.nodes.provider.status;
+            if(data.nodes.provider.active) document.getElementById('node-provider-status').classList.add('text-indigo-600');
+
+            updateNode('node-destination', data.nodes.dest);
+            document.getElementById('node-dest-received').innerText = `$${data.nodes.dest.received.toLocaleString()}`;
+
+            // 3. Update Lines
+            document.getElementById('line-1').className.baseVal = `flow-line ${data.lines.line1}`;
+            document.getElementById('line-2').className.baseVal = `flow-line ${data.lines.line2}`;
+            document.getElementById('line-3').className.baseVal = `flow-line ${data.lines.line3}`;
+            document.getElementById('line-4').className.baseVal = `flow-line ${data.lines.line4}`;
+
+            // 4. Update Event Log (Cumulative)
+            const logContainer = document.getElementById('event-log-container');
+            logContainer.innerHTML = '';
+            for(let i=0; i<=stepIdx; i++) {
+                steps[i].logs.forEach(log => {
+                    logContainer.innerHTML += `
+                        <div class="flex items-start gap-3 p-3 bg-slate-50 rounded border border-slate-100 text-xs">
+                            <div class="w-16 font-mono text-slate-400 shrink-0 pt-0.5">${log.time}</div>
+                            <div>
+                                <span class="font-bold text-slate-700 bg-slate-200 px-1.5 py-0.5 rounded mr-2">${log.component}</span>
+                                <span class="font-mono text-indigo-600 font-semibold">${log.event}</span>
+                                <p class="text-slate-600 mt-1">${log.detail}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            // Auto-scroll log
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // 5. Update Ledger Table
+            const tbody = document.getElementById('ledger-table-body');
+            if (!data.ledger) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-sans italic">Awaiting route resolution to post ledger entries.</td></tr>`;
+            } else {
+                tbody.innerHTML = data.ledger.map(row => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-2 font-semibold text-slate-900">${row.acc}</td>
+                        <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">${row.type}</span></td>
+                        <td class="p-2 text-right ${row.drClass}">${row.dr}</td>
+                        <td class="p-2 text-right ${row.crClass}">${row.cr}</td>
+                    </tr>
+                `).join('');
+            }
+            document.getElementById('ledger-rule-desc').innerHTML = data.ruleDesc;
+
+            // 6. Update Button State
+            const btn = document.getElementById('btn-next-step');
+            if (stepIdx === steps.length - 1) {
+                btn.innerHTML = `<span>Simulation Complete</span>`;
+                btn.classList.replace('bg-indigo-600', 'bg-emerald-600');
+                btn.classList.replace('hover:bg-indigo-500', 'hover:bg-emerald-500');
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                btn.innerHTML = `<span>Execute Next Step</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                btn.classList.replace('bg-emerald-600', 'bg-indigo-600');
+                btn.classList.replace('hover:bg-emerald-500', 'hover:bg-indigo-500');
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        function updateNode(elementId, config) {
+            const el = document.getElementById(elementId);
+            el.className = 'node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0';
+            if (config.active) el.classList.add('active');
+            if (config.completed) el.classList.add('completed');
+        }
+
+        // --- Actions ---
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateUI(currentStep);
+            }
+        }
+
+        function resetSimulation() {
+            currentStep = 0;
+            updateUI(currentStep);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUI(0);
+        });
+    </script>
+</body>
+</html>

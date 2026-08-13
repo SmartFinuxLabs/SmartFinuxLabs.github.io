@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiat Redemption Route - Architecture & Lifecycle</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles for Architecture Nodes & Animations */
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        .node-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+        
+        .node-card.active {
+            border-color: #4f46e5; /* Indigo 600 */
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
+            transform: translateY(-4px);
+            background-color: #f5f3ff; /* Indigo 50 */
+        }
+        
+        .node-card.completed {
+            border-color: #10b981; /* Emerald 500 */
+            background-color: #ecfdf5; /* Emerald 50 */
+        }
+
+        .flow-line {
+            stroke: #cbd5e1;
+            stroke-width: 3;
+            fill: none;
+            transition: all 0.5s ease;
+        }
+
+        .flow-line.active {
+            stroke: #4f46e5;
+            stroke-dasharray: 8;
+            animation: dash 1s linear infinite;
+        }
+
+        .flow-line.completed {
+            stroke: #10b981;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -16; }
+        }
+
+        /* Pulse animation for active states */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        .pulse-indicator {
+            position: relative;
+        }
+        .pulse-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px; top: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%;
+            border: 2px solid #4f46e5;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            display: none;
+        }
+        .active .pulse-indicator::before { display: block; }
+        
+        /* Specific background for Fiat conversion boundary */
+        .fiat-boundary {
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.05) 50%, rgba(16, 185, 129, 0.1));
+            border-radius: 1rem;
+            border: 1px dashed #a7f3d0;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-600 p-2 rounded-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Fiat Redemption System Architecture</h1>
+                    <p class="text-xs text-slate-400">Visualizing the Crypto-to-Fiat Routing & Ledger Lifecycle</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="resetSimulation()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-lg border border-slate-700 transition-colors">
+                    Reset
+                </button>
+                <button id="btn-next-step" onclick="nextStep()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg shadow shadow-emerald-900/20 transition-colors flex items-center gap-2">
+                    <span>Execute Next Step</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 w-full">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div class="w-full lg:w-1/3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Lifecycle State</span>
+                <h2 id="ui-current-state" class="text-2xl font-black text-slate-900 mt-1 font-mono">1. created</h2>
+            </div>
+            <div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 w-full lg:w-2/3">
+                <span class="font-bold text-emerald-700 block mb-1 text-base" id="ui-action-title">Redemption Requested</span>
+                <span id="ui-action-desc">Customer requests to redeem $1,000 USDC into their external fiat bank account. Funds are fully available in the Source ADA.</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 overflow-hidden relative">
+            
+            <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-2">
+                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">System Interfacing & Data Flow</h3>
+                <div class="flex gap-4 text-xs font-semibold text-slate-400">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-200"></span> Digital/Crypto Domain</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Fiat/Banking Domain</span>
+                </div>
+            </div>
+            
+            <!-- Architecture Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
+                
+                <!-- Node 1: Source ADA -->
+                <div id="node-source" class="node-card active bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">👤</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Source ADA</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Customer Digital Account</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100 text-left">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">Avail (USDC):</span>
+                            <span id="node-source-avail" class="text-emerald-600 font-bold">$10,000</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-mono mt-1">
+                            <span class="text-slate-500">Rsvd (USDC):</span>
+                            <span id="node-source-rsvd" class="text-amber-600 font-bold">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 2: Router -->
+                <div id="node-router" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">🧠</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Payment Router</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Fiat Strategy Configured</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100">
+                        <span id="node-router-status" class="text-[10px] font-mono text-slate-400 font-semibold">Evaluating Constraints</span>
+                    </div>
+                </div>
+
+                <!-- Node 3: Ledger -->
+                <div id="node-ledger" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">⚖️</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Internal Ledger</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Accounting State Machine</p>
+                    <div class="mt-3 w-full bg-slate-50 p-2 rounded border border-slate-100 text-left">
+                         <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500" title="Redemption Payable">Payable (USD):</span>
+                            <span id="node-ledger-payable" class="text-rose-600 font-bold">$0</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-mono mt-1">
+                            <span class="text-slate-500" title="Bank Cash">Bank Cash:</span>
+                            <span id="node-ledger-cash" class="text-slate-700 font-bold">$50,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fiat Boundary Background -->
+                <div class="absolute right-0 top-0 w-2/5 h-full fiat-boundary hidden md:block z-0 pointer-events-none"></div>
+
+                <!-- Node 4: Provider (Fiat Rails) -->
+                <div id="node-provider" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">🏛️</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Execution API</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Circle Mint / Fiat Wires</p>
+                    <div class="mt-3 w-full bg-emerald-50 p-2 rounded border border-emerald-100">
+                        <span id="node-provider-status" class="text-[10px] font-mono text-emerald-700 font-semibold">Idle</span>
+                    </div>
+                </div>
+
+                <!-- Node 5: Destination Bank -->
+                <div id="node-destination" class="node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0 border-emerald-200">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-xl mb-3 pulse-indicator z-20">🏦</div>
+                    <h4 class="font-bold text-slate-900 text-sm">Destination Bank</h4>
+                    <p class="text-[10px] text-slate-500 mt-1">Linked Fiat Wire Account</p>
+                    <div class="mt-3 w-full bg-emerald-50 p-2 rounded border border-emerald-100 text-left">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-500">Received (USD):</span>
+                            <span id="node-dest-received" class="text-emerald-600 font-bold">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <svg class="absolute top-0 left-0 w-full h-full pointer-events-none hidden md:block z-0" style="min-height: 250px;">
+                <path id="line-1" d="M 12% 50% L 28% 50%" class="flow-line active" />
+                <path id="line-2" d="M 32% 50% L 48% 50%" class="flow-line" />
+                <path id="line-3" d="M 52% 50% L 68% 50%" class="flow-line" />
+                <path id="line-4" d="M 72% 50% L 88% 50%" class="flow-line" />
+            </svg>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Event Triggers & Interfacing Log -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wide border-b border-slate-100 pb-2 flex items-center gap-2">
+                    <span>📡</span> System Interfacing Events
+                </h3>
+                <div class="flex-grow overflow-y-auto max-h-96 pr-2 space-y-4" id="event-log-container">
+                    <!-- Event logs injected here -->
+                </div>
+            </section>
+
+            <!-- Double-Entry Ledger View -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wide border-b border-slate-100 pb-2 flex items-center gap-2">
+                    <span>📓</span> Double-Entry Journal Postings
+                </h3>
+                
+                <div class="overflow-x-auto flex-grow">
+                    <table class="min-w-full text-xs text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-white">
+                                <th class="p-2 rounded-l w-1/2">GL Account Name</th>
+                                <th class="p-2">Type</th>
+                                <th class="p-2 text-right">Debit ($)</th>
+                                <th class="p-2 rounded-r text-right">Credit ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-table-body" class="divide-y divide-slate-100 font-mono">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-lg text-xs text-emerald-900">
+                    <strong class="block mb-1 font-bold">Ledger Context:</strong>
+                    <span id="ledger-rule-desc">Awaiting routing resolution before executing any financial state changes.</span>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script>
+        const TRANSFER_AMOUNT = 1000;
+        let currentStep = 0;
+
+        const steps = [
+            {
+                state: "1. created",
+                title: "Redemption Requested via API",
+                desc: "Customer initiates a $1,000 USDC redemption to their verified external bank account. The system registers the instruction but waits for the Router to determine the execution path.",
+                nodes: {
+                    source: { active: true, completed: false, avail: 10000, rsvd: 0 },
+                    router: { active: false, completed: false, status: "Awaiting Scope" },
+                    ledger: { active: false, completed: false, payable: 0, cash: 50000 },
+                    provider: { active: false, completed: false, status: "Idle" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'active', line2: '', line3: '', line4: '' },
+                logs: [
+                    { time: "0ms", event: "POST /payment-instructions", component: "API Gateway", detail: "Received redemption request for $1,000 USDC." },
+                    { time: "+14ms", event: "instruction_created", component: "Core Engine", detail: "Instruction saved. Emitting event to Router." }
+                ],
+                ledger: null,
+                ruleDesc: "No entries are posted during the `created` phase to prevent premature accounting before a route is verified."
+            },
+            {
+                state: "2. route_resolved",
+                title: "Router Configures Fiat Path & Ledger Reserves",
+                desc: "The Router evaluates constraints (must be fiat_wire) and selects the Circle Mint Wire route. The Ledger immediately triggers an internal reservation to prevent double-spending.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9000, rsvd: 1000 },
+                    router: { active: true, completed: false, status: "RC_CIRCLE_MINT_WIRE_USD" },
+                    ledger: { active: true, completed: false, payable: 0, cash: 50000 },
+                    provider: { active: false, completed: false, status: "Idle" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'completed', line2: 'active', line3: '', line4: '' },
+                logs: [
+                    { time: "+42ms", event: "resolveRoute()", component: "Payment Router", detail: "Evaluated RP_FIAT_REDEMPTION_V1 constraints. Selected RC_CIRCLE_MINT_WIRE_USD." },
+                    { time: "+68ms", event: "activate_reservation", component: "Ledger Engine", detail: "Locked $1,000 USDC from Available to Reserved bucket." }
+                ],
+                ledger: [
+                    { acc: "Customer USDC Liability - Available", type: "Customer Liab.", dr: "1,000.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Customer USDC Liability - Reserved", type: "Customer Liab.", dr: "—", cr: "1,000.00", drClass: "text-slate-400", crClass: "text-indigo-600" }
+                ],
+                ruleDesc: "The ledger reclassifies the customer's digital liability internally. The funds are locked, but physical custody remains unchanged as we haven't submitted to the provider yet."
+            },
+            {
+                state: "3. pending_provider",
+                title: "Digital-to-Fiat Conversion & Wire Initiation",
+                desc: "The system submits the redemption API request. The Ledger formally extinguishes the customer's digital asset claim on the subledger and creates a legal Fiat Redemption Payable.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9000, rsvd: 0 },
+                    router: { active: false, completed: true, status: "Decision Persisted" },
+                    ledger: { active: false, completed: true, payable: 1000, cash: 49000 },
+                    provider: { active: true, completed: false, status: "Processing Wire" },
+                    dest: { active: false, completed: false, received: 0 }
+                },
+                lines: { line1: 'completed', line2: 'completed', line3: 'active', line4: 'active' },
+                logs: [
+                    { time: "+185ms", event: "POST /v1/redemptions", component: "Circle API Client", detail: "Dispatched fiat wire payout instruction to banking rails." },
+                    { time: "+420ms", event: "extinguish_digital_claim", component: "Ledger Engine", detail: "Burned Reserved USDC constraint, mapped to Fiat Payable." },
+                    { time: "+422ms", event: "adjust_platform_assets", component: "Ledger Engine", detail: "Reduced Circle Custody USDC, shifted to Bank Cash." }
+                ],
+                ledger: [
+                    { acc: "Customer USDC Liab. - Reserved", type: "Customer Liab.", dr: "1,000.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Redemption Payable", type: "Platform Liab.", dr: "—", cr: "1,000.00", drClass: "text-slate-400", crClass: "text-rose-600" },
+                    { acc: "Bank Cash", type: "Platform Asset", dr: "1,000.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Circle Custody USDC Asset", type: "Platform Asset", dr: "—", cr: "1,000.00", drClass: "text-slate-400", crClass: "text-rose-600" }
+                ],
+                ruleDesc: "Crucial Step: The digital token liability is burned on the subledger and transformed into a legal fiat obligation (Redemption Payable). This isolates banking cutoff and settlement risks from the fast crypto rails."
+            },
+            {
+                state: "4. confirmed",
+                title: "Bank Wire Settled & Terminal Finality",
+                desc: "The banking network confirms the wire has landed in the destination fiat account. The Ledger clears the Redemption Payable and reduces Bank Cash.",
+                nodes: {
+                    source: { active: false, completed: true, avail: 9000, rsvd: 0 },
+                    router: { active: false, completed: true, status: "Decision Persisted" },
+                    ledger: { active: false, completed: true, payable: 0, cash: 49000 },
+                    provider: { active: false, completed: true, status: "Wire Terminal" },
+                    dest: { active: true, completed: true, received: 1000 }
+                },
+                lines: { line1: 'completed', line2: 'completed', line3: 'completed', line4: 'completed' },
+                logs: [
+                    { time: "+14.2 hrs", event: "POST /webhook/circle", component: "Reconciliation Svc", detail: "Received FEDWIRE terminal confirmation event." },
+                    { time: "+14.2 hrs", event: "fiat_payout_confirmed", component: "Ledger Engine", detail: "Instruction marked complete. Final fiat payout posted." }
+                ],
+                ledger: [
+                    { acc: "Redemption Payable", type: "Platform Liab.", dr: "1,000.00", cr: "—", drClass: "text-emerald-600", crClass: "text-slate-400" },
+                    { acc: "Bank Cash", type: "Platform Asset", dr: "—", cr: "1,000.00", drClass: "text-slate-400", crClass: "text-rose-600" }
+                ],
+                ruleDesc: "Terminal Finality! The fiat wire has cleared banking networks. The temporary Redemption Payable debt is resolved against the actual Bank Cash asset. The entire Crypto-to-Fiat loop is closed."
+            }
+        ];
+
+        function updateUI(stepIdx) {
+            const data = steps[stepIdx];
+
+            // Update Banner
+            document.getElementById('ui-current-state').innerText = data.state;
+            document.getElementById('ui-action-title').innerText = data.title;
+            document.getElementById('ui-action-desc').innerText = data.desc;
+
+            // Update Architecture Nodes
+            updateNode('node-source', data.nodes.source);
+            document.getElementById('node-source-avail').innerText = `$${data.nodes.source.avail.toLocaleString()}`;
+            document.getElementById('node-source-rsvd').innerText = `$${data.nodes.source.rsvd.toLocaleString()}`;
+
+            updateNode('node-router', data.nodes.router);
+            document.getElementById('node-router-status').innerText = data.nodes.router.status;
+            if(data.nodes.router.active) document.getElementById('node-router-status').classList.add('text-indigo-600');
+
+            updateNode('node-ledger', data.nodes.ledger);
+            document.getElementById('node-ledger-payable').innerText = `$${data.nodes.ledger.payable.toLocaleString()}`;
+            document.getElementById('node-ledger-cash').innerText = `$${data.nodes.ledger.cash.toLocaleString()}`;
+
+            updateNode('node-provider', data.nodes.provider);
+            document.getElementById('node-provider-status').innerText = data.nodes.provider.status;
+
+            updateNode('node-destination', data.nodes.dest);
+            document.getElementById('node-dest-received').innerText = `$${data.nodes.dest.received.toLocaleString()}`;
+
+            // Update SVG Lines
+            document.getElementById('line-1').className.baseVal = `flow-line ${data.lines.line1}`;
+            document.getElementById('line-2').className.baseVal = `flow-line ${data.lines.line2}`;
+            document.getElementById('line-3').className.baseVal = `flow-line ${data.lines.line3}`;
+            document.getElementById('line-4').className.baseVal = `flow-line ${data.lines.line4}`;
+
+            // Update Event Log
+            const logContainer = document.getElementById('event-log-container');
+            logContainer.innerHTML = '';
+            for(let i = 0; i <= stepIdx; i++) {
+                steps[i].logs.forEach(log => {
+                    logContainer.innerHTML += `
+                        <div class="flex items-start gap-3 p-3 bg-slate-50 rounded border border-slate-100 text-xs">
+                            <div class="w-16 font-mono text-slate-400 shrink-0 pt-0.5">${log.time}</div>
+                            <div>
+                                <span class="font-bold text-slate-700 bg-slate-200 px-1.5 py-0.5 rounded mr-2">${log.component}</span>
+                                <span class="font-mono text-indigo-600 font-semibold">${log.event}</span>
+                                <p class="text-slate-600 mt-1">${log.detail}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // Update Ledger Table
+            const tbody = document.getElementById('ledger-table-body');
+            if (!data.ledger) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-sans italic">Awaiting route resolution to post ledger entries.</td></tr>`;
+            } else {
+                tbody.innerHTML = data.ledger.map(row => `
+                    <tr class="hover:bg-slate-50 border-t border-slate-100 last:border-b-0">
+                        <td class="p-2 font-semibold text-slate-900 truncate" title="${row.acc}">${row.acc}</td>
+                        <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700">${row.type}</span></td>
+                        <td class="p-2 text-right ${row.drClass}">${row.dr}</td>
+                        <td class="p-2 text-right ${row.crClass}">${row.cr}</td>
+                    </tr>
+                `).join('');
+            }
+            document.getElementById('ledger-rule-desc').innerText = data.ruleDesc;
+
+            // Update Button State
+            const btn = document.getElementById('btn-next-step');
+            if (stepIdx === steps.length - 1) {
+                btn.innerHTML = `<span>Simulation Complete</span>`;
+                btn.classList.replace('bg-emerald-600', 'bg-slate-400');
+                btn.classList.replace('hover:bg-emerald-500', 'hover:bg-slate-500');
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed');
+            } else {
+                btn.innerHTML = `<span>Execute Next Step</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                btn.classList.replace('bg-slate-400', 'bg-emerald-600');
+                btn.classList.replace('hover:bg-slate-500', 'hover:bg-emerald-500');
+                btn.disabled = false;
+                btn.classList.remove('cursor-not-allowed');
+            }
+        }
+
+        function updateNode(elementId, config) {
+            const el = document.getElementById(elementId);
+            // Reset base classes to handle the custom fiat node specifically
+            let baseClasses = 'node-card bg-white p-4 rounded-xl border-2 shadow-sm flex flex-col items-center text-center relative z-20 mt-8 md:mt-0';
+            if (elementId === 'node-destination' || elementId === 'node-provider') {
+                baseClasses += ' border-emerald-200'; // Slight green tint for fiat domain
+            }
+            el.className = baseClasses;
+            
+            if (config.active) el.classList.add('active');
+            if (config.completed) el.classList.add('completed');
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateUI(currentStep);
+            }
+        }
+
+        function resetSimulation() {
+            currentStep = 0;
+            updateUI(currentStep);
+        }
+
+        // Initialize on DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUI(0);
+        });
+    </script>
+</body>
+</html>

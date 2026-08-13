@@ -61,11 +61,16 @@
                     </div>
                     <span class="text-xl font-bold tracking-tight text-stone-800 uppercase">GTT Alpha</span>
                 </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                <div class="hidden md:flex space-x-6 text-sm font-medium text-stone-600 items-center">
                     <a href="#liquidity" class="hover:text-emerald-600 transition">Liquidity Flow</a>
                     <a href="#advance-payment" class="hover:text-emerald-600 transition">Advance Payment Flow</a>
                     <a href="#accounting" class="hover:text-emerald-600 transition">Accounting</a>
+                    <a href="#router-design" class="hover:text-emerald-600 transition">Router Engine</a>
                     <a href="#ecosystem" class="hover:text-emerald-600 transition">Ecosystem</a>
+                    <a href="routerwithledger/" class="hover:text-emerald-600 transition flex items-center space-x-1 font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200/80">
+                        <span>⚡</span>
+                        <span>Router Design</span>
+                    </a>
                 </div>
                 <div class="relative inline-block text-left" id="demo-popover-wrapper">
                     <button type="button" id="demo-popover-btn" onclick="toggleDemoPopover(event)"
@@ -173,7 +178,13 @@
                 </div>
             </div>
 
-            <div class="mt-8 flex justify-center">
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="routerwithledger/"
+                    class="inline-flex items-center space-x-2 bg-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-emerald-500 transition shadow-md group">
+                    <span>⚡</span>
+                    <span>Explore Router Design</span>
+                    <svg class="w-4 h-4 ml-1 text-emerald-200 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
                 <a href="Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf" target="_blank"
                     class="inline-flex items-center space-x-2 bg-stone-900 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-stone-800 transition shadow-md group">
                     <svg class="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,6 +436,65 @@
             </div>
         </section>
 
+        <!-- Router Design & Ledger Architecture Section -->
+        <section id="router-design" class="max-w-7xl mx-auto px-6 py-20 border-t border-stone-200">
+            <div class="bg-stone-900 rounded-3xl p-8 md:p-12 text-white shadow-xl">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-10 pb-8 border-b border-stone-800">
+                    <div>
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
+                            <span>⚡ Categorized Architecture Modules</span>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white tracking-tight">
+                            Payment Orchestration Router & Ledger Engine
+                        </h2>
+                        <p class="text-stone-300 text-sm md:text-base mt-2 max-w-2xl leading-relaxed">
+                            Decoupling payment policy from execution rails. Categorized into two core architectural example groups: <strong>External Route Architecture</strong> and <strong>Fiat Redemption Architecture</strong>.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-3 shrink-0">
+                        <a href="routerwithledger/#external-route" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-3 rounded-xl transition text-xs flex items-center space-x-2 shadow-lg">
+                            <span>🌐 External Route</span>
+                            <span>➔</span>
+                        </a>
+                        <a href="routerwithledger/#fiat-redemption" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 py-3 rounded-xl transition text-xs flex items-center space-x-2 shadow-lg">
+                            <span>🏦 Fiat Redemption</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div class="bg-stone-800/80 p-6 rounded-2xl border border-stone-700/70">
+                        <div class="flex items-center space-x-2 text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🌐 Category 1</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">External Route Architecture</h3>
+                        <p class="text-xs text-stone-300 leading-relaxed mb-4">
+                            Interactive visualizers, sequence diagrams, USDC on-chain transfer lifecycle walkthroughs, and step-by-step route simulators.
+                        </p>
+                        <a href="routerwithledger/#external-route" class="text-indigo-400 hover:text-indigo-300 font-semibold text-xs inline-flex items-center gap-1">
+                            <span>Explore 4 External Route Modules</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+
+                    <div class="bg-stone-800/80 p-6 rounded-2xl border border-stone-700/70">
+                        <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🏦 Category 2</span>
+                        </div>
+                        <h3 class="font-bold text-white text-lg mb-2">Fiat Redemption Architecture</h3>
+                        <p class="text-xs text-stone-300 leading-relaxed mb-4">
+                            Off-ramp redemption specifications, Circle Mint interfacing, banking wire/SEN settlements, and fiat transit liability accounting.
+                        </p>
+                        <a href="routerwithledger/#fiat-redemption" class="text-amber-400 hover:text-amber-300 font-semibold text-xs inline-flex items-center gap-1">
+                            <span>Explore 2 Fiat Redemption Modules</span>
+                            <span>➔</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="whitepaper" class="max-w-7xl mx-auto px-6 py-16 border-t border-stone-200">
             <div class="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 rounded-3xl p-8 md:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="md:w-2/3 space-y-4">
@@ -466,6 +536,8 @@
             <div class="flex space-x-6 text-sm">
                 <a href="https://gtt-alpha.connextium.xyz/"
                     class="text-stone-400 hover:text-emerald-400 transition">Launch App</a>
+                <a href="routerwithledger/"
+                    class="text-emerald-400 hover:text-emerald-300 font-semibold transition">Router Design</a>
                 <a href="Project%20ADA_%20Optimizing%20Supply%20Chain%20Finance%20via%20the%20Stablecoins%20Commerce%20Stack.pdf" target="_blank"
                     class="text-stone-400 hover:text-emerald-400 transition">Project ADA Whitepaper (PDF)</a>
                 <a href="#" class="text-stone-400 hover:text-emerald-400 transition">Privacy</a>

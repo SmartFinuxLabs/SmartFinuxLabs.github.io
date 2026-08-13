@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Orchestration Architecture & Double-Entry Ledger Explorer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            },
+            slate: {
+              850: '#131e32',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 320px;
+      max-height: 400px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 360px;
+      }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-slate-800 bg-slate-50 flex flex-col custom-scrollbar">
+
+  <!-- Chosen Palette: Warm Neutral & Federal Emerald (Background: #F8FAFC, Surface: #FFFFFF, Primary: #0F172A, Accents: #16A34A / #2563EB / #D97706) -->
+
+  <!-- Application Structure Plan:
+       1. Header & Global Controls: Switch between 2 primary payment flows (External On-Chain USDC vs Fiat Off-Ramp) and global simulation controls.
+       2. Section 1: Executive Overview & Architectural Core: Highlighting the decoupling between Decision/Routing Engine, Double-Entry Subledger, and Execution Providers.
+       3. Section 2: Interactive System Topology & ADA Interfacing: Visual map of Orchestration, Subledger (ADA), and Execution domains with clickable node inspection.
+       4. Section 3: Interactive Lifecycle Simulator: Step-by-step event flow player with real-time JSON event viewer, state machine badge, and live Source ADA balance bucket animations.
+       5. Section 4: Advanced Double-Entry Accounting Paths: Exploration of 4 specialized ledger accounting scenarios (Internal Transfer, ACH Fiat Mint, Supplier Payout with Fee Split, CCTP Cross-Chain Bridge) + Fiat Off-Ramp T-Accounts.
+       6. Section 5: Router Math Engine Simulator: Interactive weight tuning sliders and candidate score comparison powered by Chart.js.
+       7. Section 6: Architecture Event Catalog: Filterable reference matrix of all platform events, commands, and ledger hooks.
+  -->
+
+  <!-- Visualization & Content Choices:
+       - System Topology: Node-based card layout styled with Tailwind CSS, offering click-to-inspect modal details.
+       - Lifecycle Player: Custom event stepper with JSON editor view, progress indicator, and bucket bar graph animation.
+       - T-Account Cards: Side-by-side Debit/Credit accounting cards following double-entry principles.
+       - Route Scoring Engine: Interactive sliders recalculating normalized scores with real-time Chart.js bar graph updates.
+       - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+  -->
+
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <!-- Top Navigation Header -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-slate-900 text-lg shadow">
+            🏛️
+          </div>
+          <div>
+            <h1 class="font-bold text-base sm:text-lg text-slate-100 tracking-tight">Payment Orchestration Architecture Explorer</h1>
+            <p class="text-xs text-slate-400 hidden sm:block">Decoupled Routing, Subledger Accounting & Settlement Rails</p>
+          </div>
+        </div>
+
+        <!-- Global Scenario Switcher -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2 bg-slate-800 p-1.5 rounded-lg border border-slate-700">
+            <span class="text-xs text-slate-400 pl-1 hidden md:inline">Route Scenario:</span>
+            <select id="scenario-selector" onchange="app.switchScenario(this.value)" class="bg-slate-900 text-emerald-400 font-semibold text-xs border border-slate-700 rounded px-2.5 py-1 focus:outline-none focus:border-emerald-500">
+              <option value="crypto" selected>⚡ External USDC On-Chain Route ($500 USDC)</option>
+              <option value="fiat">💵 Fiat Redemption Off-Ramp ($10,000 USD)</option>
+            </select>
+          </div>
+          <button onclick="app.resetAll()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-md transition border border-slate-700">
+            ↺ Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col space-y-6">
+
+    <!-- Overview Banner -->
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2 mb-1">
+            <span id="active-scenario-badge" class="bg-blue-100 text-blue-800 border border-blue-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded">
+              Active Mode: External USDC On-Chain Route
+            </span>
+            <span class="text-xs text-slate-500">Strict Decoupling of Policy, Ledger, and Provider Rails</span>
+          </div>
+          <h2 id="scenario-main-title" class="text-xl font-bold text-slate-900">External On-Chain USDC Transfer Lifecycle</h2>
+          <p id="scenario-main-desc" class="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
+            When an internal Funding Instruction resolves to an external USDC payment, the system coordinates three distinct domains: <strong>Payment Orchestration & Routing</strong> (the brain), <strong>Treasury & Ledger Domain</strong> (the accountant), and <strong>Execution & Settlement Domain</strong> (the worker).
+          </p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex items-center space-x-1 bg-slate-100 p-1.5 rounded-lg border border-slate-200 self-start md:self-auto overflow-x-auto max-w-full">
+          <button onclick="app.setTab('topology')" id="tab-btn-topology" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition bg-white text-slate-900 shadow-sm whitespace-nowrap">
+            🗺️ Topology Map
+          </button>
+          <button onclick="app.setTab('lifecycle')" id="tab-btn-lifecycle" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            ⏱️ Event Lifecycle Player
+          </button>
+          <button onclick="app.setTab('ledger')" id="tab-btn-ledger" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            ⚖️ Double-Entry Accounting
+          </button>
+          <button onclick="app.setTab('scoring')" id="tab-btn-scoring" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            🧮 Router Math Engine
+          </button>
+          <button onclick="app.setTab('catalog')" id="tab-btn-catalog" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            📚 Event Catalog
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: TOPOLOGY & INTERFACING MAP -->
+    <section id="tab-topology" class="tab-content flex flex-col space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Decoupled System Architecture & Domain Boundaries</h3>
+            <p class="text-xs text-slate-500">Introductory Overview: Below is the structural map connecting user triggers, routing decision policies, subledgers (Source ADA), and execution rails.</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs">
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Orchestration Domain</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-1"></span> Ledger & ADA Domain</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-purple-500 mr-1"></span> Provider & Execution Domain</span>
+          </div>
+        </div>
+
+        <!-- ADA Context Banner -->
+        <div class="mt-4 p-4 bg-slate-900 text-slate-100 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="flex items-start space-x-3">
+            <div class="text-2xl p-1 bg-slate-800 rounded-lg">👛</div>
+            <div>
+              <h4 class="font-bold text-emerald-400 text-sm">Source ADA (Account of Digital Asset)</h4>
+              <p class="text-slate-300 mt-0.5 leading-relaxed">
+                The platform app-level ledger account holding customer digital assets. Operates strict balance buckets: <code class="text-emerald-300 font-mono">Available</code>, <code class="text-amber-300 font-mono">Reserved</code>, and <code class="text-blue-300 font-mono">Pending Outbound</code>.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <div class="text-2xl p-1 bg-slate-800 rounded-lg">🌐</div>
+            <div>
+              <h4 class="font-bold text-blue-400 text-sm" id="destination-ada-title">Destination Account / Rail Target</h4>
+              <p class="text-slate-300 mt-0.5 leading-relaxed" id="destination-ada-desc">
+                For external USDC routes, the destination is an on-chain blockchain wallet address (e.g. Polygon / Ethereum). For fiat routes, it is a linked bank account via Fedwire/ACH.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Domain Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          
+          <!-- Domain 1: Orchestration -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-blue-200 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-blue-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-blue-200">
+              <span>1. Payment Orchestration & Routing</span>
+              <span class="text-blue-600">⚡ Policy Brain</span>
+            </div>
+
+            <div onclick="app.selectNode('upstream')" id="node-upstream" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">External Systems / UI</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Ingress</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Initiates payment instruction requests into the platform.</p>
+            </div>
+
+            <div onclick="app.selectNode('instApi')" id="node-instApi" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Payment Instruction API</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">State Coordinator</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Manages instruction state machine (created → route_resolved → pending → confirmed).</p>
+            </div>
+
+            <div onclick="app.selectNode('routerEngine')" id="node-routerEngine" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Funding Router Engine</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Policy Evaluator</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Scores candidates based on cost, latency, liquidity, and reliability telemetry.</p>
+            </div>
+          </div>
+
+          <!-- Domain 2: Treasury & Ledger -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-emerald-200 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-emerald-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-emerald-200">
+              <span>2. Treasury & Ledger Domain</span>
+              <span class="text-emerald-600">🛡️ Financial Truth</span>
+            </div>
+
+            <div onclick="app.selectNode('posCalc')" id="node-posCalc" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Treasury Position Calculator</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Deployable Guard</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Computes exact deployable liquidity before route reservation.</p>
+            </div>
+
+            <div onclick="app.selectNode('ledgerEngine')" id="node-ledgerEngine" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Double-Entry Ledger Engine</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Append-Only</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Translates operational events into balanced financial journal entries.</p>
+            </div>
+
+            <div onclick="app.selectNode('sourceAda')" id="node-sourceAda" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Accounts of Digital Asset (ADA)</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Subledger Buckets</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Tracks Available, Reserved, Pending Outbound, and In-Transit buckets.</p>
+            </div>
+          </div>
+
+          <!-- Domain 3: Execution & Settlement -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-purple-200 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-purple-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-purple-200">
+              <span>3. Execution & Settlement Domain</span>
+              <span class="text-purple-600">🚀 Rail Gateway</span>
+            </div>
+
+            <div onclick="app.selectNode('submitter')" id="node-submitter" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-purple-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Provider Submitter Service</span>
+                <span class="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">Idempotent Worker</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Issues execution calls to external providers (Circle API, Banking Gateways).</p>
+            </div>
+
+            <div onclick="app.selectNode('externalRail')" id="node-externalRail" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-purple-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800" id="rail-node-title">Circle API / Blockchain Rail</span>
+                <span class="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">External Network</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1" id="rail-node-desc">Executes on-chain blockchain transfer or wire clearing.</p>
+            </div>
+
+            <div onclick="app.selectNode('reconService')" id="node-reconService" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-purple-500 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Reconciliation Service</span>
+                <span class="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">Terminal Finality</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Ingests webhooks and triggers terminal balance settlement in the ledger.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Node Inspector Display -->
+        <div id="node-inspector" class="mt-6 p-4 bg-slate-900 text-slate-100 rounded-xl border border-slate-800 flex flex-col space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div class="flex items-center space-x-2">
+              <span id="inspector-icon" class="text-lg">🔍</span>
+              <h4 id="inspector-title" class="font-bold text-sm text-white">Click any component above to inspect details</h4>
+            </div>
+            <span id="inspector-domain" class="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Domain Inspection</span>
+          </div>
+          <p id="inspector-desc" class="text-xs text-slate-300">Select any component card from the topology map to view its inputs, outputs, commands, and subledger hooks.</p>
+          <div id="inspector-details" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1 hidden">
+            <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+              <span class="font-semibold text-emerald-400 block mb-1">Inbound Inputs & Triggers:</span>
+              <p id="inspector-inbound" class="text-slate-300">...</p>
+            </div>
+            <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+              <span class="font-semibold text-blue-400 block mb-1">Outbound Events & State Mutations:</span>
+              <p id="inspector-outbound" class="text-slate-300">...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: STEP-BY-STEP LIFECYCLE PLAYER -->
+    <section id="tab-lifecycle" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold uppercase tracking-wide bg-blue-100 text-blue-800 px-2 py-0.5 rounded" id="current-phase-badge">Phase A: Instruction & Route Selection</span>
+              <span class="text-xs text-slate-500" id="step-counter-text">Step 1 of 14</span>
+            </div>
+            <h3 id="step-title" class="text-lg font-bold text-slate-900 mt-1">1. Upstream Initiates Funding Instruction</h3>
+          </div>
+
+          <!-- Controls -->
+          <div class="flex items-center space-x-2">
+            <button onclick="app.prevStep()" id="btn-prev-step" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition disabled:opacity-40">
+              ◄ Previous
+            </button>
+            <button onclick="app.toggleAutoPlay()" id="btn-play-step" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition flex items-center space-x-1 shadow">
+              <span id="play-icon">▶</span> <span id="play-text">Auto Play</span>
+            </button>
+            <button onclick="app.nextStep()" id="btn-next-step" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition disabled:opacity-40">
+              Next ►
+            </button>
+          </div>
+        </div>
+
+        <!-- Step Progress Bar -->
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden my-4 flex">
+          <div id="progress-bar-fill" class="bg-emerald-500 h-full transition-all duration-300" style="width: 7%;"></div>
+        </div>
+
+        <!-- Phase Nav Pills -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-[11px] font-medium mb-6">
+          <div id="phase-pill-A" onclick="app.goToStep(1)" class="p-2 rounded-lg cursor-pointer transition border border-emerald-500 bg-emerald-50 text-emerald-900 font-bold">
+            Phase A: Route Selection (Steps 1-4)
+          </div>
+          <div id="phase-pill-B" onclick="app.goToStep(5)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase B: Internal Reservation (Steps 5-7)
+          </div>
+          <div id="phase-pill-C" onclick="app.goToStep(8)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase C: Provider Transit (Steps 8-10)
+          </div>
+          <div id="phase-pill-D" onclick="app.goToStep(11)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase D: Terminal Finality (Steps 11-14)
+          </div>
+        </div>
+
+        <!-- Step Narrative and Code -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <div class="lg:col-span-2 flex flex-col space-y-4">
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <h4 class="font-bold text-slate-900 text-sm mb-2">Operational Narrative & Context</h4>
+              <p id="step-description" class="text-xs text-slate-700 leading-relaxed">
+                The Upstream Business System requests an external payment of $500 USDC from Source ADA (`ada_cust_usdc_01`) to External Wallet (`0x71C...39A`).
+              </p>
+            </div>
+
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-slate-100 flex flex-col">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span class="text-xs font-mono text-emerald-400 font-bold" id="event-type-label">Event: CreateInstructionEvent</span>
+                <span class="text-[10px] text-slate-400" id="event-sender-receiver">Upstream UI → Instruction API</span>
+              </div>
+              <pre id="payload-json-view" class="font-mono text-[11px] text-slate-300 mt-3 p-3 bg-slate-950 rounded-lg overflow-x-auto custom-scrollbar leading-snug">
+{
+  "instruction_id": "inst_usdc_onchain_9982",
+  "source_ada_id": "ada_cust_usdc_01",
+  "destination_address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+  "amount": 500.00,
+  "currency": "USDC",
+  "state": "created"
+}
+              </pre>
+            </div>
+          </div>
+
+          <!-- Real-Time State & Subledger Buckets -->
+          <div class="flex flex-col space-y-4">
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">State Machine Status</span>
+              <div class="flex items-center space-x-2">
+                <span id="lifecycle-state-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                  created
+                </span>
+                <span class="text-xs text-slate-500" id="lifecycle-state-sub">Awaiting policy routing</span>
+              </div>
+            </div>
+
+            <!-- Source ADA Live Balance Buckets -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-800">Source ADA Subledger</span>
+                <span class="text-[10px] text-slate-500 font-mono" id="subledger-ada-code">ada_cust_usdc_01</span>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Available Balance:</span>
+                    <span id="bucket-val-avail" class="font-bold text-slate-900">$500.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-avail" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Reserved Balance:</span>
+                    <span id="bucket-val-rsrv" class="font-bold text-amber-600">$0.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-rsrv" class="bg-amber-500 h-full transition-all duration-300" style="width: 0%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Pending Transit:</span>
+                    <span id="bucket-val-transit" class="font-bold text-blue-600">$0.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-transit" class="bg-blue-500 h-full transition-all duration-300" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-700">Total Asset Value:</span>
+                <span id="bucket-val-total" class="font-bold text-slate-900">$500.00 USDC</span>
+              </div>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/80 text-xs">
+              <span class="font-bold text-emerald-900 block mb-1">Active Ledger Journal Entry:</span>
+              <p id="step-journal-summary" class="text-emerald-800 text-[11px]">
+                No journal posted yet. Waiting for route decision to trigger reservation.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: DOUBLE-ENTRY ACCOUNTING & T-ACCOUNTS -->
+    <section id="tab-ledger" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Advanced Double-Entry Accounting Paths</h3>
+            <p class="text-xs text-slate-500">How the Router's selected <code class="text-emerald-700">railType</code> and <code class="text-emerald-700">cost_model</code> dictate exact General Ledger journal templates.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-600">Fundamental Invariant:</span>
+            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold border border-emerald-200">
+              ✓ Sum(Debits) = Sum(Credits)
+            </span>
+          </div>
+        </div>
+
+        <!-- Accounting Scenario Selector Buttons -->
+        <div class="mt-4 flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
+          <button onclick="app.setLedgerScenario(1)" id="ledger-scen-btn-1" class="ledger-scen-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white">
+            1. Internal Ledger Transfer
+          </button>
+          <button onclick="app.setLedgerScenario(2)" id="ledger-scen-btn-2" class="ledger-scen-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">
+            2. ACH Fiat Deposit (Mint)
+          </button>
+          <button onclick="app.setLedgerScenario(3)" id="ledger-scen-btn-3" class="ledger-scen-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">
+            3. Supplier Payout + Fee Deduction
+          </button>
+          <button onclick="app.setLedgerScenario(4)" id="ledger-scen-btn-4" class="ledger-scen-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">
+            4. CCTP Cross-Chain Bridge
+          </button>
+          <button onclick="app.setLedgerScenario(5)" id="ledger-scen-btn-5" class="ledger-scen-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200">
+            5. Fiat Redemption Off-Ramp
+          </button>
+        </div>
+
+        <!-- Scenario Context Narrative -->
+        <div id="ledger-scenario-narrative" class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- T-Account Grid -->
+        <div id="t-accounts-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: ROUTER SCORING MATH ENGINE -->
+    <section id="tab-scoring" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Interactive Route Decision & Scoring Math Engine</h3>
+            <p class="text-xs text-slate-500">Tune policy parameters to see how the Router evaluates normalized scores across available execution rails.</p>
+          </div>
+          <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-bold border border-blue-200">
+            Policy Profile: RP_MULTI_RAIL_ROUTER_V2
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          
+          <!-- Controls Panel -->
+          <div class="lg:col-span-5 bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col space-y-5">
+            <h4 class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-2">1. Adjust Policy Weights ($w$)</h4>
+            
+            <div class="space-y-4 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Cost Weight ($w_{cost}$):</span>
+                  <span id="val-w-cost" class="font-mono text-blue-600">0.30</span>
+                </div>
+                <input type="range" id="slider-w-cost" min="0" max="1" step="0.05" value="0.30" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Speed/Latency Weight ($w_{lat}$):</span>
+                  <span id="val-w-lat" class="font-mono text-blue-600">0.40</span>
+                </div>
+                <input type="range" id="slider-w-lat" min="0" max="1" step="0.05" value="0.40" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Liquidity Weight ($w_{liq}$):</span>
+                  <span id="val-w-liq" class="font-mono text-blue-600">0.15</span>
+                </div>
+                <input type="range" id="slider-w-liq" min="0" max="1" step="0.05" value="0.15" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Reliability Weight ($w_{rel}$):</span>
+                  <span id="val-w-rel" class="font-mono text-blue-600">0.15</span>
+                </div>
+                <input type="range" id="slider-w-rel" min="0" max="1" step="0.05" value="0.15" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+            </div>
+
+            <h4 class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-2 pt-2">2. Candidate Dynamic Inputs</h4>
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Fedwire Wire Fee ($):</span>
+                <input type="number" id="input-fedwire-cost" value="15.00" step="1.0" onchange="app.updateScoringMath()" class="w-20 p-1 border border-slate-300 rounded font-mono text-right text-xs">
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Polygon Gas Cost ($):</span>
+                <input type="number" id="input-polygon-cost" value="0.05" step="0.01" onchange="app.updateScoringMath()" class="w-20 p-1 border border-slate-300 rounded font-mono text-right text-xs">
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-900 text-slate-200 rounded-lg text-[11px] font-mono leading-relaxed space-y-1">
+              <div class="text-emerald-400 font-bold">Scoring Formula:</div>
+              <div>Score = 100 × (w_cost·N_cost + w_lat·N_lat + w_liq·N_liq + w_rel·R)</div>
+            </div>
+
+          </div>
+
+          <!-- Chart & Table -->
+          <div class="lg:col-span-7 flex flex-col space-y-4">
+            
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold text-slate-800">Dynamic Candidate Route Scores</span>
+                <span id="winner-tag-badge" class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                  Winner: RC_CIRCLE_ONCHAIN_A
+                </span>
+              </div>
+              <div class="chart-container">
+                <canvas id="scoringChart"></canvas>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden text-xs">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-semibold">
+                  <tr>
+                    <th class="p-2.5">Candidate Route</th>
+                    <th class="p-2.5">Cost</th>
+                    <th class="p-2.5">Speed</th>
+                    <th class="p-2.5">Reliability</th>
+                    <th class="p-2.5 text-right">Final Score</th>
+                  </tr>
+                </thead>
+                <tbody id="candidates-table-body" class="divide-y divide-slate-100">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: EVENT CATALOG -->
+    <section id="tab-catalog" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Architectural Event Catalog & Subledger Matrix</h3>
+            <p class="text-xs text-slate-500">Filterable reference catalog of system events, commands, and ledger journal hooks.</p>
+          </div>
+          <input type="text" id="catalog-search-input" onkeyup="app.filterCatalog()" placeholder="🔍 Search event or state..." class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs w-64 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="mt-6 overflow-x-auto custom-scrollbar">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="p-3">Seq #</th>
+                <th class="p-3">Event / Command Name</th>
+                <th class="p-3">Phase</th>
+                <th class="p-3">Sender → Receiver</th>
+                <th class="p-3">State & Ledger Effect</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-table-body" class="divide-y divide-slate-100">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 mt-auto text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-emerald-400 font-bold">Payment Orchestration System Architecture</span>
+        <span>•</span>
+        <span>Decoupled Routing, Subledger & Settlement Architecture</span>
+      </div>
+      <div class="text-slate-500 text-[11px]">
+        Guarantees: Strict Idempotency • Replayable Decisions • Double-Entry Subledger Integrity
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Controller JavaScript -->
+  <script>
+    const appState = {
+      activeScenario: 'crypto', // 'crypto' or 'fiat'
+      activeTab: 'topology',
+      currentStep: 1,
+      totalSteps: 14,
+      autoPlayTimer: null,
+      isPlaying: false,
+      activeLedgerScenario: 1,
+
+      weights: {
+        cost: 0.30,
+        lat: 0.40,
+        liq: 0.15,
+        rel: 0.15
+      },
+
+      overrides: {
+        fedwireCost: 15.00,
+        polygonCost: 0.05
+      }
+    };
+
+    const componentCatalog = {
+      upstream: {
+        title: "Upstream Business Systems / User UI",
+        domain: "Client Ingress",
+        icon: "🖥️",
+        desc: "The initiator of funding instructions (e.g., mobile apps, automated treasury workers, user portals).",
+        inbound: "User checkout actions, scheduled treasury rebalance triggers, or exchange withdrawals.",
+        outbound: "Posts POST /payment-instructions payload (CreateInstructionEvent)."
+      },
+      instApi: {
+        title: "Payment Instruction API",
+        domain: "Orchestration Domain",
+        icon: "⚙️",
+        desc: "State machine coordinator that tracks instructions through created → route_resolved → pending → confirmed.",
+        inbound: "CreateInstructionEvent from Upstream; RouteWinnerSelectedEvent from Router Engine.",
+        outbound: "ResolveRouteCommand to Router Engine; ActivateFundingReservationCommand to Ledger."
+      },
+      routerEngine: {
+        title: "Funding Router Decision Engine",
+        domain: "Stateless Policy Engine",
+        icon: "🧠",
+        desc: "Evaluates profile rules, checks cutoff times, and scores eligible route capabilities based on cost, latency, liquidity, and reliability.",
+        inbound: "ResolveRouteCommand, Position telemetry from Treasury Calculator.",
+        outbound: "RouteWinnerSelectedEvent with full decision audit trail."
+      },
+      posCalc: {
+        title: "Treasury Position Calculator",
+        domain: "Treasury Domain",
+        icon: "📊",
+        desc: "Computes deployable liquidity by inspecting Source ADA available balance buckets and active locks.",
+        inbound: "Liquidity queries from Router Decision Engine.",
+        outbound: "Returns exact deployable amount ($500 USDC or $10,000 USD)."
+      },
+      ledgerEngine: {
+        title: "Double-Entry Ledger Engine",
+        domain: "Financial Subledger",
+        icon: "⚖️",
+        desc: "Authoritative financial record keeper. Writes append-only double-entry journal entries and updates ADA balance buckets.",
+        inbound: "ActivateFundingReservationCommand, ExecuteProviderTransferCommand, FinalizeSettlementCommand.",
+        outbound: "LedgerJournalPostedEvent, BalanceBucketUpdatedEvent."
+      },
+      sourceAda: {
+        title: "Source ADA (Account of Digital Asset)",
+        domain: "Subledger Domain",
+        icon: "👛",
+        desc: "The customer's internal ledger account holding digital assets. Manages Available, Reserved, and Pending Outbound balance buckets.",
+        inbound: "Bucket update commands from Ledger Engine.",
+        outbound: "Balance state telemetry to Position Calculator."
+      },
+      submitter: {
+        title: "Provider Submission Service",
+        domain: "Execution Domain",
+        icon: "🚀",
+        desc: "Worker service responsible for submitting payload calls to external APIs with strict idempotency keys.",
+        inbound: "ExecuteProviderTransferCommand from Instruction API.",
+        outbound: "API payload calls to Circle API or Commercial Bank host-to-host gateway."
+      },
+      externalRail: {
+        title: "Circle API / Blockchain / Bank Rail",
+        domain: "External Network",
+        icon: "🌐",
+        desc: "External execution infrastructure (Circle API, Polygon/Ethereum on-chain network, or Fedwire/ACH banking system).",
+        inbound: "Transfer initiation request from Submitter Service.",
+        outbound: "On-chain transaction hash or bank IMAD confirmation webhooks."
+      },
+      reconService: {
+        title: "Reconciliation Service",
+        domain: "Settlement Domain",
+        icon: "🔎",
+        desc: "Matches external provider webhooks against internal instructions and commands terminal subledger settlement.",
+        inbound: "Terminal Webhook / Statement Rx.",
+        outbound: "ReconciliationMatchedEvent to Ledger Engine."
+      }
+    };
+
+    // Crypto Scenario Steps (External USDC Route)
+    const cryptoLifecycleSteps = [
+      {
+        step: 1, phase: "Phase A", phaseBadge: "Phase A: Route Selection",
+        title: "1. Upstream Initiates Payment Instruction",
+        description: "Upstream requests a $500 USDC transfer from Source ADA (`ada_cust_usdc_01`) to External Blockchain Wallet (`0x71C...39A`). State is `created`.",
+        state: "created", event: "CreateInstructionEvent", parties: "Upstream UI → Instruction API",
+        journal: "No journal entry posted yet. Instruction initialized as created.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", source_ada_id: "ada_cust_usdc_01", destination_address: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F", amount: 500.00, currency: "USDC", state: "created" },
+        balances: { avail: 500, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 2, phase: "Phase A", phaseBadge: "Phase A: Route Selection",
+        title: "2. Instruction API Commands Route Resolution",
+        description: "The Instruction API invokes the Funding Router Engine to evaluate available route capabilities under policy `RP_EXTERNAL_USDC_V1`.",
+        state: "created", event: "ResolveRouteCommand", parties: "Instruction API → Funding Router Engine",
+        journal: "No journal entry. Policy evaluation initiated.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", action: "resolve_route", policy_profile: "RP_EXTERNAL_USDC_V1" },
+        balances: { avail: 500, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 3, phase: "Phase A", phaseBadge: "Phase A: Route Selection",
+        title: "3. Router Engine Queries Treasury Deployable Liquidity",
+        description: "The Router queries the Treasury Position Calculator to ensure Source ADA has >= $500 USDC deployable balance.",
+        state: "created", event: "LiquidityCheckQuery", parties: "Router Engine → Treasury Position Calculator",
+        journal: "No journal entry. Liquidity confirmed ($500 available).",
+        payload: { ada_id: "ada_cust_usdc_01", required_amount: 500.00, deployable_amount: 500.00, sufficient: true },
+        balances: { avail: 500, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 4, phase: "Phase A", phaseBadge: "Phase A: Route Selection",
+        title: "4. Optimal Route Selected (RC_CIRCLE_ONCHAIN_A)",
+        description: "Router evaluates scores: `RC_CIRCLE_ONCHAIN_A` wins (Score: 92.4) due to low gas fee ($0.05) and instant sub-minute finality.",
+        state: "route_resolved", event: "RouteWinnerSelectedEvent", parties: "Router Engine → Instruction API",
+        journal: "State transitions to route_resolved.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", selected_route_code: "RC_CIRCLE_ONCHAIN_A", score: 92.4, state: "route_resolved" },
+        balances: { avail: 500, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 5, phase: "Phase B", phaseBadge: "Phase B: Internal Reservation",
+        title: "5. Command Funding Reservation",
+        description: "State transition to `route_resolved` triggers the Instruction API to command the Ledger Engine to lock $500 USDC.",
+        state: "route_resolved", event: "ActivateFundingReservationCommand", parties: "Instruction API → Double-Entry Ledger Engine",
+        journal: "Preparing reservation lock in subledger.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", source_ada_id: "ada_cust_usdc_01", reserve_amount: 500.00 },
+        balances: { avail: 500, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 6, phase: "Phase B", phaseBadge: "Phase B: Internal Reservation",
+        title: "6. Ledger Posts Journal 1 (Encumbrance Lock)",
+        description: "Ledger Engine writes Journal 1: Debiting Customer Available Liability (-$500) and Crediting Customer Reserved Liability (+$500).",
+        state: "route_resolved", event: "LedgerJournalPostedEvent (Journal 1)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Available ($500) | CREDIT: Customer USDC Reserved ($500)",
+        payload: { journal_id: "jnl_rsrv_101", entries: [ { account: "Customer_USDC_Available", debit: 500.00, credit: 0 }, { account: "Customer_USDC_Reserved", debit: 0, credit: 500.00 } ] },
+        balances: { avail: 0, rsrv: 500, transit: 0 }
+      },
+      {
+        step: 7, phase: "Phase B", phaseBadge: "Phase B: Internal Reservation",
+        title: "7. Source ADA Balance Buckets Updated",
+        description: "Source ADA (`ada_cust_usdc_01`) updates its buckets: `available` drops to $0; `reserved` increases to $500.",
+        state: "route_resolved", event: "BalanceBucketUpdatedEvent", parties: "Ledger Engine → Source ADA",
+        journal: "Balance buckets mutated. Customer total ownership remains unchanged at $500.",
+        payload: { ada_id: "ada_cust_usdc_01", available_balance: 0.00, reserved_balance: 500.00, pending_outbound: 0.00 },
+        balances: { avail: 0, rsrv: 500, transit: 0 }
+      },
+      {
+        step: 8, phase: "Phase C", phaseBadge: "Phase C: Provider Transit",
+        title: "8. Command Provider Transfer Execution",
+        description: "Instruction API commands Submitter Service to execute Circle API call. Instruction state transitions to `pending_provider`.",
+        state: "pending_provider", event: "ExecuteProviderTransferCommand", parties: "Instruction API → Provider Submission Service",
+        journal: "Preparing transit shift in subledger.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", provider: "circle", route_code: "RC_CIRCLE_ONCHAIN_A", amount: 500.00, state: "pending_provider" },
+        balances: { avail: 0, rsrv: 500, transit: 0 }
+      },
+      {
+        step: 9, phase: "Phase C", phaseBadge: "Phase C: Provider Transit",
+        title: "9. Ledger Posts Journal 2 (In-Transit Shift)",
+        description: "Ledger Engine writes Journal 2: Debiting Customer Reserved Liability ($500) and Crediting Settlement Transit Liability ($500).",
+        state: "pending_provider", event: "LedgerJournalPostedEvent (Journal 2)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Reserved ($500) | CREDIT: Settlement Transit Liability ($500)",
+        payload: { journal_id: "jnl_transit_102", entries: [ { account: "Customer_USDC_Reserved", debit: 500.00, credit: 0 }, { account: "Settlement_Transit_Liability", debit: 0, credit: 500.00 } ] },
+        balances: { avail: 0, rsrv: 0, transit: 500 }
+      },
+      {
+        step: 10, phase: "Phase C", phaseBadge: "Phase C: Provider Transit",
+        title: "10. Submitter Calls Circle API (Idempotent)",
+        description: "Submitter calls Circle API with idempotency key `idem_usdc_9982`. Blockchain transfer submitted to network.",
+        state: "pending_provider", event: "ExternalTransferSubmittedEvent", parties: "Submitter Service → Circle API / Blockchain",
+        journal: "Funds in-transit externally on blockchain network.",
+        payload: { circle_transfer_id: "cir_tx_881923", idempotency_key: "idem_usdc_9982", status: "pending" },
+        balances: { avail: 0, rsrv: 0, transit: 500 }
+      },
+      {
+        step: 11, phase: "Phase D", phaseBadge: "Phase D: Terminal Finality",
+        title: "11. Circle Emits Terminal Webhook",
+        description: "Circle API sends webhook confirming on-chain transaction finality on Polygon (`0xabc...123`).",
+        state: "pending_provider", event: "ProviderWebhookReceivedEvent", parties: "Circle API → Webhook Receiver",
+        journal: "Terminal webhook ingested.",
+        payload: { circle_transfer_id: "cir_tx_881923", status: "complete", tx_hash: "0xabc1234567890def" },
+        balances: { avail: 0, rsrv: 0, transit: 500 }
+      },
+      {
+        step: 12, phase: "Phase D", phaseBadge: "Phase D: Terminal Finality",
+        title: "12. Reconciliation Service Matches Transaction",
+        description: "Reconciliation Service matches `cir_tx_881923` to internal instruction `inst_usdc_onchain_9982` and triggers settlement.",
+        state: "pending_provider", event: "ReconciliationMatchedEvent", parties: "Reconciliation Service → Ledger Engine",
+        journal: "Triggering final double-entry settlement posting.",
+        payload: { matched: true, instruction_id: "inst_usdc_onchain_9982", tx_hash: "0xabc1234567890def" },
+        balances: { avail: 0, rsrv: 0, transit: 500 }
+      },
+      {
+        step: 13, phase: "Phase D", phaseBadge: "Phase D: Terminal Finality",
+        title: "13. Ledger Posts Journal 3 (Final Settlement)",
+        description: "Ledger writes Journal 3: Debiting Settlement Transit Liability ($500) and Crediting Circle Custody USDC Asset ($500).",
+        state: "confirmed", event: "LedgerJournalPostedEvent (Journal 3)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Settlement Transit Liability ($500) | CREDIT: Circle Custody USDC Asset ($500)",
+        payload: { journal_id: "jnl_final_103", entries: [ { account: "Settlement_Transit_Liability", debit: 500.00, credit: 0 }, { account: "Circle_Custody_USDC_Asset", debit: 0, credit: 500.00 } ] },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 14, phase: "Phase D", phaseBadge: "Phase D: Terminal Finality",
+        title: "14. Instruction Confirmed & Outbound Cleared",
+        description: "Instruction state updates to `confirmed`. Source ADA `pending_outbound` bucket cleared. Payment lifecycle complete!",
+        state: "confirmed", event: "InstructionConfirmedEvent", parties: "Instruction API → Upstream UI",
+        journal: "Lifecycle complete. Final balances: Available $0 | Reserved $0 | Pending Transit $0.",
+        payload: { instruction_id: "inst_usdc_onchain_9982", final_state: "confirmed", completed_at: "2026-08-13T12:00:00Z" },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      }
+    ];
+
+    // Fiat Scenario Steps
+    const fiatLifecycleSteps = [
+      {
+        step: 1, phase: "Phase A", phaseBadge: "Phase A: Route Selection & FX",
+        title: "1. Upstream Initiates Fiat Redemption Request",
+        description: "Upstream requests a $10,000 USD fiat off-ramp payout from Source ADA (`ada_cust_usdc_01`) to recipient Chase bank account (`****4829`).",
+        state: "created", event: "CreateInstructionEvent", parties: "Upstream Portal → Instruction API",
+        journal: "No journal entry posted yet. State initialized as created.",
+        payload: { instruction_id: "inst_fiat_redemption_7712", source_ada_id: "ada_cust_usdc_01", amount_fiat: 10000.00, fiat_currency: "USD", bank_routing: "021000021", state: "created" },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 2, phase: "Phase A", phaseBadge: "Phase A: Route Selection & FX",
+        title: "2. Instruction API Requests Fiat Route Resolution",
+        description: "Instruction API invokes Router Engine with profile `RP_FIAT_REDEMPTION_V1` before cutoff time.",
+        state: "created", event: "ResolveRouteCommand", parties: "Instruction API → Router Engine",
+        journal: "No journal entry. Policy evaluation initiated.",
+        payload: { instruction_id: "inst_fiat_redemption_7712", action: "resolve_route", policy_profile: "RP_FIAT_REDEMPTION_V1" },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 3, phase: "Phase A", phaseBadge: "Phase A: Route Selection & FX",
+        title: "3. Router Locks 1:1 USD:USDC Rate & Treasury",
+        description: "Router locks 1:1 USD conversion rate ($10,000 USDC = $10,000 USD) and confirms bank reserve liquidity ($500k USD available).",
+        state: "created", event: "LiquidityAndFXCheckQuery", parties: "Router Engine → FX Engine & Treasury Calc",
+        journal: "No journal entry. Rates locked.",
+        payload: { usdc_required: 10000.00, usd_fiat_payout: 10000.00, fx_rate: 1.0000, bank_reserve_ok: true },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 4, phase: "Phase A", phaseBadge: "Phase A: Route Selection & FX",
+        title: "4. Route Winner Selected (RC_FEDWIRE_EXPRESS)",
+        description: "Router evaluates options: `RC_FEDWIRE_EXPRESS` wins (Score: 88.5) for same-day instant settlement.",
+        state: "route_resolved", event: "RouteWinnerSelectedEvent", parties: "Router Engine → Instruction API",
+        journal: "State updates to route_resolved.",
+        payload: { selected_route_code: "RC_FEDWIRE_EXPRESS", score: 88.5, state: "route_resolved" },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 5, phase: "Phase B", phaseBadge: "Phase B: Asset Reservation",
+        title: "5. Command Funding Reservation",
+        description: "Instruction API commands Ledger Engine to lock $10,000 USDC in Source ADA.",
+        state: "route_resolved", event: "ActivateFundingReservationCommand", parties: "Instruction API → Double-Entry Ledger Engine",
+        journal: "Preparing reservation lock in subledger.",
+        payload: { instruction_id: "inst_fiat_redemption_7712", source_ada_id: "ada_cust_usdc_01", reserve_amount: 10000.00 },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 6, phase: "Phase B", phaseBadge: "Phase B: Asset Reservation",
+        title: "6. Ledger Posts Journal 1 (USDC Lock)",
+        description: "Ledger writes Journal 1: Debiting Customer Available Liability (-$10,000) and Crediting Customer Reserved Liability (+$10,000).",
+        state: "route_resolved", event: "LedgerJournalPostedEvent (Journal 1)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Available ($10,000) | CREDIT: Customer USDC Reserved ($10,000)",
+        payload: { journal_id: "jnl_fiat_rsrv_501", entries: [ { account: "Customer_USDC_Available", debit: 10000.00, credit: 0 }, { account: "Customer_USDC_Reserved", debit: 0, credit: 10000.00 } ] },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 7, phase: "Phase B", phaseBadge: "Phase B: Asset Reservation",
+        title: "7. Source ADA Balance Buckets Updated",
+        description: "Source ADA (`ada_cust_usdc_01`) updates its buckets: `available` drops to $0; `reserved` increases to $10,000.",
+        state: "route_resolved", event: "BalanceBucketUpdatedEvent", parties: "Ledger Engine → Source ADA",
+        journal: "Balance buckets mutated. Total entitlement value remains $10,000 USD.",
+        payload: { available_balance: 0.00, reserved_balance: 10000.00, pending_fiat_transit: 0.00 },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 8, phase: "Phase C", phaseBadge: "Phase C: Banking Rail Submission",
+        title: "8. Execute Fiat Payout Command",
+        description: "Instruction API commands Banking Submitter Service to issue Fedwire wire instruction. State becomes `pending_bank`.",
+        state: "pending_bank", event: "ExecuteFiatPayoutCommand", parties: "Instruction API → Banking Submitter Service",
+        journal: "Preparing fiat transit shift.",
+        payload: { instruction_id: "inst_fiat_redemption_7712", rail: "fedwire", payout_amount: 10000.00, state: "pending_bank" },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 9, phase: "Phase C", phaseBadge: "Phase C: Banking Rail Submission",
+        title: "9. Ledger Posts Journal 2 (Fiat Transit Shift)",
+        description: "Ledger Engine writes Journal 2: Debiting Customer Reserved ($10,000) and Crediting Settlement Fiat Transit Liability ($10,000).",
+        state: "pending_bank", event: "LedgerJournalPostedEvent (Journal 2)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Reserved ($10,000) | CREDIT: Settlement Fiat Transit Liability ($10,000)",
+        payload: { journal_id: "jnl_fiat_transit_502", entries: [ { account: "Customer_USDC_Reserved", debit: 10000.00, credit: 0 }, { account: "Settlement_Fiat_Transit_Liability", debit: 0, credit: 10000.00 } ] },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 10, phase: "Phase C", phaseBadge: "Phase C: Banking Rail Submission",
+        title: "10. Banking Submitter Issues ISO20022 Wire",
+        description: "Banking Submitter issues ISO20022 `pamt.008` Fedwire payment message to commercial bank host-to-host gateway.",
+        state: "pending_bank", event: "ExternalBankingPayoutSubmittedEvent", parties: "Banking Submitter → Fedwire Gateway",
+        journal: "Fiat funds in-transit via Federal Reserve banking rail.",
+        payload: { bank_ref: "WIRE_20260813_99812", idempotency_key: "idem_fiat_7712", status: "submitted" },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 11, phase: "Phase D", phaseBadge: "Phase D: Settlement & Finality",
+        title: "11. Bank Emits Federal Wire Confirmation (IMAD)",
+        description: "Commercial Bank emits wire confirmation webhook with Federal Reserve IMAD code (`20260813B1QMP00C000102`).",
+        state: "pending_bank", event: "BankPayoutWebhookReceivedEvent", parties: "Fedwire Gateway → Bank Webhook Rx",
+        journal: "Federal Reserve wire confirmation received.",
+        payload: { imad: "20260813B1QMP00C000102", status: "settled_on_fedwire" },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 12, phase: "Phase D", phaseBadge: "Phase D: Settlement & Finality",
+        title: "12. Reconciliation Engine Matches IMAD Code",
+        description: "Fiat Reconciliation Engine matches IMAD code to instruction `inst_fiat_redemption_7712` and commands clearing.",
+        state: "pending_bank", event: "ReconciliationMatchedEvent", parties: "Reconciliation Engine → Ledger Engine",
+        journal: "Triggering final double-entry settlement posting.",
+        payload: { matched: true, instruction_id: "inst_fiat_redemption_7712", imad: "20260813B1QMP00C000102" },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 13, phase: "Phase D", phaseBadge: "Phase D: Settlement & Finality",
+        title: "13. Ledger Posts Journal 3 (Final Settlement)",
+        description: "Ledger writes Journal 3: Debiting Settlement Fiat Transit Liability ($10,000) and Crediting Platform Commercial Bank USD Asset ($10,000).",
+        state: "confirmed", event: "LedgerJournalPostedEvent (Journal 3)", parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Settlement Fiat Transit Liability ($10,000) | CREDIT: Commercial Bank USD Asset ($10,000)",
+        payload: { journal_id: "jnl_fiat_final_503", entries: [ { account: "Settlement_Fiat_Transit_Liability", debit: 10000.00, credit: 0 }, { account: "Commercial_Bank_USD_Asset", debit: 0, credit: 10000.00 } ] },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 14, phase: "Phase D", phaseBadge: "Phase D: Settlement & Finality",
+        title: "14. Instruction Confirmed & Off-Ramp Complete",
+        description: "Instruction state updates to `confirmed`. Fiat transit cleared. Destination fiat entitlement satisfied via Chase wire delivery!",
+        state: "confirmed", event: "InstructionConfirmedEvent", parties: "Instruction API → Upstream Portal",
+        journal: "Lifecycle complete. Final balances: Available $0 | Reserved $0 | Fiat Transit $0.",
+        payload: { instruction_id: "inst_fiat_redemption_7712", final_state: "confirmed", payout_channel: "Fedwire" },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      }
+    ];
+
+    // 5 Ledger Accounting Scenarios Data
+    const ledgerScenarios = {
+      1: {
+        title: "Scenario 1: Internal Customer-to-Customer Settlement (Off-Chain)",
+        rail: "RC_INTERNAL_LEDGER",
+        narrative: "<strong>The Context:</strong> Buyer sends $1,000 USDC to Supplier. Both hold ADAs on the platform.<br><strong>Router Decision:</strong> Router selects <code class='text-emerald-700'>RC_INTERNAL_LEDGER</code> ($0.00 fee, 0ms latency).<br><strong>Ledger Impact:</strong> Bypasses external custody and transit accounts entirely. Reclassifies internal liability between buyer and supplier.",
+        accounts: [
+          { name: "Buyer USDC Liability - Available", type: "Digital Asset Subledger", d1: "$1,000.00 (Step 1)", c1: "$1,000.00 (Initial)", end: "$0.00" },
+          { name: "Buyer USDC Liability - Reserved", type: "Encumbrance Account", d1: "$1,000.00 (Step 2)", c1: "$1,000.00 (Step 1)", end: "$0.00 (Cleared)" },
+          { name: "Supplier USDC Liability - Available", type: "Digital Asset Subledger", d1: "-", c1: "$1,000.00 (Step 2)", end: "+$1,000.00" }
+        ]
+      },
+      2: {
+        title: "Scenario 2: Fiat-to-Crypto Payin (ACH Deposit & Minting)",
+        rail: "RC_CIRCLE_MINT_ACH_USD",
+        narrative: "<strong>The Context:</strong> Investor deposits $5,000 USD via ACH to fund wallet.<br><strong>Router Decision:</strong> Router selects <code class='text-emerald-700'>RC_CIRCLE_MINT_ACH_USD</code> (1-3 days settlement).<br><strong>Ledger Impact:</strong> Uses temporary Fiat Deposit Receivable and Pending Liability accounts to protect platform from uncleared funds.",
+        accounts: [
+          { name: "Fiat Deposit Receivable - ACH", type: "Asset Account", d1: "$5,000.00 (Step 1: ACH)", c1: "$5,000.00 (Step 2: Clear)", end: "$0.00 (Cleared)" },
+          { name: "Investor USDC Liability - Pending", type: "Pending Liability", d1: "$5,000.00 (Step 2: Clear)", c1: "$5,000.00 (Step 1: ACH)", end: "$0.00 (Cleared)" },
+          { name: "Circle Custody USDC Asset", type: "Platform Asset", d1: "$5,000.00 (Step 2: Mint)", c1: "-", end: "+$5,000.00 USD" },
+          { name: "Investor USDC Liability - Available", type: "Customer Liability", d1: "-", c1: "$5,000.00 (Step 2: Clear)", end: "+$5,000.00 USDC" }
+        ]
+      },
+      3: {
+        title: "Scenario 3: Supplier Payout with Platform Fee Deduction",
+        rail: "RC_CIRCLE_ONCHAIN_POLYGON",
+        narrative: "<strong>The Context:</strong> Supplier liquidates $2,000 invoice with a $5.00 platform routing fee.<br><strong>Router Decision:</strong> Router selects <code class='text-emerald-700'>RC_CIRCLE_ONCHAIN_POLYGON</code> with $5.00 markup.<br><strong>Ledger Impact:</strong> Ledger executes a split journal entry: $1,995 principal to Transit, $5.00 to Platform Revenue.",
+        accounts: [
+          { name: "Supplier USDC Liability - Available", type: "Customer Liability", d1: "$2,000.00 (Lock)", c1: "$2,000.00 (Initial)", end: "$0.00" },
+          { name: "Supplier USDC Liability - Reserved", type: "Encumbrance Account", d1: "$2,000.00 (Split)", c1: "$2,000.00 (Lock)", end: "$0.00" },
+          { name: "Settlement Transit Liability", type: "Transit Account", d1: "$1,995.00 (Confirm)", c1: "$1,995.00 (Split)", end: "$0.00" },
+          { name: "Platform Markup Revenue", type: "Revenue Account", d1: "-", c1: "$5.00 (Split)", end: "+$5.00 Revenue" }
+        ]
+      },
+      4: {
+        title: "Scenario 4: Cross-Chain Treasury Rebalancing (Circle CCTP)",
+        rail: "RC_CIRCLE_CCTP_ETH_TO_ARB",
+        narrative: "<strong>The Context:</strong> Treasury moves $50,000 USDC from Ethereum to Arbitrum via CCTP.<br><strong>Router Decision:</strong> Router selects <code class='text-emerald-700'>RC_CIRCLE_CCTP_ETH_TO_ARB</code> ($12.50 gas cost).<br><strong>Ledger Impact:</strong> Uses Cross-Chain Transit Asset to safeguard balance sheet during burn-and-mint attestation gap.",
+        accounts: [
+          { name: "On-Chain Treasury USDC - Ethereum", type: "Platform Asset", d1: "-", c1: "$50,000.00 (Burn) + $12.50 (Gas)", end: "-$50,012.50" },
+          { name: "Cross-Chain Transit Asset", type: "Bridge Asset", d1: "$50,000.00 (Burn)", c1: "$50,000.00 (Mint)", end: "$0.00 (Cleared)" },
+          { name: "Network Gas Fee Expense", type: "Expense Account", d1: "$12.50 (Gas)", c1: "-", end: "+$12.50 Expense" },
+          { name: "On-Chain Treasury USDC - Arbitrum", type: "Platform Asset", d1: "$50,000.00 (Mint)", c1: "-", end: "+$50,000.00" }
+        ]
+      },
+      5: {
+        title: "Scenario 5: Fiat Redemption Off-Ramp (Source ADA to Bank Wire)",
+        rail: "RC_FEDWIRE_EXPRESS",
+        narrative: "<strong>The Context:</strong> Client redeems $10,000 USDC for Fedwire payout to Chase Bank.<br><strong>Router Decision:</strong> Router selects <code class='text-emerald-700'>RC_FEDWIRE_EXPRESS</code>.<br><strong>Ledger Impact:</strong> Shifts USDC Available → USDC Reserved → Fiat Transit Liability → Commercial Bank USD Asset.",
+        accounts: [
+          { name: "Customer USDC Liability - Available", type: "Subledger Account", d1: "$10,000.00 (Lock)", c1: "$10,000.00 (Initial)", end: "$0.00" },
+          { name: "Customer USDC Liability - Reserved", type: "Encumbrance Account", d1: "$10,000.00 (Submit)", c1: "$10,000.00 (Lock)", end: "$0.00" },
+          { name: "Settlement Fiat Transit Liability", type: "Bank Transit", d1: "$10,000.00 (Final)", c1: "$10,000.00 (Submit)", end: "$0.00" },
+          { name: "Platform Commercial Bank USD Asset", type: "Bank Custody Asset", d1: "$500,000.00 (Initial)", c1: "$10,000.00 (Wire Out)", end: "$490,000.00 USD" }
+        ]
+      }
+    };
+
+    let scoringChartInstance = null;
+
+    const app = {
+      init() {
+        this.renderCatalog();
+        this.initScoringChart();
+        this.updateScoringMath();
+        this.updateStepView();
+        this.setLedgerScenario(1);
+      },
+
+      switchScenario(scenarioKey) {
+        appState.activeScenario = scenarioKey;
+        const mainTitle = document.getElementById('scenario-main-title');
+        const mainDesc = document.getElementById('scenario-main-desc');
+        const badge = document.getElementById('active-scenario-badge');
+        const railTitle = document.getElementById('rail-node-title');
+        const railDesc = document.getElementById('rail-node-desc');
+        const destTitle = document.getElementById('destination-ada-title');
+        const destDesc = document.getElementById('destination-ada-desc');
+        const subledgerCode = document.getElementById('subledger-ada-code');
+
+        if (scenarioKey === 'crypto') {
+          badge.className = "bg-blue-100 text-blue-800 border border-blue-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded";
+          badge.innerText = "Active Mode: External USDC On-Chain Route";
+          mainTitle.innerText = "External On-Chain USDC Transfer Lifecycle";
+          mainDesc.innerHTML = "When an internal Funding Instruction resolves to an external USDC payment, the system coordinates three distinct domains: <strong>Payment Orchestration & Routing</strong>, <strong>Treasury & Ledger Domain</strong>, and <strong>Execution & Settlement Domain</strong>.";
+          railTitle.innerText = "Circle API / Blockchain Rail";
+          railDesc.innerText = "Executes on-chain blockchain transfer (Polygon/Ethereum).";
+          destTitle.innerText = "Destination Account / Rail Target";
+          destDesc.innerText = "External blockchain wallet address (e.g., 0x71C...39A).";
+          subledgerCode.innerText = "ada_cust_usdc_01";
+        } else {
+          badge.className = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded";
+          badge.innerText = "Active Mode: Fiat Off-Ramp Route";
+          mainTitle.innerText = "Fiat Redemption Architecture & Interfacing Overview";
+          mainDesc.innerHTML = "When the Router selects a <strong>Fiat Redemption Route</strong>, the platform converts digital asset balance in the <strong>Source ADA</strong> (`ada_cust_usdc_01`) into a fiat payout delivered to a <strong>Destination Fiat Account / Bank Account</strong> via Fedwire/ACH.";
+          railTitle.innerText = "Fedwire / Commercial Banking Rail";
+          railDesc.innerText = "Executes host-to-host bank wire transfer.";
+          destTitle.innerText = "Destination Fiat Bank Account";
+          destDesc.innerText = "Linked customer commercial bank account (Chase ****4829).";
+          subledgerCode.innerText = "ada_cust_usdc_01";
+        }
+
+        appState.currentStep = 1;
+        this.renderCatalog();
+        this.updateStepView();
+      },
+
+      setTab(tabKey) {
+        appState.activeTab = tabKey;
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(el => {
+          el.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+          el.classList.add('text-slate-600');
+        });
+
+        const activeContent = document.getElementById(`tab-${tabKey}`);
+        const activeBtn = document.getElementById(`tab-btn-${tabKey}`);
+
+        if (activeContent) activeContent.classList.remove('hidden');
+        if (activeBtn) {
+          activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+          activeBtn.classList.remove('text-slate-600');
+        }
+
+        if (tabKey === 'scoring' && scoringChartInstance) {
+          setTimeout(() => scoringChartInstance.resize(), 100);
+        }
+      },
+
+      selectNode(nodeKey) {
+        const info = componentCatalog[nodeKey];
+        if (!info) return;
+
+        document.querySelectorAll('.node-card').forEach(el => el.classList.remove('ring-2', 'ring-blue-500', 'ring-emerald-500', 'ring-purple-500'));
+        const selectedCard = document.getElementById(`node-${nodeKey}`);
+        if (selectedCard) selectedCard.classList.add('ring-2', 'ring-blue-500');
+
+        document.getElementById('inspector-icon').innerText = info.icon;
+        document.getElementById('inspector-title').innerText = info.title;
+        document.getElementById('inspector-domain').innerText = info.domain;
+        document.getElementById('inspector-desc').innerText = info.desc;
+        document.getElementById('inspector-inbound').innerText = info.inbound;
+        document.getElementById('inspector-outbound').innerText = info.outbound;
+        document.getElementById('inspector-details').classList.remove('hidden');
+      },
+
+      goToStep(stepNum) {
+        if (stepNum < 1) stepNum = 1;
+        if (stepNum > appState.totalSteps) stepNum = appState.totalSteps;
+        appState.currentStep = stepNum;
+        this.updateStepView();
+      },
+
+      nextStep() { this.goToStep(appState.currentStep + 1); },
+      prevStep() { this.goToStep(appState.currentStep - 1); },
+
+      toggleAutoPlay() {
+        if (appState.isPlaying) {
+          clearInterval(appState.autoPlayTimer);
+          appState.isPlaying = false;
+          document.getElementById('play-icon').innerText = '▶';
+          document.getElementById('play-text').innerText = 'Auto Play';
+          document.getElementById('btn-play-step').classList.remove('bg-amber-600');
+          document.getElementById('btn-play-step').classList.add('bg-emerald-600');
+        } else {
+          appState.isPlaying = true;
+          document.getElementById('play-icon').innerText = '⏸';
+          document.getElementById('play-text').innerText = 'Pause';
+          document.getElementById('btn-play-step').classList.remove('bg-emerald-600');
+          document.getElementById('btn-play-step').classList.add('bg-amber-600');
+
+          appState.autoPlayTimer = setInterval(() => {
+            if (appState.currentStep >= appState.totalSteps) {
+              app.goToStep(1);
+            } else {
+              app.nextStep();
+            }
+          }, 2200);
+        }
+      },
+
+      resetAll() {
+        if (appState.isPlaying) this.toggleAutoPlay();
+        appState.currentStep = 1;
+        appState.weights = { cost: 0.30, lat: 0.40, liq: 0.15, rel: 0.15 };
+        document.getElementById('slider-w-cost').value = 0.30;
+        document.getElementById('slider-w-lat').value = 0.40;
+        document.getElementById('slider-w-liq').value = 0.15;
+        document.getElementById('slider-w-rel').value = 0.15;
+        this.updateScoringMath();
+        this.updateStepView();
+        this.setTab('topology');
+      },
+
+      updateStepView() {
+        const steps = appState.activeScenario === 'crypto' ? cryptoLifecycleSteps : fiatLifecycleSteps;
+        const step = steps[appState.currentStep - 1];
+        if (!step) return;
+
+        document.getElementById('current-phase-badge').innerText = step.phaseBadge;
+        document.getElementById('step-counter-text').innerText = `Step ${step.step} of 14`;
+        document.getElementById('step-title').innerText = step.title;
+        document.getElementById('step-description').innerText = step.description;
+        document.getElementById('event-type-label').innerText = `Event: ${step.event}`;
+        document.getElementById('event-sender-receiver').innerText = step.parties;
+        document.getElementById('payload-json-view').innerText = JSON.stringify(step.payload, null, 2);
+        document.getElementById('step-journal-summary').innerText = step.journal;
+
+        const pct = (step.step / appState.totalSteps) * 100;
+        document.getElementById('progress-bar-fill').style.width = `${pct}%`;
+
+        ['A', 'B', 'C', 'D'].forEach(p => {
+          const pill = document.getElementById(`phase-pill-${p}`);
+          if (pill) {
+            pill.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold');
+            pill.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+          }
+        });
+
+        const activePhaseLetter = step.phase.split(' ')[1];
+        const activePill = document.getElementById(`phase-pill-${activePhaseLetter}`);
+        if (activePill) {
+          activePill.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
+          activePill.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold');
+        }
+
+        const stateBadge = document.getElementById('lifecycle-state-badge');
+        stateBadge.innerText = step.state;
+        if (step.state === 'created') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300";
+        } else if (step.state === 'route_resolved') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300";
+        } else if (step.state === 'pending_provider' || step.state === 'pending_bank') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900 border border-blue-300";
+        } else if (step.state === 'confirmed') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300";
+        }
+
+        const b = step.balances;
+        const maxVal = appState.activeScenario === 'crypto' ? 500 : 10000;
+        const unit = appState.activeScenario === 'crypto' ? 'USDC' : 'USD';
+
+        document.getElementById('bucket-val-avail').innerText = `$${b.avail.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        document.getElementById('bucket-val-rsrv').innerText = `$${b.rsrv.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        document.getElementById('bucket-val-transit').innerText = `$${b.transit.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        document.getElementById('bucket-val-total').innerText = `$${maxVal.toLocaleString('en-US', {minimumFractionDigits: 2})} ${unit}`;
+
+        document.getElementById('bucket-bar-avail').style.width = `${(b.avail / maxVal) * 100}%`;
+        document.getElementById('bucket-bar-rsrv').style.width = `${(b.rsrv / maxVal) * 100}%`;
+        document.getElementById('bucket-bar-transit').style.width = `${(b.transit / maxVal) * 100}%`;
+
+        document.getElementById('btn-prev-step').disabled = (step.step === 1);
+        document.getElementById('btn-next-step').disabled = (step.step === appState.totalSteps);
+      },
+
+      setLedgerScenario(id) {
+        appState.activeLedgerScenario = id;
+        document.querySelectorAll('.ledger-scen-btn').forEach(btn => {
+          btn.classList.remove('bg-slate-900', 'text-white');
+          btn.classList.add('bg-slate-100', 'text-slate-700');
+        });
+
+        const activeBtn = document.getElementById(`ledger-scen-btn-${id}`);
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+          activeBtn.classList.add('bg-slate-900', 'text-white');
+        }
+
+        const scen = ledgerScenarios[id];
+        if (!scen) return;
+
+        document.getElementById('ledger-scenario-narrative').innerHTML = scen.narrative;
+
+        const grid = document.getElementById('t-accounts-grid');
+        grid.innerHTML = '';
+        scen.accounts.forEach(acc => {
+          const card = document.createElement('div');
+          card.className = "bg-slate-50 p-4 rounded-xl border border-slate-200";
+          card.innerHTML = `
+            <div class="flex justify-between items-center pb-2 border-b-2 border-slate-800">
+              <span class="font-bold text-xs text-slate-900">${acc.name}</span>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">${acc.type}</span>
+            </div>
+            <div class="grid grid-cols-2 text-xs divide-x divide-slate-300 mt-2 font-mono min-h-[90px]">
+              <div class="pr-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">DEBIT (-)</span>
+                <div class="text-red-600 font-bold">${acc.d1}</div>
+              </div>
+              <div class="pl-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">CREDIT (+)</span>
+                <div class="text-emerald-600 font-bold">${acc.c1}</div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200 text-right text-xs font-bold text-slate-800">
+              Ending Balance: ${acc.end}
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      },
+
+      updateScoringMath() {
+        appState.weights.cost = parseFloat(document.getElementById('slider-w-cost').value);
+        appState.weights.lat = parseFloat(document.getElementById('slider-w-lat').value);
+        appState.weights.liq = parseFloat(document.getElementById('slider-w-liq').value);
+        appState.weights.rel = parseFloat(document.getElementById('slider-w-rel').value);
+
+        document.getElementById('val-w-cost').innerText = appState.weights.cost.toFixed(2);
+        document.getElementById('val-w-lat').innerText = appState.weights.lat.toFixed(2);
+        document.getElementById('val-w-liq').innerText = appState.weights.liq.toFixed(2);
+        document.getElementById('val-w-rel').innerText = appState.weights.rel.toFixed(2);
+
+        appState.overrides.fedwireCost = parseFloat(document.getElementById('input-fedwire-cost').value) || 15.00;
+        appState.overrides.polygonCost = parseFloat(document.getElementById('input-polygon-cost').value) || 0.05;
+
+        const candidates = [
+          { code: "RC_CIRCLE_ONCHAIN_A", name: "Circle Polygon On-Chain", cost: appState.overrides.polygonCost, latMins: 0.5, liq: 2000000, rel: 0.99 },
+          { code: "RC_FEDWIRE_EXPRESS", name: "Fedwire Express Same-Day", cost: appState.overrides.fedwireCost, latMins: 15, liq: 5000000, rel: 0.99 },
+          { code: "RC_CIRCLE_CCTP_ETH", name: "Circle CCTP Cross-Chain", cost: 12.50, latMins: 12, liq: 10000000, rel: 0.98 },
+          { code: "RC_ACH_BATCH_DIRECT", name: "ACH Batch Direct (Next Day)", cost: 0.25, latMins: 1440, liq: 50000000, rel: 0.95 }
+        ];
+
+        const minCost = Math.min(...candidates.map(c => c.cost));
+        const maxCost = Math.max(...candidates.map(c => c.cost));
+        const minLat = Math.min(...candidates.map(c => c.latMins));
+        const maxLat = Math.max(...candidates.map(c => c.latMins));
+        const minLiq = Math.min(...candidates.map(c => c.liq));
+        const maxLiq = Math.max(...candidates.map(c => c.liq));
+
+        const w = appState.weights;
+
+        candidates.forEach(c => {
+          const nCost = maxCost === minCost ? 1 : (maxCost - c.cost) / (maxCost - minCost);
+          const nLat = maxLat === minLat ? 1 : (maxLat - c.latMins) / (maxLat - minLat);
+          const nLiq = maxLiq === minLiq ? 1 : (c.liq - minLiq) / (maxLiq - minLiq);
+          const rRel = c.rel;
+
+          const baseScore = 100 * (w.cost * nCost + w.lat * nLat + w.liq * nLiq + w.rel * rRel);
+          c.finalScore = parseFloat(baseScore.toFixed(2));
+        });
+
+        candidates.sort((a, b) => b.finalScore - a.finalScore);
+        const winner = candidates[0];
+
+        document.getElementById('winner-tag-badge').innerText = `Winner: ${winner.code} (${winner.finalScore})`;
+
+        const tbody = document.getElementById('candidates-table-body');
+        tbody.innerHTML = '';
+        candidates.forEach(c => {
+          const isWinner = (c.code === winner.code);
+          const tr = document.createElement('tr');
+          tr.className = isWinner ? 'bg-emerald-50/80 font-semibold text-emerald-950' : '';
+          tr.innerHTML = `
+            <td class="p-2.5">
+              <span class="block text-xs font-bold">${c.code}</span>
+              <span class="text-[10px] text-slate-500">${c.name}</span>
+            </td>
+            <td class="p-2.5 font-mono">$${c.cost.toFixed(2)}</td>
+            <td class="p-2.5 font-mono">${c.latMins >= 60 ? (c.latMins/60).toFixed(1) + ' hrs' : c.latMins + ' mins'}</td>
+            <td class="p-2.5 font-mono">${(c.rel * 100).toFixed(0)}%</td>
+            <td class="p-2.5 text-right font-mono text-sm font-bold ${isWinner ? 'text-emerald-700' : 'text-slate-700'}">
+              ${c.finalScore.toFixed(2)}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        if (scoringChartInstance) {
+          scoringChartInstance.data.datasets[0].data = candidates.map(c => c.finalScore);
+          scoringChartInstance.data.labels = candidates.map(c => c.code);
+          scoringChartInstance.data.datasets[0].backgroundColor = candidates.map(c => (c.code === winner.code ? '#22c55e' : '#3b82f6'));
+          scoringChartInstance.update();
+        }
+      },
+
+      initScoringChart() {
+        const ctx = document.getElementById('scoringChart');
+        if (!ctx) return;
+
+        scoringChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['RC_CIRCLE_ONCHAIN_A', 'RC_FEDWIRE_EXPRESS', 'RC_CIRCLE_CCTP_ETH', 'RC_ACH_BATCH_DIRECT'],
+            datasets: [{
+              label: 'Route Score',
+              data: [92.4, 88.5, 75.2, 54.0],
+              backgroundColor: ['#22c55e', '#3b82f6', '#8b5cf6', '#94a3b8'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, max: 100, title: { display: true, text: 'Weighted Score (0-100)', font: { size: 11 } } },
+              x: { ticks: { font: { size: 10 } } }
+            }
+          }
+        });
+      },
+
+      renderCatalog() {
+        const tbody = document.getElementById('catalog-table-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+        const steps = appState.activeScenario === 'crypto' ? cryptoLifecycleSteps : fiatLifecycleSteps;
+        steps.forEach(s => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+          tr.innerHTML = `
+            <td class="p-3 font-mono font-bold text-slate-500">${s.step}</td>
+            <td class="p-3 font-bold text-slate-900">${s.event}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-semibold">${s.phase}</span></td>
+            <td class="p-3 text-slate-600 font-mono text-[11px]">${s.parties}</td>
+            <td class="p-3 text-slate-700 leading-snug">${s.journal}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      },
+
+      filterCatalog() {
+        const query = document.getElementById('catalog-search-input').value.toLowerCase();
+        const rows = document.querySelectorAll('#catalog-table-body tr');
+        rows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          row.style.display = text.includes(query) ? '' : 'none';
+        });
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      app.init();
+    });
+  </script>
+</body>
+</html>

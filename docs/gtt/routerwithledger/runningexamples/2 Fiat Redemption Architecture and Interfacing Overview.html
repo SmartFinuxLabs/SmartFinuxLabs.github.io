@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiat Redemption Route - Architecture & Lifecycle Explorer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            },
+            slate: {
+              850: '#131e32',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 320px;
+      max-height: 400px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 360px;
+      }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-slate-800 bg-slate-50 flex flex-col custom-scrollbar">
+
+  <!-- Chosen Palette: Warm Neutral & Federal Emerald (Background: #F8FAFC, Surface: #FFFFFF, Primary: #0F172A, Accents: #16A34A / #2563EB / #D97706) -->
+
+  <!-- Application Structure Plan:
+       1. Top Navigation & Scenario Switcher: Global header with scenario selector (Fiat Redemption Off-Ramp vs. External Crypto USDC Route).
+       2. Architecture Intro & Core ADA Interfacing Summary: Highlighting the role of Source ADA (Digital Asset Subledger) and Destination ADA / Bank Account (Fiat Subledger / External Account) in Fiat Off-Ramps.
+       3. Dynamic Tab Workspace:
+          - Tab 1: System Topology & Component Interfacing (Interactive node layout showing Source ADA, Router, Conversion/FX engine, Banking Rails, and Destination Fiat ADA).
+          - Tab 2: Step-by-Step Lifecycle Player (14-step scenario player showing exact JSON payloads, state machine transitions, and balance updates for $10,000 USD Fiat Redemption).
+          - Tab 3: Double-Entry Ledger & T-Accounts (Real-time subledger bucket movements and T-Account accounting entries across the 4 execution phases).
+          - Tab 4: Router Scoring Math Engine (Interactive weight tuning sliders and dynamic candidate comparison for ACH, Fedwire, and Circle Fiat Off-Ramps).
+          - Tab 5: Architectural Event Catalog (Filterable reference matrix of all messages, API endpoints, and database interactions).
+  -->
+
+  <!-- Visualization & Content Choices:
+       - System Architecture Map: Structured HTML/Tailwind node layout with dynamic state inspection for Source ADA, Router Engine, Ledger, and Banking Submitter.
+       - Step-by-Step Event Flow: Dynamic Interactive Stepper with live code payload editor/viewer, timeline progress bar, and real-time balance bucket animation.
+       - Double-Entry Ledger T-Accounts: Side-by-side debit/credit subledger cards updated according to financial accounting principles.
+       - Router Scoring Engine: Interactive sliders feeding real-time math normalization and Chart.js horizontal bar visualization for candidate routes.
+       - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+  -->
+
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <!-- Top Navigation Header -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-slate-900 text-lg shadow">
+            🏛️
+          </div>
+          <div>
+            <h1 class="font-bold text-base sm:text-lg text-slate-100 tracking-tight">System Architecture: Fiat Redemption Route</h1>
+            <p class="text-xs text-slate-400 hidden sm:block">Source/Destination ADA Interfacing & Banking Rail Execution</p>
+          </div>
+        </div>
+
+        <!-- Global Scenario Switcher Dropdown -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2 bg-slate-800 p-1.5 rounded-lg border border-slate-700">
+            <span class="text-xs text-slate-400 pl-1 hidden md:inline">Route Scenario:</span>
+            <select id="scenario-selector" onchange="app.switchScenario(this.value)" class="bg-slate-900 text-emerald-400 font-semibold text-xs border border-slate-700 rounded px-2.5 py-1 focus:outline-none focus:border-emerald-500">
+              <option value="fiat" selected>💵 Fiat Redemption Route ($10,000 USD)</option>
+              <option value="crypto">⚡ External Crypto Route ($500 USDC)</option>
+            </select>
+          </div>
+          <button id="btn-reset-sim" onclick="app.resetAll()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-md transition border border-slate-700">
+            ↺ Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col space-y-6">
+
+    <!-- Section Intro Banner & Context -->
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2 mb-1">
+            <span id="active-scenario-badge" class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded">
+              Active Mode: Fiat Off-Ramp
+            </span>
+            <span class="text-xs text-slate-500">Decoupled Policy Routing & Double-Entry Banking Settlement</span>
+          </div>
+          <h2 id="scenario-main-title" class="text-xl font-bold text-slate-900">Fiat Redemption Architecture & Interfacing Overview</h2>
+          <p id="scenario-main-desc" class="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
+            When the Router selects a <strong>Fiat Redemption Route</strong>, the platform converts digital asset balance in the <strong>Source ADA</strong> (e.g., `ada_cust_usdc_01`) into a fiat payout to a <strong>Destination Fiat Account / ADA</strong> (e.g., `ada_cust_fiat_usd` or External Bank Account via Fedwire / ACH / Circle Fiat).
+          </p>
+        </div>
+
+        <!-- Tab Navigation Buttons -->
+        <div class="flex items-center space-x-1.5 bg-slate-100 p-1.5 rounded-lg border border-slate-200 self-start md:self-auto overflow-x-auto max-w-full">
+          <button onclick="app.setTab('topology')" id="tab-btn-topology" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition bg-white text-slate-900 shadow-sm whitespace-nowrap">
+            🗺️ Topology & ADAs
+          </button>
+          <button onclick="app.setTab('lifecycle')" id="tab-btn-lifecycle" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            ⏱️ Lifecycle Player
+          </button>
+          <button onclick="app.setTab('ledger')" id="tab-btn-ledger" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            ⚖️ Double-Entry T-Accounts
+          </button>
+          <button onclick="app.setTab('scoring')" id="tab-btn-scoring" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            🧮 Router Math Engine
+          </button>
+          <button onclick="app.setTab('catalog')" id="tab-btn-catalog" class="tab-btn px-3 py-1.5 text-xs font-semibold rounded-md transition text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            📚 Event Catalog
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: SYSTEM TOPOLOGY & ADA INTERFACING MAP -->
+    <section id="tab-topology" class="tab-content flex flex-col space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <!-- Header & ADA Highlights -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">System Topology & ADA Interfacing Architecture</h3>
+            <p class="text-xs text-slate-500">Click any component card to inspect its inputs, outputs, state machine impact, and subledger hooks.</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs">
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Orchestration & FX</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-1"></span> Ledger & ADA Domain</span>
+            <span class="inline-flex items-center"><span class="w-3 h-3 rounded-full bg-amber-500 mr-1"></span> Banking Rails & Fedwire</span>
+          </div>
+        </div>
+
+        <!-- Source vs Destination ADA Key Summary Box -->
+        <div class="mt-4 p-4 bg-emerald-50/60 border border-emerald-200 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="flex items-start space-x-3">
+            <div class="text-2xl p-1 bg-white rounded-lg shadow-sm border border-emerald-200">👛</div>
+            <div>
+              <h4 class="font-bold text-emerald-900 text-sm">Source ADA (Account of Digital Asset)</h4>
+              <p class="text-slate-700 mt-0.5 leading-relaxed">
+                <strong>Internal Identifier:</strong> <code class="bg-emerald-100 px-1 py-0.5 rounded font-mono text-[11px] text-emerald-900">ada_cust_usdc_01</code><br>
+                Holds customer's digital asset balance ($10,000 USDC). Manages <em>Available</em>, <em>Reserved</em>, and <em>Pending Outbound</em> subledger buckets during redemption.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <div class="text-2xl p-1 bg-white rounded-lg shadow-sm border border-emerald-200">🏛️</div>
+            <div>
+              <h4 class="font-bold text-emerald-900 text-sm">Destination ADA / External Banking Target</h4>
+              <p class="text-slate-700 mt-0.5 leading-relaxed">
+                <strong>Target Account:</strong> <code class="bg-emerald-100 px-1 py-0.5 rounded font-mono text-[11px] text-emerald-900">ada_cust_fiat_usd</code> / Chase Bank Wire<br>
+                The fiat entitlement destination. The system maps customer bank details (Routing #021000021, Acct #****4829) as a linked fiat instrument for payout.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component Architecture Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          
+          <!-- Column 1: Orchestration & Decision Domain -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-blue-200/80 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-blue-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-blue-200">
+              <span>1. Orchestration & Policy Domain</span>
+              <span class="text-blue-600">⚡ Policy Engine</span>
+            </div>
+
+            <div onclick="app.selectNode('upstream')" id="node-upstream" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Upstream Business / Portal</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Client Ingress</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Requests $10,000 USD fiat off-ramp payout to Chase Bank account.</p>
+            </div>
+
+            <div onclick="app.selectNode('instApi')" id="node-instApi" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Payment Instruction API</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">State Machine</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">State transition coordinator: created → route_resolved → pending_bank → confirmed.</p>
+            </div>
+
+            <div onclick="app.selectNode('routerEngine')" id="node-routerEngine" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Funding Router Engine</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Deterministic Evaluator</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Evaluates profile `RP_FIAT_REDEMPTION_V1`. Scores ACH, Fedwire, and Circle Fiat rails.</p>
+            </div>
+
+            <div onclick="app.selectNode('fxService')" id="node-fxService" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">FX & Conversion Engine</span>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">1:1 Mint/Burn</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Locks USD:USDC 1:1 redemption rate ($10,000 USDC = $10,000 USD) and checks off-ramp limits.</p>
+            </div>
+          </div>
+
+          <!-- Column 2: Subledger & Treasury Domain -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-emerald-200/80 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-emerald-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-emerald-200">
+              <span>2. Treasury & Ledger Domain</span>
+              <span class="text-emerald-600">🛡️ Authoritative</span>
+            </div>
+
+            <div onclick="app.selectNode('posCalc')" id="node-posCalc" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Treasury Position Calculator</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Liquidity Guard</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Inspects Source ADA available USDC ($10,000) and Bank Custody reserves ($500k USD).</p>
+            </div>
+
+            <div onclick="app.selectNode('ledgerEngine')" id="node-ledgerEngine" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Double-Entry Ledger Engine</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Append-Only</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Executes balanced subledger journals across Available, Reserved, and Fiat Transit liabilities.</p>
+            </div>
+
+            <div onclick="app.selectNode('sourceAda')" id="node-sourceAda" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Source ADA (USDC Account)</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Subledger Account</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Subledger ADA holding digital assets. Encumbers $10k during redemption phase.</p>
+            </div>
+
+            <div onclick="app.selectNode('journalDb')" id="node-journalDb" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Financial Journal DB</span>
+                <span class="text-[10px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">Immutable Audit</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Stores append-only financial journals. Debits equal credits at all times.</p>
+            </div>
+          </div>
+
+          <!-- Column 3: Banking Rails & External Execution -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-amber-200/80 flex flex-col space-y-3">
+            <div class="flex items-center justify-between text-amber-900 font-bold text-xs uppercase tracking-wider pb-2 border-b border-amber-200">
+              <span>3. Banking & Fiat Settlement</span>
+              <span class="text-amber-600">🏛️ Banking Rail</span>
+            </div>
+
+            <div onclick="app.selectNode('bankSubmitter')" id="node-bankSubmitter" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-amber-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Banking Submitter Service</span>
+                <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">Payout Worker</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Pipes payout instructions to commercial bank host-to-host API / ISO20022 wire gateway.</p>
+            </div>
+
+            <div onclick="app.selectNode('fedwireRail')" id="node-fedwireRail" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-amber-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Fedwire / ACH Settlement Rail</span>
+                <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">External Banking</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Executes wire transfer from platform custody bank to recipient's Chase account.</p>
+            </div>
+
+            <div onclick="app.selectNode('bankWebhook')" id="node-bankWebhook" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-amber-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Bank Webhook / Statement Rx</span>
+                <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">Ingress Statement</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Ingests BAI2/CAMT.053 bank confirmation files and real-time wire status webhooks.</p>
+            </div>
+
+            <div onclick="app.selectNode('reconService')" id="node-reconService" class="node-card p-3 rounded-lg bg-white border border-slate-200 hover:border-amber-400 cursor-pointer transition shadow-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-xs text-slate-800">Fiat Reconciliation Engine</span>
+                <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">Match & Clear</span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">Matches Federal IMAD/OMAD reference numbers against instruction IDs to finalize settlement.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Selected Node Inspector Modal/Panel -->
+        <div id="node-inspector" class="mt-6 p-4 bg-slate-900 text-slate-100 rounded-xl border border-slate-800 flex flex-col space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div class="flex items-center space-x-2">
+              <span id="inspector-icon" class="text-lg">🔍</span>
+              <h4 id="inspector-title" class="font-bold text-sm text-white">Select a component node above</h4>
+            </div>
+            <span id="inspector-domain" class="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Fiat Architecture Interface</span>
+          </div>
+          <p id="inspector-desc" class="text-xs text-slate-300">Click on any component card in the topology diagram to inspect its interface details, triggered events, and database interactions.</p>
+          <div id="inspector-details" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1 hidden">
+            <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+              <span class="font-semibold text-emerald-400 block mb-1">Inbound Inputs & Triggers:</span>
+              <p id="inspector-inbound" class="text-slate-300">...</p>
+            </div>
+            <div class="bg-slate-800/60 p-2.5 rounded-lg border border-slate-700/50">
+              <span class="font-semibold text-blue-400 block mb-1">Outbound Events & State Mutations:</span>
+              <p id="inspector-outbound" class="text-slate-300">...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: STEP-BY-STEP LIFECYCLE SIMULATOR -->
+    <section id="tab-lifecycle" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <!-- Controls Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold uppercase tracking-wide bg-blue-100 text-blue-800 px-2 py-0.5 rounded" id="current-phase-badge">Phase A: Route Selection & FX</span>
+              <span class="text-xs text-slate-500" id="step-counter-text">Step 1 of 14</span>
+            </div>
+            <h3 id="step-title" class="text-lg font-bold text-slate-900 mt-1">1. Upstream Initiates Fiat Redemption Request</h3>
+          </div>
+
+          <!-- Playback Controls -->
+          <div class="flex items-center space-x-2">
+            <button onclick="app.prevStep()" id="btn-prev-step" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition disabled:opacity-40">
+              ◄ Previous
+            </button>
+            <button onclick="app.toggleAutoPlay()" id="btn-play-step" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition flex items-center space-x-1 shadow">
+              <span id="play-icon">▶</span> <span id="play-text">Auto Play</span>
+            </button>
+            <button onclick="app.nextStep()" id="btn-next-step" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition disabled:opacity-40">
+              Next ►
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Step Tracker Bar -->
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden my-4 flex">
+          <div id="progress-bar-fill" class="bg-emerald-500 h-full transition-all duration-300" style="width: 7%;"></div>
+        </div>
+
+        <!-- Step Phase Pills -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-[11px] font-medium mb-6">
+          <div id="phase-pill-A" onclick="app.goToStep(1)" class="p-2 rounded-lg cursor-pointer transition border border-emerald-500 bg-emerald-50 text-emerald-900 font-bold">
+            Phase A: Route Selection (Steps 1-4)
+          </div>
+          <div id="phase-pill-B" onclick="app.goToStep(5)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase B: Digital Asset Reservation (Steps 5-7)
+          </div>
+          <div id="phase-pill-C" onclick="app.goToStep(8)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase C: Banking Rail Submission (Steps 8-10)
+          </div>
+          <div id="phase-pill-D" onclick="app.goToStep(11)" class="p-2 rounded-lg cursor-pointer transition border border-slate-200 bg-slate-50 text-slate-600">
+            Phase D: Wire Finality & Settlement (Steps 11-14)
+          </div>
+        </div>
+
+        <!-- Step Deep Dive Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Step Details & Narrative -->
+          <div class="lg:col-span-2 flex flex-col space-y-4">
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <h4 class="font-bold text-slate-900 text-sm mb-2">Operational Narrative</h4>
+              <p id="step-description" class="text-xs text-slate-700 leading-relaxed">
+                The Upstream Client Portal requests a $10,000 USD fiat redemption off-ramp from Source ADA (`ada_cust_usdc_01`) to recipient bank account (`Chase ****4829`, Routing `021000021`).
+              </p>
+            </div>
+
+            <!-- Active Message Payload Inspector -->
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-slate-100 flex flex-col">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span class="text-xs font-mono text-emerald-400 font-bold" id="event-type-label">Event: CreateInstructionEvent</span>
+                <span class="text-[10px] text-slate-400" id="event-sender-receiver">Upstream Portal → Instruction API</span>
+              </div>
+              <pre id="payload-json-view" class="font-mono text-[11px] text-slate-300 mt-3 p-3 bg-slate-950 rounded-lg overflow-x-auto custom-scrollbar leading-snug">
+{
+  "instruction_id": "inst_fiat_redemption_7712",
+  "source_ada_id": "ada_cust_usdc_01",
+  "destination_fiat_account": "ada_cust_fiat_usd",
+  "amount_fiat": 10000.00,
+  "fiat_currency": "USD",
+  "bank_routing_number": "021000021",
+  "bank_account_number": "xxxx4829",
+  "redemption_type": "fiat_offramp",
+  "state": "created"
+}
+              </pre>
+            </div>
+          </div>
+
+          <!-- Real-Time State & Subledger Snapshot -->
+          <div class="flex flex-col space-y-4">
+            
+            <!-- State Badge Card -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Instruction State Machine</span>
+              <div class="flex items-center space-x-2">
+                <span id="lifecycle-state-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                  created
+                </span>
+                <span class="text-xs text-slate-500" id="lifecycle-state-sub">Awaiting policy routing</span>
+              </div>
+            </div>
+
+            <!-- Source ADA Live Balance Buckets -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span class="text-xs font-bold text-slate-800">Source ADA Subledger</span>
+                <span class="text-[10px] text-slate-500 font-mono">ada_cust_usdc_01</span>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Available USDC Balance:</span>
+                    <span id="bucket-val-avail" class="font-bold text-slate-900">$10,000.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-avail" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Reserved USDC Balance:</span>
+                    <span id="bucket-val-rsrv" class="font-bold text-amber-600">$0.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-rsrv" class="bg-amber-500 h-full transition-all duration-300" style="width: 0%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-600 mb-1">
+                    <span>Pending Fiat Transit:</span>
+                    <span id="bucket-val-transit" class="font-bold text-blue-600">$0.00</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div id="bucket-bar-transit" class="bg-blue-500 h-full transition-all duration-300" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-700">Total Entitlement Value:</span>
+                <span id="bucket-val-total" class="font-bold text-slate-900">$10,000.00 USD</span>
+              </div>
+            </div>
+
+            <!-- Active Journal Entry Preview -->
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/80 text-xs">
+              <span class="font-bold text-emerald-900 block mb-1">Active Ledger Journal Entry:</span>
+              <p id="step-journal-summary" class="text-emerald-800 text-[11px]">
+                No financial journal posted yet. Waiting for route decision to trigger reservation.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: LEDGER T-ACCOUNT & BUCKET VISUALIZER -->
+    <section id="tab-ledger" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Fiat Redemption Double-Entry Accounting (T-Accounts)</h3>
+            <p class="text-xs text-slate-500">Examine how digital asset liability converts to fiat clearing liabilities and bank asset movements.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-600">Accounting Invariant:</span>
+            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold border border-emerald-200">
+              ✓ Debits = Credits ($10,000.00 USD)
+            </span>
+          </div>
+        </div>
+
+        <!-- Balance Bucket Progression Matrix -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+          
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Phase 1: Ingress</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-0.5">Instruction Created</h4>
+              <p class="text-[11px] text-slate-600 mt-2">Source ADA has full deployable USDC available.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200 text-xs space-y-1 font-mono">
+              <div class="flex justify-between"><span>Available:</span> <span class="font-bold">$10,000</span></div>
+              <div class="flex justify-between text-slate-400"><span>Reserved:</span> <span>$0</span></div>
+              <div class="flex justify-between text-slate-400"><span>Fiat Transit:</span> <span>$0</span></div>
+            </div>
+          </div>
+
+          <div class="bg-amber-50/60 p-4 rounded-xl border border-amber-200 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase text-amber-800 tracking-wider">Phase 2: Route Resolved</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-0.5">USDC Locked</h4>
+              <p class="text-[11px] text-slate-600 mt-2">USDC shifted from Available to Reserved bucket.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-amber-200/80 text-xs space-y-1 font-mono">
+              <div class="flex justify-between"><span>Available:</span> <span class="font-bold">$0</span></div>
+              <div class="flex justify-between text-amber-700 font-bold"><span>Reserved:</span> <span>+$10,000</span></div>
+              <div class="flex justify-between text-slate-400"><span>Fiat Transit:</span> <span>$0</span></div>
+            </div>
+          </div>
+
+          <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-200 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase text-blue-800 tracking-wider">Phase 3: Wire Submitted</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-0.5">In Transit (Fedwire)</h4>
+              <p class="text-[11px] text-slate-600 mt-2">Shifted to Settlement Fiat Transit clearing account.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-blue-200/80 text-xs space-y-1 font-mono">
+              <div class="flex justify-between"><span>Available:</span> <span class="font-bold">$0</span></div>
+              <div class="flex justify-between text-slate-400"><span>Reserved:</span> <span>$0</span></div>
+              <div class="flex justify-between text-blue-700 font-bold"><span>Fiat Transit:</span> <span>+$10,000</span></div>
+            </div>
+          </div>
+
+          <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase text-emerald-800 tracking-wider">Phase 4: Bank Confirmation</span>
+              <h4 class="font-bold text-slate-800 text-sm mt-0.5">Wire Finality</h4>
+              <p class="text-[11px] text-slate-600 mt-2">Fiat Transit cleared; Platform bank asset reduced.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-emerald-200/80 text-xs space-y-1 font-mono">
+              <div class="flex justify-between"><span>Available:</span> <span class="font-bold">$0</span></div>
+              <div class="flex justify-between text-slate-400"><span>Reserved:</span> <span>$0</span></div>
+              <div class="flex justify-between text-slate-400"><span>Fiat Transit:</span> <span>$0 (Cleared)</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- T-Account Ledger Cards Grid -->
+        <h4 class="font-bold text-slate-900 text-md mt-8 mb-4">Double-Entry Journal Postings (T-Accounts)</h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- T-Account 1: Source Customer USDC Liability - Available -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center pb-2 border-b-2 border-slate-800">
+              <span class="font-bold text-xs text-slate-900">Account: Customer USDC Liability - Available</span>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Digital Asset Subledger</span>
+            </div>
+            <div class="grid grid-cols-2 text-xs divide-x divide-slate-300 mt-2 font-mono min-h-[100px]">
+              <div class="pr-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">DEBIT (-)</span>
+                <div class="text-red-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 6: Reservation Lock)</span></div>
+              </div>
+              <div class="pl-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">CREDIT (+)</span>
+                <div class="text-slate-400">$10,000.00 <span class="text-[10px] text-slate-400 block font-normal">(Initial Balance)</span></div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200 text-right text-xs font-bold text-slate-800">
+              Ending Balance: $0.00
+            </div>
+          </div>
+
+          <!-- T-Account 2: Customer USDC Liability - Reserved -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center pb-2 border-b-2 border-slate-800">
+              <span class="font-bold text-xs text-slate-900">Account: Customer USDC Liability - Reserved</span>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Encumbrance Account</span>
+            </div>
+            <div class="grid grid-cols-2 text-xs divide-x divide-slate-300 mt-2 font-mono min-h-[100px]">
+              <div class="pr-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">DEBIT (-)</span>
+                <div class="text-red-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 9: Wire Submission)</span></div>
+              </div>
+              <div class="pl-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">CREDIT (+)</span>
+                <div class="text-emerald-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 6: Reservation Lock)</span></div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200 text-right text-xs font-bold text-slate-800">
+              Ending Balance: $0.00 (Cleared)
+            </div>
+          </div>
+
+          <!-- T-Account 3: Settlement Fiat Transit Liability -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center pb-2 border-b-2 border-slate-800">
+              <span class="font-bold text-xs text-slate-900">Account: Settlement Fiat Transit Liability</span>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Bank In-Transit Clearing</span>
+            </div>
+            <div class="grid grid-cols-2 text-xs divide-x divide-slate-300 mt-2 font-mono min-h-[100px]">
+              <div class="pr-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">DEBIT (-)</span>
+                <div class="text-red-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 13: Final Clearing)</span></div>
+              </div>
+              <div class="pl-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">CREDIT (+)</span>
+                <div class="text-emerald-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 9: Wire Submission)</span></div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200 text-right text-xs font-bold text-slate-800">
+              Ending Balance: $0.00 (Cleared)
+            </div>
+          </div>
+
+          <!-- T-Account 4: Operating Commercial Bank Custody USD Asset -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex justify-between items-center pb-2 border-b-2 border-slate-800">
+              <span class="font-bold text-xs text-slate-900">Account: Platform Commercial Bank USD Asset</span>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Platform Asset</span>
+            </div>
+            <div class="grid grid-cols-2 text-xs divide-x divide-slate-300 mt-2 font-mono min-h-[100px]">
+              <div class="pr-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">DEBIT (+)</span>
+                <div class="text-slate-400">$500,000.00 <span class="text-[10px] text-slate-400 block font-normal">(Initial Bank Balance)</span></div>
+              </div>
+              <div class="pl-3">
+                <span class="text-[10px] text-slate-400 font-sans block mb-1">CREDIT (-)</span>
+                <div class="text-emerald-600 font-bold">$10,000.00 <span class="text-[10px] text-slate-500 font-normal block">(Step 13: Fedwire Outflow)</span></div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-200 text-right text-xs font-bold text-slate-800">
+              Ending Asset Balance: $490,000.00 USD
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: ROUTER MATH & SCORING ENGINE SIMULATOR -->
+    <section id="tab-scoring" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Fiat Off-Ramp Route Scoring Engine</h3>
+            <p class="text-xs text-slate-500">Adjust policy weights to see how the Router dynamically chooses between ACH, Fedwire, and Circle Fiat.</p>
+          </div>
+          <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-bold border border-blue-200">
+            Policy Profile: RP_FIAT_REDEMPTION_V1
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          
+          <!-- Policy Sliders -->
+          <div class="lg:col-span-5 bg-slate-50 p-5 rounded-xl border border-slate-200 flex flex-col space-y-5">
+            <h4 class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-2">1. Policy Scoring Weights ($w$)</h4>
+            
+            <div class="space-y-4 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Cost Weight ($w_{cost}$):</span>
+                  <span id="val-w-cost" class="font-mono text-blue-600">0.30</span>
+                </div>
+                <input type="range" id="slider-w-cost" min="0" max="1" step="0.05" value="0.30" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Speed/Latency Weight ($w_{lat}$):</span>
+                  <span id="val-w-lat" class="font-mono text-blue-600">0.40</span>
+                </div>
+                <input type="range" id="slider-w-lat" min="0" max="1" step="0.05" value="0.40" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Liquidity Weight ($w_{liq}$):</span>
+                  <span id="val-w-liq" class="font-mono text-blue-600">0.15</span>
+                </div>
+                <input type="range" id="slider-w-liq" min="0" max="1" step="0.05" value="0.15" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-700 font-semibold mb-1">
+                  <span>Reliability Weight ($w_{rel}$):</span>
+                  <span id="val-w-rel" class="font-mono text-blue-600">0.15</span>
+                </div>
+                <input type="range" id="slider-w-rel" min="0" max="1" step="0.05" value="0.15" oninput="app.updateScoringMath()" class="w-full accent-blue-600">
+              </div>
+            </div>
+
+            <h4 class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-2 pt-2">2. Candidate Candidate Overrides</h4>
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Fedwire Wire Fee ($):</span>
+                <input type="number" id="input-fedwire-cost" value="15.00" step="1.0" onchange="app.updateScoringMath()" class="w-20 p-1 border border-slate-300 rounded font-mono text-right text-xs">
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-600">Fedwire Latency (mins):</span>
+                <input type="number" id="input-fedwire-lat" value="15" step="5" onchange="app.updateScoringMath()" class="w-20 p-1 border border-slate-300 rounded font-mono text-right text-xs">
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-900 text-slate-200 rounded-lg text-[11px] font-mono leading-relaxed space-y-1">
+              <div class="text-emerald-400 font-bold">Fiat Route Math:</div>
+              <div>Base Score = 100 × (w_cost·N_cost + w_lat·N_lat + w_liq·N_liq + w_rel·R)</div>
+            </div>
+
+          </div>
+
+          <!-- Chart & Table -->
+          <div class="lg:col-span-7 flex flex-col space-y-4">
+            
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold text-slate-800">Fiat Off-Ramp Route Scoring Comparison</span>
+                <span id="winner-tag-badge" class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                  Winner: RC_FEDWIRE_EXPRESS
+                </span>
+              </div>
+              <div class="chart-container">
+                <canvas id="scoringChart"></canvas>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden text-xs">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-semibold">
+                  <tr>
+                    <th class="p-2.5">Candidate Code</th>
+                    <th class="p-2.5">Cost</th>
+                    <th class="p-2.5">Settlement Speed</th>
+                    <th class="p-2.5">Constraints</th>
+                    <th class="p-2.5 text-right">Score</th>
+                  </tr>
+                </thead>
+                <tbody id="candidates-table-body" class="divide-y divide-slate-100">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: ARCHITECTURAL CATALOG -->
+    <section id="tab-catalog" class="tab-content flex flex-col space-y-6 hidden">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+          <div>
+            <h3 class="font-bold text-slate-900 text-lg">Fiat Redemption Event & Component Reference Catalog</h3>
+            <p class="text-xs text-slate-500">Comprehensive list of triggered messages, state transitions, and subledger hooks.</p>
+          </div>
+          <input type="text" id="catalog-search-input" onkeyup="app.filterCatalog()" placeholder="🔍 Search event or component..." class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs w-64 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="mt-6 overflow-x-auto custom-scrollbar">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="p-3">Seq #</th>
+                <th class="p-3">Event Name</th>
+                <th class="p-3">Phase</th>
+                <th class="p-3">Sender → Receiver</th>
+                <th class="p-3">Ledger / State Impact</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-table-body" class="divide-y divide-slate-100">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 mt-auto text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="text-emerald-400 font-bold">Fiat Redemption Route Architecture</span>
+        <span>•</span>
+        <span>Source ADA Digital Asset to Fiat Banking Handoff</span>
+      </div>
+      <div class="text-slate-500 text-[11px]">
+        Guarantees: Strict Idempotency • Replayable Routing Decisions • Balanced T-Accounts
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Logic Application Script -->
+  <script>
+    const appState = {
+      activeScenario: 'fiat', // 'fiat' or 'crypto'
+      activeTab: 'topology',
+      currentStep: 1,
+      totalSteps: 14,
+      autoPlayTimer: null,
+      isPlaying: false,
+
+      // Fiat Scenario Balances ($10,000 USD)
+      fiatBalances: {
+        adaId: 'ada_cust_usdc_01',
+        total: 10000.00,
+        avail: 10000.00,
+        rsrv: 0.00,
+        transit: 0.00
+      },
+
+      // Router Policy Weights for Fiat Off-Ramp
+      weights: {
+        cost: 0.30,
+        lat: 0.40,
+        liq: 0.15,
+        rel: 0.15
+      },
+
+      // Candidate Overrides
+      fedwire: {
+        cost: 15.00,
+        latMinutes: 15
+      }
+    };
+
+    // Component details for inspector
+    const componentCatalog = {
+      upstream: {
+        title: "Upstream Business Systems / User UI",
+        domain: "Client / Payment Ingress",
+        icon: "🖥️",
+        desc: "The initiator of payout/redemption requests (e.g. client dashboard, automated exchange treasury worker).",
+        inbound: "User actions, scheduled payout triggers, or automated exchange withdrawal requests.",
+        outbound: "Issues POST /fiat-redemption-instructions payload (CreateInstructionEvent)."
+      },
+      instApi: {
+        title: "Payment Instruction API",
+        domain: "Payment Orchestration",
+        icon: "⚙️",
+        desc: "State machine coordinator that receives instructions and orchestrates route resolution, subledger locking, and banking dispatch.",
+        inbound: "CreateInstructionEvent from Upstream; RouteWinnerSelectedEvent from Router Engine.",
+        outbound: "ResolveRouteCommand to Router; ActivateFundingReservationCommand to Ledger Engine."
+      },
+      routerEngine: {
+        title: "Funding Router Decision Engine",
+        domain: "Stateless Policy Engine",
+        icon: "🧠",
+        desc: "Evaluates matching policy profile `RP_FIAT_REDEMPTION_V1`, checks cutoff times, and scores ACH vs Fedwire vs Circle Fiat.",
+        inbound: "ResolveRouteCommand, Treasury Position telemetry, Bank gateway status.",
+        outbound: "RouteWinnerSelectedEvent with full decision candidate audit trail."
+      },
+      fxService: {
+        title: "FX & Conversion Engine",
+        domain: "Asset Conversion",
+        icon: "💱",
+        desc: "Locks the 1:1 USD:USDC redemption rate, checks daily tier off-ramp limits, and provides execution quotes.",
+        inbound: "Conversion quote request from Router Decision Engine.",
+        outbound: "Returns locked rate quote and conversion authorization code."
+      },
+      posCalc: {
+        title: "Treasury Position Calculator",
+        domain: "Treasury Management",
+        icon: "📊",
+        desc: "Computes deployable USDC in Source ADA and checks liquidity in commercial bank payout omnibus accounts.",
+        inbound: "Liquidity queries from Router Engine.",
+        outbound: "Returns deployable USDC ($10,000) and Bank USD reserves ($500,000)."
+      },
+      ledgerEngine: {
+        title: "Double-Entry Ledger Engine",
+        domain: "Financial Subledger",
+        icon: "⚖️",
+        desc: "Authoritative financial record keeper. Enforces balanced double-entry journals and manages ADA balance buckets.",
+        inbound: "ActivateFundingReservationCommand, ExecuteFiatPayoutCommand, FinalizeSettlementCommand.",
+        outbound: "LedgerJournalPostedEvent, BalanceBucketUpdatedEvent."
+      },
+      sourceAda: {
+        title: "Source ADA (Account of Digital Asset)",
+        domain: "Digital Asset Subledger",
+        icon: "👛",
+        desc: "The customer's digital asset account (`ada_cust_usdc_01`) holding USDC entitlements. Encumbers funds into Reserved bucket.",
+        inbound: "Bucket update commands from Ledger Engine.",
+        outbound: "Balance state telemetry to Position Calculator."
+      },
+      journalDb: {
+        title: "Financial Journal DB",
+        domain: "Immutable Storage",
+        icon: "📜",
+        desc: "Append-only database storing all balanced double-entry accounting entries.",
+        inbound: "Append-only journal writes from Ledger Engine.",
+        outbound: "Audit trails and historical balance reconciliations."
+      },
+      bankSubmitter: {
+        title: "Banking Submitter Service",
+        domain: "Execution Domain",
+        icon: "🚀",
+        desc: "Worker service responsible for executing host-to-host bank API calls / ISO20022 wire messages with strict idempotency keys.",
+        inbound: "ExecuteFiatPayoutCommand from Instruction API.",
+        outbound: "API payout calls to Commercial Bank / Fedwire gateway."
+      },
+      fedwireRail: {
+        title: "Fedwire / ACH Banking Rail",
+        domain: "External Banking System",
+        icon: "🏛️",
+        desc: "External interbank settlement network executing the fiat wire transfer to recipient's bank account.",
+        inbound: "Fedwire ISO20022 payment initiation payload.",
+        outbound: "Federal IMAD/OMAD confirmation code and wire receipt."
+      },
+      bankWebhook: {
+        title: "Bank Webhook / Statement Rx",
+        domain: "Ingress Event Handling",
+        icon: "📩",
+        desc: "Ingests real-time bank webhooks and daily CAMT.053 / BAI2 bank statement files.",
+        inbound: "Bank payment status notification webhooks.",
+        outbound: "Forwards BankPayoutWebhookReceivedEvent to Reconciliation Service."
+      },
+      reconService: {
+        title: "Fiat Reconciliation Engine",
+        domain: "Settlement Reconciliation",
+        icon: "🔎",
+        desc: "Matches Federal IMAD reference numbers against instruction IDs to trigger final subledger clearing.",
+        inbound: "BankPayoutWebhookReceivedEvent from Receiver.",
+        outbound: "ReconciliationMatchedEvent to Ledger Engine."
+      }
+    };
+
+    // 14 Steps for Fiat Redemption Scenario
+    const fiatLifecycleSteps = [
+      {
+        step: 1,
+        phase: "Phase A",
+        phaseBadge: "Phase A: Route Selection & FX",
+        title: "1. Upstream Initiates Fiat Redemption Request",
+        description: "The Upstream Portal submits a payment instruction requesting $10,000 USD fiat off-ramp from Source ADA (`ada_cust_usdc_01`) to recipient Chase bank account (`****4829`).",
+        state: "created",
+        event: "CreateInstructionEvent",
+        parties: "Upstream Portal → Instruction API",
+        journal: "No journal entry posted yet. State initialized as created.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          source_ada_id: "ada_cust_usdc_01",
+          destination_fiat_account: "ada_cust_fiat_usd",
+          amount_fiat: 10000.00,
+          fiat_currency: "USD",
+          bank_routing_number: "021000021",
+          bank_account_number: "xxxx4829",
+          redemption_type: "fiat_offramp",
+          state: "created"
+        },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 2,
+        phase: "Phase A",
+        phaseBadge: "Phase A: Route Selection & FX",
+        title: "2. Instruction API Requests Fiat Route Resolution",
+        description: "The Instruction API calls the Funding Router Decision Engine with policy scope `fiat_offramp`.",
+        state: "created",
+        event: "ResolveRouteCommand",
+        parties: "Instruction API → Funding Router Engine",
+        journal: "No journal entry. Policy evaluation initiated.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          action: "resolve_route",
+          policy_profile: "RP_FIAT_REDEMPTION_V1",
+          cutoff_time_check: "passed_before_1600_EST"
+        },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 3,
+        phase: "Phase A",
+        phaseBadge: "Phase A: Route Selection & FX",
+        title: "3. Router Engine Locks FX Rate & Checks Treasury",
+        description: "The Router verifies 1:1 USD conversion rate ($10,000 USDC = $10,000 USD) and confirms bank custody balance ($500,000 available).",
+        state: "created",
+        event: "LiquidityAndFXCheckQuery",
+        parties: "Router Engine → FX Engine & Treasury Calc",
+        journal: "No journal entry. Liquidity & FX rate locked.",
+        payload: {
+          ada_id: "ada_cust_usdc_01",
+          usdc_required: 10000.00,
+          usd_fiat_payout: 10000.00,
+          fx_rate: 1.0000,
+          bank_reserve_sufficient: true
+        },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 4,
+        phase: "Phase A",
+        phaseBadge: "Phase A: Route Selection & FX",
+        title: "4. Route Winner Selected (RC_FEDWIRE_EXPRESS)",
+        description: "The Router evaluates policy `RP_FIAT_REDEMPTION_V1`. Route candidate `RC_FEDWIRE_EXPRESS` wins (Score: 88.5) for instant same-day settlement.",
+        state: "route_resolved",
+        event: "RouteWinnerSelectedEvent",
+        parties: "Router Engine → Instruction API",
+        journal: "Instruction state transitions to route_resolved.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          selected_route_code: "RC_FEDWIRE_EXPRESS",
+          scoring_rank: 1,
+          score: 88.5,
+          state: "route_resolved"
+        },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 5,
+        phase: "Phase B",
+        phaseBadge: "Phase B: Asset Reservation",
+        title: "5. Activate Funding Reservation Command",
+        description: "The `route_resolved` state change triggers the Instruction API to command the Ledger Engine to lock $10,000 USDC in Source ADA.",
+        state: "route_resolved",
+        event: "ActivateFundingReservationCommand",
+        parties: "Instruction API → Double-Entry Ledger Engine",
+        journal: "Preparing reservation journal posting.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          source_ada_id: "ada_cust_usdc_01",
+          reserve_amount_usdc: 10000.00
+        },
+        balances: { avail: 10000, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 6,
+        phase: "Phase B",
+        phaseBadge: "Phase B: Asset Reservation",
+        title: "6. Ledger Posts Journal 1 (USDC Lock)",
+        description: "Ledger writes Journal 1: Debiting Customer USDC Available Liability (-$10,000) and Crediting Customer USDC Reserved Liability (+$10,000).",
+        state: "route_resolved",
+        event: "LedgerJournalPostedEvent (Journal 1)",
+        parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Available ($10,000) | CREDIT: Customer USDC Reserved ($10,000)",
+        payload: {
+          journal_id: "jnl_fiat_rsrv_501",
+          entries: [
+            { account: "Customer_USDC_Available", debit: 10000.00, credit: 0 },
+            { account: "Customer_USDC_Reserved", debit: 0, credit: 10000.00 }
+          ]
+        },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 7,
+        phase: "Phase B",
+        phaseBadge: "Phase B: Asset Reservation",
+        title: "7. Source ADA Balance Buckets Updated",
+        description: "Source ADA (`ada_cust_usdc_01`) updates its balance buckets: `available` drops to $0; `reserved` increases to $10,000.",
+        state: "route_resolved",
+        event: "BalanceBucketUpdatedEvent",
+        parties: "Ledger Engine → Source ADA",
+        journal: "Balance buckets mutated. Total entitlement value remains $10,000 USD.",
+        payload: {
+          ada_id: "ada_cust_usdc_01",
+          available_balance: 0.00,
+          reserved_balance: 10000.00,
+          pending_fiat_transit: 0.00
+        },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 8,
+        phase: "Phase C",
+        phaseBadge: "Phase C: Banking Rail Submission",
+        title: "8. Execute Fiat Payout Command",
+        description: "Instruction API commands the Banking Submitter Service to issue Fedwire wire instruction. Instruction state transitions to `pending_bank`.",
+        state: "pending_bank",
+        event: "ExecuteFiatPayoutCommand",
+        parties: "Instruction API → Banking Submitter Service",
+        journal: "Preparing fiat transit shift.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          rail: "fedwire",
+          payout_amount_usd: 10000.00,
+          state: "pending_bank"
+        },
+        balances: { avail: 0, rsrv: 10000, transit: 0 }
+      },
+      {
+        step: 9,
+        phase: "Phase C",
+        phaseBadge: "Phase C: Banking Rail Submission",
+        title: "9. Ledger Posts Journal 2 (Fiat Transit Shift)",
+        description: "Ledger Engine writes Journal 2: Debiting Customer USDC Reserved ($10,000) and Crediting Settlement Fiat Transit Liability ($10,000).",
+        state: "pending_bank",
+        event: "LedgerJournalPostedEvent (Journal 2)",
+        parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Customer USDC Reserved ($10,000) | CREDIT: Settlement Fiat Transit Liability ($10,000)",
+        payload: {
+          journal_id: "jnl_fiat_transit_502",
+          entries: [
+            { account: "Customer_USDC_Reserved", debit: 10000.00, credit: 0 },
+            { account: "Settlement_Fiat_Transit_Liability", debit: 0, credit: 10000.00 }
+          ]
+        },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 10,
+        phase: "Phase C",
+        phaseBadge: "Phase C: Banking Rail Submission",
+        title: "10. Banking Submitter Transmits ISO20022 Wire",
+        description: "Banking Submitter issues ISO20022 `pamt.008` Fedwire payment message to commercial bank host-to-host gateway.",
+        state: "pending_bank",
+        event: "ExternalBankingPayoutSubmittedEvent",
+        parties: "Banking Submitter → Fedwire Gateway",
+        journal: "Fiat funds in-transit via Federal Reserve banking rail.",
+        payload: {
+          bank_reference: "WIRE_20260813_99812",
+          idempotency_key: "idem_fiat_7712",
+          status: "submitted_to_fed"
+        },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 11,
+        phase: "Phase D",
+        phaseBadge: "Phase D: Settlement & Finality",
+        title: "11. Bank Emits Federal Wire Confirmation (IMAD)",
+        description: "Commercial Bank emits wire confirmation webhook with Federal Reserve IMAD code (`20260813B1QMP00C000102`).",
+        state: "pending_bank",
+        event: "BankPayoutWebhookReceivedEvent",
+        parties: "Fedwire Gateway → Bank Webhook Rx",
+        journal: "Federal Reserve wire confirmation received.",
+        payload: {
+          imad: "20260813B1QMP00C000102",
+          status: "settled_on_fedwire",
+          recipient_bank: "CHASE_US"
+        },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 12,
+        phase: "Phase D",
+        phaseBadge: "Phase D: Settlement & Finality",
+        title: "12. Reconciliation Engine Matches IMAD Code",
+        description: "Fiat Reconciliation Engine matches IMAD code to `inst_fiat_redemption_7712` and commands final subledger clearing.",
+        state: "pending_bank",
+        event: "ReconciliationMatchedEvent",
+        parties: "Reconciliation Engine → Ledger Engine",
+        journal: "Triggering final double-entry settlement posting.",
+        payload: {
+          matched: true,
+          instruction_id: "inst_fiat_redemption_7712",
+          imad: "20260813B1QMP00C000102"
+        },
+        balances: { avail: 0, rsrv: 0, transit: 10000 }
+      },
+      {
+        step: 13,
+        phase: "Phase D",
+        phaseBadge: "Phase D: Settlement & Finality",
+        title: "13. Ledger Posts Journal 3 (Final Settlement)",
+        description: "Ledger writes Journal 3: Debiting Settlement Fiat Transit Liability ($10,000) and Crediting Platform Commercial Bank USD Asset ($10,000).",
+        state: "confirmed",
+        event: "LedgerJournalPostedEvent (Journal 3)",
+        parties: "Ledger Engine → Journal DB",
+        journal: "DEBIT: Settlement Fiat Transit Liability ($10,000) | CREDIT: Commercial Bank USD Asset ($10,000)",
+        payload: {
+          journal_id: "jnl_fiat_final_503",
+          entries: [
+            { account: "Settlement_Fiat_Transit_Liability", debit: 10000.00, credit: 0 },
+            { account: "Commercial_Bank_USD_Asset", debit: 0, credit: 10000.00 }
+          ]
+        },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      },
+      {
+        step: 14,
+        phase: "Phase D",
+        phaseBadge: "Phase D: Settlement & Finality",
+        title: "14. Instruction Confirmed & Off-Ramp Complete",
+        description: "Instruction state updates to `confirmed`. Fiat transit cleared. Destination fiat entitlement satisfied via Chase wire delivery!",
+        state: "confirmed",
+        event: "InstructionConfirmedEvent",
+        parties: "Instruction API → Upstream Portal",
+        journal: "Lifecycle complete. Final balances: Available $0 | Reserved $0 | Fiat Transit $0.",
+        payload: {
+          instruction_id: "inst_fiat_redemption_7712",
+          final_state: "confirmed",
+          payout_channel: "Fedwire",
+          completed_at: "2026-08-13T11:45:00Z"
+        },
+        balances: { avail: 0, rsrv: 0, transit: 0 }
+      }
+    ];
+
+    let scoringChartInstance = null;
+
+    // App Controller
+    const app = {
+      init() {
+        this.renderCatalog();
+        this.initScoringChart();
+        this.updateScoringMath();
+        this.updateStepView();
+      },
+
+      switchScenario(scenarioKey) {
+        appState.activeScenario = scenarioKey;
+        const mainTitle = document.getElementById('scenario-main-title');
+        const mainDesc = document.getElementById('scenario-main-desc');
+        const badge = document.getElementById('active-scenario-badge');
+
+        if (scenarioKey === 'fiat') {
+          badge.className = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded";
+          badge.innerText = "Active Mode: Fiat Off-Ramp";
+          mainTitle.innerText = "Fiat Redemption Architecture & Interfacing Overview";
+          mainDesc.innerHTML = "When the Router selects a <strong>Fiat Redemption Route</strong>, the platform converts digital asset balance in the <strong>Source ADA</strong> (e.g. `ada_cust_usdc_01`) into a fiat payout delivered to a <strong>Destination Fiat Account / Bank Account</strong> (e.g. `ada_cust_fiat_usd` via Fedwire/ACH).";
+        } else {
+          badge.className = "bg-blue-100 text-blue-800 border border-blue-300 font-bold text-[10px] uppercase px-2 py-0.5 rounded";
+          badge.innerText = "Active Mode: Crypto On-Chain";
+          mainTitle.innerText = "External USDC On-Chain Route Architecture Overview";
+          mainDesc.innerHTML = "When the Router selects an <strong>External USDC On-Chain Route</strong>, the platform locks digital asset balance in the <strong>Source ADA</strong> and transfers on-chain USDC directly to an external blockchain wallet address via Circle/Polygon/Base.";
+        }
+
+        this.renderCatalog();
+        this.updateScoringMath();
+        this.updateStepView();
+      },
+
+      setTab(tabKey) {
+        appState.activeTab = tabKey;
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(el => {
+          el.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+          el.classList.add('text-slate-600');
+        });
+
+        const activeContent = document.getElementById(`tab-${tabKey}`);
+        const activeBtn = document.getElementById(`tab-btn-${tabKey}`);
+
+        if (activeContent) activeContent.classList.remove('hidden');
+        if (activeBtn) {
+          activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+          activeBtn.classList.remove('text-slate-600');
+        }
+
+        if (tabKey === 'scoring' && scoringChartInstance) {
+          setTimeout(() => scoringChartInstance.resize(), 100);
+        }
+      },
+
+      selectNode(nodeKey) {
+        const info = componentCatalog[nodeKey];
+        if (!info) return;
+
+        document.querySelectorAll('.node-card').forEach(el => el.classList.remove('ring-2', 'ring-blue-400', 'ring-emerald-400'));
+        const selectedCard = document.getElementById(`node-${nodeKey}`);
+        if (selectedCard) selectedCard.classList.add('ring-2', 'ring-blue-400');
+
+        document.getElementById('inspector-icon').innerText = info.icon;
+        document.getElementById('inspector-title').innerText = info.title;
+        document.getElementById('inspector-domain').innerText = info.domain;
+        document.getElementById('inspector-desc').innerText = info.desc;
+        document.getElementById('inspector-inbound').innerText = info.inbound;
+        document.getElementById('inspector-outbound').innerText = info.outbound;
+        document.getElementById('inspector-details').classList.remove('hidden');
+      },
+
+      goToStep(stepNum) {
+        if (stepNum < 1) stepNum = 1;
+        if (stepNum > appState.totalSteps) stepNum = appState.totalSteps;
+        appState.currentStep = stepNum;
+        this.updateStepView();
+      },
+
+      nextStep() {
+        this.goToStep(appState.currentStep + 1);
+      },
+
+      prevStep() {
+        this.goToStep(appState.currentStep - 1);
+      },
+
+      toggleAutoPlay() {
+        if (appState.isPlaying) {
+          clearInterval(appState.autoPlayTimer);
+          appState.isPlaying = false;
+          document.getElementById('play-icon').innerText = '▶';
+          document.getElementById('play-text').innerText = 'Auto Play';
+          document.getElementById('btn-play-step').classList.remove('bg-amber-600');
+          document.getElementById('btn-play-step').classList.add('bg-emerald-600');
+        } else {
+          appState.isPlaying = true;
+          document.getElementById('play-icon').innerText = '⏸';
+          document.getElementById('play-text').innerText = 'Pause';
+          document.getElementById('btn-play-step').classList.remove('bg-emerald-600');
+          document.getElementById('btn-play-step').classList.add('bg-amber-600');
+
+          appState.autoPlayTimer = setInterval(() => {
+            if (appState.currentStep >= appState.totalSteps) {
+              app.goToStep(1);
+            } else {
+              app.nextStep();
+            }
+          }, 2200);
+        }
+      },
+
+      resetAll() {
+        if (appState.isPlaying) this.toggleAutoPlay();
+        appState.currentStep = 1;
+        appState.weights = { cost: 0.30, lat: 0.40, liq: 0.15, rel: 0.15 };
+        document.getElementById('slider-w-cost').value = 0.30;
+        document.getElementById('slider-w-lat').value = 0.40;
+        document.getElementById('slider-w-liq').value = 0.15;
+        document.getElementById('slider-w-rel').value = 0.15;
+        document.getElementById('input-fedwire-cost').value = 15.00;
+        document.getElementById('input-fedwire-lat').value = 15;
+        this.updateScoringMath();
+        this.updateStepView();
+        this.setTab('topology');
+      },
+
+      updateStepView() {
+        const step = fiatLifecycleSteps[appState.currentStep - 1];
+        if (!step) return;
+
+        document.getElementById('current-phase-badge').innerText = step.phaseBadge;
+        document.getElementById('step-counter-text').innerText = `Step ${step.step} of 14`;
+        document.getElementById('step-title').innerText = step.title;
+        document.getElementById('step-description').innerText = step.description;
+        document.getElementById('event-type-label').innerText = `Event: ${step.event}`;
+        document.getElementById('event-sender-receiver').innerText = step.parties;
+        document.getElementById('payload-json-view').innerText = JSON.stringify(step.payload, null, 2);
+        document.getElementById('step-journal-summary').innerText = step.journal;
+
+        const pct = (step.step / appState.totalSteps) * 100;
+        document.getElementById('progress-bar-fill').style.width = `${pct}%`;
+
+        ['A', 'B', 'C', 'D'].forEach(p => {
+          const pill = document.getElementById(`phase-pill-${p}`);
+          if (pill) {
+            pill.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold');
+            pill.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+          }
+        });
+
+        const activePhaseLetter = step.phase.split(' ')[1];
+        const activePill = document.getElementById(`phase-pill-${activePhaseLetter}`);
+        if (activePill) {
+          activePill.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
+          activePill.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold');
+        }
+
+        const stateBadge = document.getElementById('lifecycle-state-badge');
+        stateBadge.innerText = step.state;
+        if (step.state === 'created') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300";
+        } else if (step.state === 'route_resolved') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300";
+        } else if (step.state === 'pending_bank' || step.state === 'pending_provider') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900 border border-blue-300";
+        } else if (step.state === 'confirmed') {
+          stateBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300";
+        }
+
+        const b = step.balances;
+        document.getElementById('bucket-val-avail').innerText = `$${b.avail.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        document.getElementById('bucket-val-rsrv').innerText = `$${b.rsrv.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        document.getElementById('bucket-val-transit').innerText = `$${b.transit.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        
+        document.getElementById('bucket-bar-avail').style.width = `${(b.avail / 10000) * 100}%`;
+        document.getElementById('bucket-bar-rsrv').style.width = `${(b.rsrv / 10000) * 100}%`;
+        document.getElementById('bucket-bar-transit').style.width = `${(b.transit / 10000) * 100}%`;
+
+        document.getElementById('btn-prev-step').disabled = (step.step === 1);
+        document.getElementById('btn-next-step').disabled = (step.step === appState.totalSteps);
+      },
+
+      updateScoringMath() {
+        appState.weights.cost = parseFloat(document.getElementById('slider-w-cost').value);
+        appState.weights.lat = parseFloat(document.getElementById('slider-w-lat').value);
+        appState.weights.liq = parseFloat(document.getElementById('slider-w-liq').value);
+        appState.weights.rel = parseFloat(document.getElementById('slider-w-rel').value);
+
+        document.getElementById('val-w-cost').innerText = appState.weights.cost.toFixed(2);
+        document.getElementById('val-w-lat').innerText = appState.weights.lat.toFixed(2);
+        document.getElementById('val-w-liq').innerText = appState.weights.liq.toFixed(2);
+        document.getElementById('val-w-rel').innerText = appState.weights.rel.toFixed(2);
+
+        appState.fedwire.cost = parseFloat(document.getElementById('input-fedwire-cost').value) || 15.00;
+        appState.fedwire.latMinutes = parseFloat(document.getElementById('input-fedwire-lat').value) || 15;
+
+        const candidates = [
+          {
+            code: "RC_FEDWIRE_EXPRESS",
+            name: "Fedwire Same-Day Wire",
+            cost: appState.fedwire.cost,
+            latMins: appState.fedwire.latMinutes,
+            liq: 5000000,
+            rel: 0.99,
+            hardPassed: true
+          },
+          {
+            code: "RC_CIRCLE_FIAT_WIRE",
+            name: "Circle Fiat Off-Ramp API",
+            cost: 2.50,
+            latMins: 120,
+            liq: 10000000,
+            rel: 0.98,
+            hardPassed: true
+          },
+          {
+            code: "RC_ACH_BATCH_DIRECT",
+            name: "ACH Commercial Batch (Next Day)",
+            cost: 0.25,
+            latMins: 1440,
+            liq: 50000000,
+            rel: 0.95,
+            hardPassed: true
+          }
+        ];
+
+        const minCost = Math.min(...candidates.map(c => c.cost));
+        const maxCost = Math.max(...candidates.map(c => c.cost));
+        const minLat = Math.min(...candidates.map(c => c.latMins));
+        const maxLat = Math.max(...candidates.map(c => c.latMins));
+        const minLiq = Math.min(...candidates.map(c => c.liq));
+        const maxLiq = Math.max(...candidates.map(c => c.liq));
+
+        const w = appState.weights;
+
+        candidates.forEach(c => {
+          const nCost = maxCost === minCost ? 1 : (maxCost - c.cost) / (maxCost - minCost);
+          const nLat = maxLat === minLat ? 1 : (maxLat - c.latMins) / (maxLat - minLat);
+          const nLiq = maxLiq === minLiq ? 1 : (c.liq - minLiq) / (maxLiq - minLiq);
+          const rRel = c.rel;
+
+          const baseScore = 100 * (w.cost * nCost + w.lat * nLat + w.liq * nLiq + w.rel * rRel);
+          c.finalScore = parseFloat(baseScore.toFixed(2));
+        });
+
+        candidates.sort((a, b) => b.finalScore - a.finalScore);
+        const winner = candidates[0];
+
+        document.getElementById('winner-tag-badge').innerText = `Winner: ${winner.code} (${winner.finalScore})`;
+
+        const tbody = document.getElementById('candidates-table-body');
+        tbody.innerHTML = '';
+        candidates.forEach(c => {
+          const isWinner = (c.code === winner.code);
+          const tr = document.createElement('tr');
+          tr.className = isWinner ? 'bg-emerald-50/80 font-semibold text-emerald-950' : '';
+          tr.innerHTML = `
+            <td class="p-2.5">
+              <span class="block text-xs font-bold">${c.code}</span>
+              <span class="text-[10px] text-slate-500">${c.name}</span>
+            </td>
+            <td class="p-2.5 font-mono">$${c.cost.toFixed(2)}</td>
+            <td class="p-2.5 font-mono">${c.latMins >= 60 ? (c.latMins/60).toFixed(1) + ' hrs' : c.latMins + ' mins'}</td>
+            <td class="p-2.5"><span class="text-emerald-600 font-bold">✓ Valid</span></td>
+            <td class="p-2.5 text-right font-mono text-sm font-bold ${isWinner ? 'text-emerald-700' : 'text-slate-700'}">
+              ${c.finalScore.toFixed(2)}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        if (scoringChartInstance) {
+          scoringChartInstance.data.datasets[0].data = candidates.map(c => c.finalScore);
+          scoringChartInstance.data.labels = candidates.map(c => c.code);
+          scoringChartInstance.data.datasets[0].backgroundColor = candidates.map(c => (c.code === winner.code ? '#22c55e' : '#3b82f6'));
+          scoringChartInstance.update();
+        }
+      },
+
+      initScoringChart() {
+        const ctx = document.getElementById('scoringChart');
+        if (!ctx) return;
+
+        scoringChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['RC_FEDWIRE_EXPRESS', 'RC_CIRCLE_FIAT_WIRE', 'RC_ACH_BATCH_DIRECT'],
+            datasets: [{
+              label: 'Route Policy Score',
+              data: [88.5, 72.1, 54.0],
+              backgroundColor: ['#22c55e', '#3b82f6', '#94a3b8'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return `Score: ${context.parsed.y} points`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: { display: true, text: 'Weighted Policy Score (0 - 100)', font: { size: 11 } }
+              },
+              x: {
+                ticks: {
+                  font: { size: 10 }
+                }
+              }
+            }
+          }
+        });
+      },
+
+      renderCatalog() {
+        const tbody = document.getElementById('catalog-table-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+        fiatLifecycleSteps.forEach(s => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+          tr.innerHTML = `
+            <td class="p-3 font-mono font-bold text-slate-500">${s.step}</td>
+            <td class="p-3 font-bold text-slate-900">${s.event}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-semibold">${s.phase}</span></td>
+            <td class="p-3 text-slate-600 font-mono text-[11px]">${s.parties}</td>
+            <td class="p-3 text-slate-700 leading-snug">${s.journal}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      },
+
+      filterCatalog() {
+        const query = document.getElementById('catalog-search-input').value.toLowerCase();
+        const rows = document.querySelectorAll('#catalog-table-body tr');
+        rows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          row.style.display = text.includes(query) ? '' : 'none';
+        });
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      app.init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Router & Ledger System Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="text-slate-800 p-4 md:p-8">
+
+    <header class="max-w-7xl mx-auto mb-8">
+        <div class="mb-4">
+            <a href="index.html" class="inline-flex items-center text-xs font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 transition">
+                ← Back to Router Design Hub
+            </a>
+        </div>
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">External USDC Transfer: System Architecture</h1>
+        <p class="text-slate-500 mt-2 text-lg">Visualizing the interfacing between Source ADA, Payment Router, Treasury Ledger, and Destination.</p>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <section class="glass-panel rounded-2xl p-6 shadow-sm flex flex-col">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2 border-slate-200">1. Component Architecture</h2>
+            <p class="text-sm text-slate-600 mb-6">This diagram shows the structural relationships between the internal platform services and the external execution environment.</p>
+            
+            <div class="flex-grow flex items-center justify-center overflow-x-auto">
+                <div class="mermaid">
+                    flowchart TD
+                        subgraph Upstream["Upstream Context"]
+                            BusSys[External Business System]
+                        end
+
+                        subgraph Platform["Core Platform"]
+                            API[Payment Instruction API]
+                            Router{Payment Orchestration Router}
+                            Ledger[(Treasury Accounting Ledger)]
+                            Recon[Reconciliation & Webhooks]
+
+                            subgraph ADAService["Account of Digital Asset (ADA)"]
+                                SrcADA[Source ADA<br/>Customer USDC Liab.]
+                            end
+                        end
+
+                        subgraph External["External Ecosystem"]
+                            Circle[Circle API / Base Rail]
+                            DestADA[Destination External Wallet]
+                        end
+
+                        BusSys -->|1. Creates Instruction| API
+                        API -->|2. Requests Decision| Router
+                        Router -->|3. Triggers Reservation| Ledger
+                        Ledger -.->|4. Reclassifies Balance| SrcADA
+                        API -->|5. Submits Tx| Circle
+                        Circle -->|6. Settles On-Chain| DestADA
+                        Circle -->|7. Status Webhook| Recon
+                        Recon -->|8. Finalizes Accounting| Ledger
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel rounded-2xl p-6 shadow-sm flex flex-col">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2 border-slate-200">2. Event Sequence & State Handoff</h2>
+            <p class="text-sm text-slate-600 mb-6">This sequence illustrates the exact timeline of state changes, ledger journal entries, and balance updates.</p>
+            
+            <div class="flex-grow flex items-center justify-center overflow-x-auto">
+                <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        participant API as Payment API
+                        participant ADA as Source ADA
+                        participant Router as Payment Router
+                        participant Ledger as Treasury Ledger
+                        participant Circle as Circle API
+                        
+                        Note over API, Ledger: State: CREATED
+                        API->>Router: Resolve Route (USDC, Region: US)
+                        Router-->>Router: Evaluate Policies & Telemetry
+                        Router->>Ledger: Winner: RC_CIRCLE_ONCHAIN_BASE
+                        
+                        Note over API, Ledger: State: ROUTE_RESOLVED
+                        Ledger->>Ledger: Debit: Customer USDC - Available<br/>Credit: Customer USDC - Reserved
+                        Ledger->>ADA: Update Balance: Move to Reserved
+                        
+                        API->>Circle: Submit On-Chain Transfer ($500)
+                        Note over API, Ledger: State: PENDING_PROVIDER
+                        Ledger->>Ledger: Debit: Customer USDC - Reserved<br/>Credit: Settlement Transit Liability
+                        Ledger->>ADA: Update Balance: Move to Pending Outbound
+                        
+                        Circle-->>Circle: Execute Blockchain Tx to Dest ADA
+                        Circle-->>API: Webhook: Terminal Success
+                        
+                        Note over API, Ledger: State: CONFIRMED
+                        API->>Ledger: Reconcile Tx
+                        Ledger->>Ledger: Debit: Settlement Transit Liability<br/>Credit: Circle Custody USDC Asset
+                        Ledger->>ADA: Update Balance: Clear Pending
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel rounded-2xl p-6 shadow-sm lg:col-span-2">
+            <h2 class="text-xl font-bold mb-6 border-b pb-2 border-slate-200">Detailed Interfacing Breakdown</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded text-xs">Step 1 & 2</span>
+                        <h3 class="font-semibold text-slate-800">Routing & Decision</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2"><strong>Interface:</strong> Payment API ↔ Router</p>
+                    <p class="text-sm text-slate-600">The business system injects a transfer request. The Router intercepts this instruction, evaluates real-time telemetry (liquidity, cost, latency), and selects the external Circle on-chain rail. The Source and Destination ADAs are simply context variables at this stage.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-amber-100 text-amber-700 font-bold px-2 py-1 rounded text-xs">Step 3 & 4</span>
+                        <h3 class="font-semibold text-slate-800">Reservation & Handoff</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2"><strong>Interface:</strong> Router ↔ Ledger ↔ Source ADA</p>
+                    <p class="text-sm text-slate-600">Once the route is decided, the Router triggers the Ledger. The Ledger posts the first journal entry, shifting funds internally from <i>Available</i> to <i>Reserved</i>. The Source ADA balance is updated to reflect that funds are locked, preventing double-spending.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-xs">Step 5 & 6</span>
+                        <h3 class="font-semibold text-slate-800">External Execution</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2"><strong>Interface:</strong> API ↔ Circle ↔ Ledger</p>
+                    <p class="text-sm text-slate-600">The API fires the transaction to Circle. Simultaneously, the Ledger debits the reserved liability and credits a <i>Settlement Transit Liability</i>. The funds are now mathematically marked as "in flight" to the Destination ADA outside the platform.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 md:col-span-3">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded text-xs">Step 7, 8 & 9</span>
+                        <h3 class="font-semibold text-slate-800">Reconciliation & Final Settlement</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2"><strong>Interface:</strong> Circle ↔ Reconciliation ↔ Ledger ↔ Source ADA</p>
+                    <p class="text-sm text-slate-600">Circle completes the blockchain transfer to the external Destination ADA and sends a webhook to the platform. The Reconciliation service verifies the transaction hash and amount. Finally, the Ledger clears the Settlement Transit Liability and officially reduces the platform's actual Circle Custody Asset. The Source ADA removes the pending outbound amount, completing the lifecycle.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
