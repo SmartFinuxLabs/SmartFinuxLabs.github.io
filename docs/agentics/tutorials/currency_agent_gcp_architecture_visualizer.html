@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Agent - GCP Architecture & Communication Flow Visualizer</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FAF8F5',
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        },
+                        gcp: {
+                            border: '#3b82f6',
+                            bg: '#eff6ff',
+                        },
+                        local: {
+                            border: '#475569',
+                            bg: '#f8fafc',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Light Warm Background Grid */
+        .bg-architect-grid {
+            background-color: #faf8f5;
+            background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
+        }
+
+        /* Glow effects for active diagram blocks */
+        @keyframes blockGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+                border-color: #4f46e5;
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0), 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+                border-color: #6366f1;
+            }
+        }
+        .active-diagram-block {
+            animation: blockGlow 1.8s infinite;
+            border-color: #4f46e5 !important;
+            transform: translateY(-2px);
+        }
+
+        /* SVG Flow Path Dashed Animations */
+        @keyframes flowDashForward {
+            to { stroke-dashoffset: -32; }
+        }
+        @keyframes flowDashReverse {
+            to { stroke-dashoffset: 32; }
+        }
+        .svg-path-req {
+            stroke-dasharray: 8, 8;
+            animation: flowDashForward 0.8s linear infinite;
+        }
+        .svg-path-res {
+            stroke-dasharray: 8, 8;
+            animation: flowDashReverse 0.8s linear infinite;
+        }
+
+        /* Packet Glow Effects */
+        .packet-glow {
+            filter: drop-shadow(0px 0px 8px rgba(79, 70, 229, 0.85));
+        }
+
+        /* Custom Scrollbars */
+        .custom-scrollbar-dark::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar-dark::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar-dark::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-architect-grid text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-500/20">
+                    <i class="fa-solid fa-cloud-nodes text-sm"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900">Illustration of Agent Dev Kit building a currency agent</span>
+                        <span class="bg-blue-50 text-blue-700 text-[11px] px-2.5 py-0.5 rounded-full border border-blue-200 font-semibold flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                            GCP Cloud Topology
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block">Refined Interactive GCP Architecture & Directional Communication Visualizer</p>
+                </div>
+            </div>
+
+            <!-- Repository & Cloud Badges -->
+            <div class="flex items-center space-x-3 text-xs">
+                <div class="hidden lg:flex items-center space-x-2 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    <span class="font-mono text-slate-700 font-medium">Vertex AI (Gemini 2.5)</span>
+                </div>
+                <div class="hidden lg:flex items-center space-x-2 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="font-mono text-slate-700 font-medium">Private MCP (Cloud Run)</span>
+                </div>
+                <a href="https://github.com/jackwotherspoon/currency-agent" target="_blank" rel="noopener noreferrer" class="bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow-xs">
+                    <i class="fa-brands fa-github"></i>
+                    <span>Repository</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 shadow-xs sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto flex space-x-2 overflow-x-auto py-2.5 scrollbar-none" id="nav-tabs">
+            <button onclick="switchTab('hierarchy')" id="tab-hierarchy" class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-white bg-indigo-600 shadow-xs">
+                <i class="fa-solid fa-diagram-project text-xs"></i>
+                <span>GCP Architecture & Flow Animator</span>
+            </button>
+            <button onclick="switchTab('sandbox')" id="tab-sandbox" class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <i class="fa-solid fa-flask text-xs text-emerald-600"></i>
+                <span>Live Query Sandbox</span>
+            </button>
+            <button onclick="switchTab('matrix')" id="tab-matrix" class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <i class="fa-solid fa-table-cells text-xs text-blue-600"></i>
+                <span>Protocol Wire Matrix</span>
+            </button>
+            <button onclick="switchTab('topology')" id="tab-topology" class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <i class="fa-solid fa-network-wired text-xs text-amber-600"></i>
+                <span>Process & Auth Topology</span>
+            </button>
+            <button onclick="switchTab('code')" id="tab-code" class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                <i class="fa-solid fa-code text-xs text-slate-600"></i>
+                <span>Source Code Explorer</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+        <!-- TAB 1: GCP REFINED ARCHITECTURE DIAGRAM & DIRECTIONAL FLOW ANIMATOR -->
+        <div id="content-hierarchy" class="space-y-6">
+            
+            <div class="bg-white/90 border border-slate-200 rounded-2xl p-6 shadow-xs relative backdrop-blur">
+                
+                <div class="flex flex-col xl:flex-row xl:items-center justify-between pb-5 border-b border-slate-200 gap-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project text-indigo-600"></i>
+                            <span>Refined GCP & Local Developer Architecture Flow</span>
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Interactive component hierarchy with customizable arrowheads, directional flows, and step-by-step animation controls.</p>
+                    </div>
+
+                    <!-- Flow Playback & Visual Style Controls -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        
+                        <!-- Pass Direction Toggle -->
+                        <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-100 text-xs">
+                            <button id="btn-pass-req" onclick="setDirection('request')" class="px-3 py-1.5 rounded-md font-bold text-white bg-indigo-600 transition shadow-xs">
+                                <i class="fa-solid fa-arrow-down-long mr-1"></i> Request Pass
+                            </button>
+                            <button id="btn-pass-res" onclick="setDirection('response')" class="px-3 py-1.5 rounded-md font-bold text-slate-700 hover:bg-white transition">
+                                <i class="fa-solid fa-arrow-up-long mr-1"></i> Response Pass
+                            </button>
+                        </div>
+
+                        <!-- Arrowhead Style Selector -->
+                        <div class="flex items-center space-x-1 bg-slate-100 border border-slate-200 rounded-lg p-1 text-xs">
+                            <span class="text-slate-500 font-semibold px-1 text-[11px]"><i class="fa-solid fa-location-arrow text-indigo-600"></i> Arrow Type:</span>
+                            <select id="arrow-style-selector" onchange="setArrowType(this.value)" class="bg-white border border-slate-200 text-slate-800 rounded-md px-2 py-1 text-xs font-bold focus:outline-none shadow-2xs">
+                                <option value="stealth" selected>Modern Stealth Chevron</option>
+                                <option value="classic">Classic Pointer Triangle</option>
+                                <option value="dot">Glowing Terminal Dot</option>
+                                <option value="laser">Sharp Laser Wedge</option>
+                            </select>
+                        </div>
+
+                        <!-- Particle Effect Selector -->
+                        <div class="flex items-center space-x-1 bg-slate-100 border border-slate-200 rounded-lg p-1 text-xs">
+                            <span class="text-slate-500 font-semibold px-1 text-[11px]"><i class="fa-solid fa-bolt text-amber-500"></i> Flow Visual:</span>
+                            <select id="packet-effect-selector" onchange="setPacketEffect(this.value)" class="bg-white border border-slate-200 text-slate-800 rounded-md px-2 py-1 text-xs font-bold focus:outline-none shadow-2xs">
+                                <option value="orb" selected>Glowing Laser Orb</option>
+                                <option value="pill">Data Payload Pill</option>
+                                <option value="trail">Comet Flow Trail</option>
+                            </select>
+                        </div>
+
+                        <!-- Routing Connector Style -->
+                        <select id="route-style-selector" onchange="setRouteStyle(this.value)" class="bg-slate-100 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none">
+                            <option value="orthogonal">HV Smooth Curves</option>
+                            <option value="straight">Direct Straight Lines</option>
+                        </select>
+
+                        <!-- Animation Play/Pause & Step Controls -->
+                        <div class="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-200">
+                            <button id="btn-play" onclick="togglePlayPause()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-xs font-bold flex items-center space-x-1.5 transition shadow-xs">
+                                <i class="fa-solid fa-pause text-xs" id="play-icon"></i>
+                                <span id="play-text">Pause</span>
+                            </button>
+                            <button onclick="prevStep()" class="bg-white hover:bg-slate-100 text-slate-700 p-1.5 rounded-md text-xs font-semibold transition border border-slate-200" title="Previous Step">
+                                <i class="fa-solid fa-step-backward"></i>
+                            </button>
+                            <button onclick="nextStep()" class="bg-white hover:bg-slate-100 text-slate-700 p-1.5 rounded-md text-xs font-semibold transition border border-slate-200" title="Next Step">
+                                <i class="fa-solid fa-step-forward"></i>
+                            </button>
+                            <button onclick="resetFlow()" class="bg-white hover:bg-slate-100 text-slate-700 p-1.5 rounded-md text-xs font-semibold transition border border-slate-200" title="Reset Sequence">
+                                <i class="fa-solid fa-arrow-rotate-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Speed Selector -->
+                        <select id="speed-selector" onchange="setSpeed(this.value)" class="bg-slate-100 border border-slate-200 text-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none">
+                            <option value="1">1.0x Speed</option>
+                            <option value="1.5">1.5x Speed</option>
+                            <option value="2">2.0x Speed</option>
+                            <option value="0.5">0.5x Speed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sequence Step Navigation Bar -->
+                <div class="mb-6 bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-2 text-xs">
+                    <span class="font-bold text-slate-700 uppercase text-[10px] tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-route text-indigo-600"></i> Execution Sequence Step
+                    </span>
+                    <div class="flex items-center space-x-1 sm:space-x-2 overflow-x-auto w-full md:w-auto py-1" id="pipeline-steps">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- ARCHITECTURE DIAGRAM CONTAINER (REFINING EXACT TOPOLOGY FROM IMAGE) -->
+                <div class="relative min-h-[720px] p-6 flex flex-col justify-between space-y-8 bg-architect-grid rounded-2xl border border-slate-300 shadow-inner" id="hierarchy-container">
+                    
+                    <!-- SVG Overlay for Communication Connectors, Labels, Arrowheads, and Animated Packets -->
+                    <svg id="hierarchy-svg" class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- Line Gradients -->
+                            <linearGradient id="grad-req-path" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4f46e5" />
+                                <stop offset="50%" stop-color="#2563eb" />
+                                <stop offset="100%" stop-color="#059669" />
+                            </linearGradient>
+                            <linearGradient id="grad-res-path" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#d97706" />
+                                <stop offset="50%" stop-color="#7c3aed" />
+                                <stop offset="100%" stop-color="#16a34a" />
+                            </linearGradient>
+
+                            <!-- ARROWHEAD MARKERS -->
+                            <!-- Stealth Chevron -->
+                            <marker id="arrow-stealth-req" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 L 3 5 Z" fill="#4f46e5" />
+                            </marker>
+                            <marker id="arrow-stealth-res" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 L 3 5 Z" fill="#16a34a" />
+                            </marker>
+                            <marker id="arrow-stealth-static" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 L 3 5 Z" fill="#64748b" />
+                            </marker>
+
+                            <!-- Classic Pointer -->
+                            <marker id="arrow-classic-req" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                <polygon points="0 1, 10 5, 0 9" fill="#4f46e5" />
+                            </marker>
+                            <marker id="arrow-classic-res" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                <polygon points="0 1, 10 5, 0 9" fill="#16a34a" />
+                            </marker>
+
+                            <!-- Glowing Dot Terminal -->
+                            <marker id="arrow-dot-req" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                                <circle cx="5" cy="5" r="4" fill="#4f46e5" stroke="#ffffff" stroke-width="1.5" />
+                            </marker>
+                            <marker id="arrow-dot-res" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                                <circle cx="5" cy="5" r="4" fill="#16a34a" stroke="#ffffff" stroke-width="1.5" />
+                            </marker>
+
+                            <!-- Laser Wedge -->
+                            <marker id="arrow-laser-req" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                                <path d="M 0 2 L 12 6 L 0 10 L 2 6 Z" fill="#6366f1" />
+                            </marker>
+                            <marker id="arrow-laser-res" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                                <path d="M 0 2 L 12 6 L 0 10 L 2 6 Z" fill="#10b981" />
+                            </marker>
+                        </defs>
+
+                        <!-- Static Connection Paths matching exact image labels -->
+                        <path id="path-c1-c2" d="" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow-stealth-static)" />
+                        <path id="path-c2-c3" d="" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow-stealth-static)" />
+                        <path id="path-c2-c4" d="" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow-stealth-static)" />
+                        <path id="path-c3-c5" d="" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow-stealth-static)" />
+
+                        <!-- Active Flow Animated Line -->
+                        <path id="active-flow-line" d="" stroke="url(#grad-req-path)" stroke-width="3.5" fill="none" class="svg-path-req" opacity="0" marker-end="url(#arrow-stealth-req)" />
+
+                        <!-- Flow Packet Options -->
+                        <!-- Option 1: Glowing Laser Orb -->
+                        <g id="packet-orb" opacity="0" class="packet-glow">
+                            <circle r="8" fill="#4f46e5" id="packet-orb-core" />
+                            <circle r="14" fill="#6366f1" opacity="0.3" class="animate-ping" />
+                        </g>
+
+                        <!-- Option 2: Data Payload Pill -->
+                        <g id="packet-pill" opacity="0" class="packet-glow">
+                            <rect x="-46" y="-12" width="92" height="24" rx="12" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" />
+                            <text x="0" y="3" text-anchor="middle" fill="#ffffff" font-size="10" font-family="Fira Code" font-weight="bold" id="packet-pill-text">USD → EUR</text>
+                        </g>
+
+                        <!-- Option 3: Comet Trail -->
+                        <g id="packet-trail" opacity="0" class="packet-glow">
+                            <circle r="10" fill="#2563eb" />
+                            <circle r="6" fill="#38bdf8" />
+                            <circle r="2.5" fill="#ffffff" />
+                        </g>
+
+                        <!-- STATIC CONNECTOR TEXT LABELS matching image -->
+                        <g id="labels-group" font-family="Inter" font-size="11" font-weight="600">
+                            <!-- A2A JSON-RPC -->
+                            <rect id="rect-lbl-1" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                            <text id="lbl-1" text-anchor="middle" fill="#334155" dy="4">A2A JSON-RPC</text>
+
+                            <!-- gcloud Credentials -->
+                            <rect id="rect-lbl-2" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                            <text id="lbl-2" text-anchor="middle" fill="#334155" dy="4">gcloud Credentials</text>
+
+                            <!-- HTTP / localhost -->
+                            <rect id="rect-lbl-3" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                            <text id="lbl-3" text-anchor="middle" fill="#334155" dy="4">HTTP / localhost</text>
+
+                            <!-- Authenticated HTTPS -->
+                            <rect id="rect-lbl-4" rx="4" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                            <text id="lbl-4" text-anchor="middle" fill="#334155" dy="4">Authenticated HTTPS</text>
+                        </g>
+                    </svg>
+
+                    <!-- CONTAINER 1: LOCAL DEVELOPER MACHINE (MATCHING IMAGE SPECIFICATION) -->
+                    <div class="relative z-20 border-2 border-slate-700 bg-white/80 rounded-2xl p-6 shadow-sm">
+                        <!-- Container Header Label -->
+                        <div class="text-center mb-6">
+                            <span class="text-sm font-bold text-slate-800 tracking-wide">Local Developer Machine</span>
+                        </div>
+
+                        <div class="flex flex-col items-center space-y-12">
+                            <!-- Node 1: A2A Client -->
+                            <div id="node-1" onclick="selectNode(1)" class="w-72 bg-purple-50/90 border-2 border-purple-300 rounded-xl p-4 text-center cursor-pointer hover:border-purple-600 transition shadow-xs group relative">
+                                <h4 class="font-bold text-sm text-purple-950 group-hover:text-purple-700">A2A Client</h4>
+                                <div class="text-xs font-mono text-purple-800 mt-1 font-medium">(test_client.py)</div>
+                            </div>
+
+                            <!-- Node 2: Local A2A Agent -->
+                            <div id="node-2" onclick="selectNode(2)" class="w-80 bg-purple-50/90 border-2 border-purple-300 rounded-xl p-4 text-center cursor-pointer hover:border-purple-600 transition shadow-xs group relative">
+                                <h4 class="font-bold text-sm text-purple-950 group-hover:text-purple-700">Local A2A Agent</h4>
+                                <div class="text-xs font-mono text-purple-800 mt-1 font-medium">(agent.py - :10000)</div>
+                            </div>
+
+                            <!-- Auth Proxy Positioned Right Under Local Agent -->
+                            <div class="w-full flex justify-end pr-4 sm:pr-12">
+                                <!-- Node 3: gcloud Auth Proxy -->
+                                <div id="node-3" onclick="selectNode(3)" class="w-80 bg-purple-50/90 border-2 border-purple-300 rounded-xl p-4 text-center cursor-pointer hover:border-purple-600 transition shadow-xs group relative">
+                                    <h4 class="font-bold text-sm text-purple-950 group-hover:text-purple-700">gcloud Auth Proxy</h4>
+                                    <div class="text-xs font-mono text-purple-800 mt-1 font-medium">(Cloud Run Proxy - :8080)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTAINER 2: GOOGLE CLOUD PLATFORM (GCP) (MATCHING IMAGE SPECIFICATION) -->
+                    <div class="relative z-20 border-2 border-blue-500 bg-blue-50/60 rounded-2xl p-6 shadow-sm">
+                        <!-- Container Header Label -->
+                        <div class="text-center mb-6">
+                            <span class="text-sm font-bold text-slate-800 tracking-wide">Google Cloud Platform (GCP)</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <!-- Node 4: Vertex AI API (Pink tinted box with brown outline as shown in image) -->
+                            <div id="node-4" onclick="selectNode(4)" class="bg-pink-100/80 border-2 border-amber-700/80 rounded-xl p-5 text-center cursor-pointer hover:border-pink-600 transition shadow-xs group relative">
+                                <h4 class="font-bold text-sm text-slate-900 group-hover:text-pink-700">Vertex AI API</h4>
+                                <div class="text-xs font-mono text-slate-800 mt-1 font-semibold">(Gemini 2.5 Flash)</div>
+                            </div>
+
+                            <!-- Node 5: Cloud Run (Green tinted box with green outline as shown in image) -->
+                            <div id="node-5" onclick="selectNode(5)" class="bg-emerald-100/80 border-2 border-emerald-600 rounded-xl p-5 text-center cursor-pointer hover:border-emerald-700 transition shadow-xs group relative">
+                                <h4 class="font-bold text-sm text-slate-900 group-hover:text-emerald-800">Cloud Run</h4>
+                                <div class="text-xs font-mono text-slate-800 mt-1 font-semibold">(Private mcp-server)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TERMINAL INSPECTOR & WIRE PAYLOAD CONSOLE -->
+                <div class="mt-6 bg-slate-900 rounded-2xl p-5 text-slate-100 border border-slate-800 shadow-lg">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 mb-4 gap-2">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span class="text-xs font-bold font-mono text-indigo-300" id="inspector-step-title">Step 1: Client Query Dispatch over A2A JSON-RPC</span>
+                        </div>
+                        <span class="text-[11px] font-mono text-slate-400" id="inspector-sub">test_client.py &rarr; agent.py (:10000)</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Details & Metadata -->
+                        <div class="lg:col-span-5 space-y-4">
+                            <div>
+                                <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Interaction Overview</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed" id="inspector-desc">
+                                    The local client script sends a structured JSON-RPC request containing the query "Convert 250 USD to EUR" to the local A2A agent process.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                                <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+                                    <div class="text-slate-500">Pass Direction</div>
+                                    <div class="text-indigo-400 font-bold mt-0.5" id="inspector-direction">Request Pass</div>
+                                </div>
+                                <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+                                    <div class="text-slate-500">Protocol Wire</div>
+                                    <div class="text-blue-400 font-bold mt-0.5" id="inspector-transport">A2A JSON-RPC</div>
+                                </div>
+                                <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+                                    <div class="text-slate-500">Source Component</div>
+                                    <div class="text-purple-300 font-bold mt-0.5" id="inspector-src">A2A Client</div>
+                                </div>
+                                <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+                                    <div class="text-slate-500">Target Component</div>
+                                    <div class="text-purple-300 font-bold mt-0.5" id="inspector-dst">Local A2A Agent</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payload Code View -->
+                        <div class="lg:col-span-7 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Protocol Payload Console</h4>
+                                <button onclick="copyPayload()" class="text-[10px] font-mono text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span id="copy-text">Copy Wire Data</span>
+                                </button>
+                            </div>
+                            <pre class="bg-slate-950 p-4 rounded-xl text-[11px] font-mono text-emerald-400 overflow-x-auto custom-scrollbar-dark border border-slate-800 h-44 leading-relaxed" id="inspector-payload">
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: LIVE QUERY SANDBOX -->
+        <div id="content-sandbox" class="space-y-6 hidden">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-5 border-b border-slate-200 gap-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-flask text-emerald-600"></i>
+                            <span>GCP Cloud Currency Agent Trace Sandbox</span>
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Execute live queries to trace request packets across local processes, gcloud Auth Proxy, Vertex AI, and Cloud Run.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-4 bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Test Parameters</h3>
+                        
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Conversion Amount</label>
+                            <input type="number" id="sim-amount" value="250" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-indigo-500">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Base Currency</label>
+                                <select id="sim-from" class="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-indigo-500">
+                                    <option value="USD" selected>USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="CAD">CAD ($)</option>
+                                    <option value="JPY">JPY (¥)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Target Currency</label>
+                                <select id="sim-to" class="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-indigo-500">
+                                    <option value="EUR" selected>EUR (€)</option>
+                                    <option value="JPY">JPY (¥)</option>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="CAD">CAD ($)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="runLiveSimulation()" id="btn-run-sim" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-2 shadow-xs">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Execute GCP Cloud Agent Trace</span>
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-8 bg-slate-900 text-slate-100 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                                <span class="text-xs font-bold font-mono text-emerald-400 flex items-center gap-2">
+                                    <i class="fa-solid fa-terminal"></i>
+                                    <span>GCP Communication Log</span>
+                                </span>
+                                <span class="text-[11px] font-mono text-slate-400" id="sim-status">Idle</span>
+                            </div>
+
+                            <div id="sim-log" class="font-mono text-xs space-y-2 h-48 overflow-y-auto custom-scrollbar-dark text-slate-300 p-1">
+                                <div class="text-slate-500">// Select parameters and click "Execute GCP Cloud Agent Trace" to start path trace.</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+                            <span class="text-xs text-slate-400">Agent Synthesized Output:</span>
+                            <span class="font-mono text-xs font-bold text-emerald-400" id="sim-result">---</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PROTOCOL WIRE MATRIX -->
+        <div id="content-matrix" class="space-y-6 hidden">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <h2 class="text-lg font-bold text-slate-900 mb-1">Architecture Communication & Protocol Matrix</h2>
+                <p class="text-xs text-slate-500 mb-6">Protocol specifications, endpoints, authentication headers, and wire format bindings across boundary lines.</p>
+
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 font-bold text-slate-700">
+                                <th class="p-3">Source Node</th>
+                                <th class="p-3">Target Node</th>
+                                <th class="p-3">Connector Label</th>
+                                <th class="p-3">Transport / Port</th>
+                                <th class="p-3">Authentication</th>
+                                <th class="p-3">Data Schema</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 font-mono text-[11px]">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-purple-700">A2A Client</td>
+                                <td class="p-3 text-purple-700">Local A2A Agent</td>
+                                <td class="p-3"><span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-bold">A2A JSON-RPC</span></td>
+                                <td class="p-3">HTTP POST :10000</td>
+                                <td class="p-3 text-slate-500">None (Local loopback)</td>
+                                <td class="p-3 text-slate-600">A2A Task JSON Envelope</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-purple-700">Local A2A Agent</td>
+                                <td class="p-3 text-pink-700">Vertex AI API</td>
+                                <td class="p-3"><span class="bg-pink-100 text-pink-800 px-2 py-0.5 rounded font-bold">gcloud Credentials</span></td>
+                                <td class="p-3">HTTPS REST / gRPC</td>
+                                <td class="p-3 text-indigo-700 font-semibold">Google OAuth2 Access Token</td>
+                                <td class="p-3 text-slate-600">Gemini Function Call Payload</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-purple-700">Local A2A Agent</td>
+                                <td class="p-3 text-purple-700">gcloud Auth Proxy</td>
+                                <td class="p-3"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-bold">HTTP / localhost</span></td>
+                                <td class="p-3">HTTP POST :8080</td>
+                                <td class="p-3 text-slate-500">Local Proxy Loopback</td>
+                                <td class="p-3 text-slate-600">FastMCP JSON-RPC 2.0</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-purple-700">gcloud Auth Proxy</td>
+                                <td class="p-3 text-emerald-700">Cloud Run (Private mcp-server)</td>
+                                <td class="p-3"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Authenticated HTTPS</span></td>
+                                <td class="p-3">HTTPS :443 (GCP Ingress)</td>
+                                <td class="p-3 text-emerald-700 font-semibold">GCP IAM ID Token Bearer</td>
+                                <td class="p-3 text-slate-600">Authenticated MCP SSE / JSON-RPC</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: PROCESS TOPOLOGY -->
+        <div id="content-topology" class="space-y-6 hidden">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <h2 class="text-lg font-bold text-slate-900 mb-1">Process Deployment Boundaries & Security Topography</h2>
+                <p class="text-xs text-slate-500 mb-6">Separation between local developer workstation processes and Google Cloud Platform managed services.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-7 bg-slate-50/80 border-2 border-slate-700 rounded-2xl p-6 relative">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-laptop"></i> Local Developer Machine Boundary
+                        </div>
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-slate-900">A2A Client</div>
+                                    <div class="text-slate-500 text-[11px]">test_client.py</div>
+                                </div>
+                                <span class="bg-purple-50 text-purple-700 text-[10px] px-2 py-1 rounded border border-purple-200">Process</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-slate-900">Local A2A Agent</div>
+                                    <div class="text-slate-500 text-[11px]">agent.py (Port 10000)</div>
+                                </div>
+                                <span class="bg-purple-50 text-purple-700 text-[10px] px-2 py-1 rounded border border-purple-200">Port :10000</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-slate-900">gcloud Auth Proxy</div>
+                                    <div class="text-slate-500 text-[11px]">Cloud Run Proxy (Port 8080)</div>
+                                </div>
+                                <span class="bg-purple-50 text-purple-700 text-[10px] px-2 py-1 rounded border border-purple-200">Port :8080</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 bg-blue-50/80 border-2 border-blue-500 rounded-2xl p-6 relative flex flex-col justify-between">
+                        <div class="text-xs font-bold uppercase tracking-wider text-blue-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud"></i> Google Cloud Platform (GCP)
+                        </div>
+                        <div class="space-y-3 font-mono text-xs">
+                            <div class="bg-white p-3 rounded-xl border border-pink-200 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-slate-900">Vertex AI API</div>
+                                    <div class="text-slate-500 text-[11px]">Gemini 2.5 Flash</div>
+                                </div>
+                                <span class="bg-pink-50 text-pink-700 text-[10px] px-2 py-1 rounded border border-pink-200">Managed API</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-emerald-200 flex justify-between items-center">
+                                <div>
+                                    <div class="font-bold text-slate-900">Cloud Run</div>
+                                    <div class="text-slate-500 text-[11px]">Private mcp-server</div>
+                                </div>
+                                <span class="bg-emerald-50 text-emerald-700 text-[10px] px-2 py-1 rounded border border-emerald-200">Private Container</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: SOURCE CODE EXPLORER -->
+        <div id="content-code" class="space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- File Selection list -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center justify-between">
+                        <span>Architecture Code Files</span>
+                        <i class="fa-solid fa-folder-tree text-slate-400"></i>
+                    </h3>
+                    <div class="font-mono text-xs space-y-1.5">
+                        <div onclick="showCode('test_client')" id="code-btn-test_client" class="cursor-pointer flex items-center space-x-2 text-purple-700 bg-purple-50 p-2 rounded transition font-bold border border-purple-200">
+                            <i class="fa-regular fa-file-code"></i>
+                            <span>test_client.py</span>
+                        </div>
+                        <div onclick="showCode('agent')" id="code-btn-agent" class="cursor-pointer flex items-center space-x-2 text-slate-700 hover:bg-slate-100 p-2 rounded transition">
+                            <i class="fa-regular fa-file-code text-indigo-600"></i>
+                            <span>agent.py</span>
+                        </div>
+                        <div onclick="showCode('mcp_server')" id="code-btn-mcp_server" class="cursor-pointer flex items-center space-x-2 text-slate-700 hover:bg-slate-100 p-2 rounded transition">
+                            <i class="fa-regular fa-file-code text-emerald-600"></i>
+                            <span>mcp-server/server.py</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code View Box -->
+                <div class="lg:col-span-2 bg-slate-900 rounded-2xl p-5 shadow-md border border-slate-800 text-slate-100 flex flex-col">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                        <span class="text-xs font-mono text-indigo-400 font-bold" id="code-file-title">test_client.py</span>
+                        <span class="text-[11px] text-slate-400 font-mono">Python 3.10+ / A2A Protocol</span>
+                    </div>
+                    <pre class="bg-slate-950 p-4 rounded-xl text-slate-300 font-mono text-xs overflow-x-auto custom-scrollbar-dark border border-slate-800 leading-relaxed" id="code-file-content">
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+        <p>Refined Architecture Diagram Visualizer for <a href="https://github.com/jackwotherspoon/currency-agent" target="_blank" rel="noopener noreferrer" class="text-indigo-600 font-semibold hover:underline">jackwotherspoon/currency-agent</a></p>
+    </footer>
+
+    <script>
+        // Global Application State
+        let currentTab = 'hierarchy';
+        let currentPass = 'request'; // 'request' or 'response'
+        let currentStep = 1;
+        let isPlaying = true;
+        let playSpeed = 1.0;
+        let routeStyle = 'orthogonal'; // 'orthogonal' or 'straight'
+        let arrowType = 'stealth'; // 'stealth', 'classic', 'dot', 'laser'
+        let packetEffect = 'orb'; // 'orb', 'pill', 'trail'
+        let animationInterval = null;
+
+        // Sequence Step Data Matching Exact Architecture Image Topology
+        const sequenceData = {
+            request: {
+                1: {
+                    stepNum: 1,
+                    title: 'Step 1: Client Query Dispatch over A2A JSON-RPC',
+                    sub: 'A2A Client (test_client.py) &rarr; Local A2A Agent (agent.py - :10000)',
+                    fromNode: 1,
+                    toNode: 2,
+                    tag: '250 USD → EUR',
+                    labelIndex: 1,
+                    desc: 'The client script initiates a query "Convert 250 USD to EUR" over local A2A JSON-RPC to the Local A2A Agent on port 10000.',
+                    transport: 'A2A JSON-RPC (:10000)',
+                    srcName: 'A2A Client (test_client.py)',
+                    dstName: 'Local A2A Agent (agent.py)',
+                    payload: `POST /a2a HTTP/1.1\nHost: localhost:10000\nContent-Type: application/json\n\n{\n  "jsonrpc": "2.0",\n  "method": "execute_task",\n  "params": {\n    "prompt": "Convert 250 USD to EUR"\n  },\n  "id": 1\n}`
+                },
+                2: {
+                    stepNum: 2,
+                    title: 'Step 2: Vertex AI Gemini Model Reasoning',
+                    sub: 'Local A2A Agent &rarr; Vertex AI API (Gemini 2.5 Flash)',
+                    fromNode: 2,
+                    toNode: 4,
+                    tag: 'gcloud Token',
+                    labelIndex: 2,
+                    desc: 'Local A2A Agent authenticates using gcloud Credentials and prompts Vertex AI API (Gemini 2.5 Flash) to parse intent and determine function calls.',
+                    transport: 'HTTPS REST / gRPC',
+                    srcName: 'Local A2A Agent',
+                    dstName: 'Vertex AI API (Gemini 2.5 Flash)',
+                    payload: `{\n  "model": "projects/gcp-agent-env/locations/us-central1/publishers/google/models/gemini-2.5-flash",\n  "contents": [{ "role": "user", "parts": [{ "text": "Convert 250 USD to EUR" }] }],\n  "tools": [{ "function_declarations": [{ "name": "get_exchange_rate" }] }]\n}`
+                },
+                3: {
+                    stepNum: 3,
+                    title: 'Step 3: Tool Call Dispatch via Local Auth Proxy',
+                    sub: 'Local A2A Agent &rarr; gcloud Auth Proxy (Cloud Run Proxy - :8080)',
+                    fromNode: 2,
+                    toNode: 3,
+                    tag: 'HTTP / localhost',
+                    labelIndex: 3,
+                    desc: 'After Gemini requests the exchange rate tool, the Local A2A Agent sends the tool invocation to the gcloud Auth Proxy running on localhost port 8080.',
+                    transport: 'HTTP / localhost (:8080)',
+                    srcName: 'Local A2A Agent',
+                    dstName: 'gcloud Auth Proxy (:8080)',
+                    payload: `POST /mcp/call HTTP/1.1\nHost: localhost:8080\nContent-Type: application/json\n\n{\n  "name": "get_exchange_rate",\n  "arguments": { "from": "USD", "to": "EUR", "amount": 250.0 }\n}`
+                },
+                4: {
+                    stepNum: 4,
+                    title: 'Step 4: Authenticated Request to Cloud Run Private MCP',
+                    sub: 'gcloud Auth Proxy &rarr; Cloud Run (Private mcp-server)',
+                    fromNode: 3,
+                    toNode: 5,
+                    tag: 'Bearer IAM Token',
+                    labelIndex: 4,
+                    desc: 'gcloud Auth Proxy injects GCP IAM authentication headers and securely proxies the request over HTTPS to Private Cloud Run mcp-server.',
+                    transport: 'Authenticated HTTPS',
+                    srcName: 'gcloud Auth Proxy',
+                    dstName: 'Cloud Run (Private mcp-server)',
+                    payload: `POST /sse HTTP/1.1\nHost: private-mcp-server-uc.a.run.app\nAuthorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6...\nContent-Type: application/json\n\n{\n  "method": "tools/call",\n  "params": { "name": "get_exchange_rate", "args": { "from": "USD", "to": "EUR", "amount": 250 } }\n}`
+                }
+            },
+            response: {
+                4: {
+                    stepNum: 4,
+                    title: 'Response Step 4: Private Cloud Run Exchange Rate Result',
+                    sub: 'Cloud Run (Private mcp-server) &rarr; gcloud Auth Proxy',
+                    fromNode: 5,
+                    toNode: 3,
+                    tag: '228.50 EUR',
+                    labelIndex: 4,
+                    desc: 'Private mcp-server fetches latest ECB exchange data and sends result back through the authenticated proxy.',
+                    transport: 'HTTPS 200 OK',
+                    srcName: 'Cloud Run (Private mcp-server)',
+                    dstName: 'gcloud Auth Proxy',
+                    payload: `HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n  "result": {\n    "from": "USD",\n    "to": "EUR",\n    "amount": 250.0,\n    "converted": 228.50,\n    "rate": 0.914\n  }\n}`
+                },
+                3: {
+                    stepNum: 3,
+                    title: 'Response Step 3: Tool Response Returned to Local Agent',
+                    sub: 'gcloud Auth Proxy &rarr; Local A2A Agent',
+                    fromNode: 3,
+                    toNode: 2,
+                    tag: 'Local Proxy Return',
+                    labelIndex: 3,
+                    desc: 'gcloud Auth Proxy routes payload back to the local agent process.',
+                    transport: 'HTTP 200 OK',
+                    srcName: 'gcloud Auth Proxy',
+                    dstName: 'Local A2A Agent',
+                    payload: `{\n  "status": "success",\n  "data": { "converted_amount": 228.50, "currency": "EUR" }\n}`
+                },
+                2: {
+                    stepNum: 2,
+                    title: 'Response Step 2: Synthesis with Gemini Model',
+                    sub: 'Vertex AI API &rarr; Local A2A Agent',
+                    fromNode: 4,
+                    toNode: 2,
+                    tag: 'Natural Language Answer',
+                    labelIndex: 2,
+                    desc: 'Agent submits tool result to Gemini 2.5 Flash, which returns formatted final natural language response.',
+                    transport: 'HTTPS REST',
+                    srcName: 'Vertex AI API',
+                    dstName: 'Local A2A Agent',
+                    payload: `{\n  "candidates": [{\n    "content": { "parts": [{ "text": "250 USD is equivalent to 228.50 EUR based on latest European Central Bank reference rates." }] }\n  }]\n}`
+                },
+                1: {
+                    stepNum: 1,
+                    title: 'Response Step 1: Final Client Response Delivery',
+                    sub: 'Local A2A Agent &rarr; A2A Client (test_client.py)',
+                    fromNode: 2,
+                    toNode: 1,
+                    tag: 'Completed Response',
+                    labelIndex: 1,
+                    desc: 'Local A2A Agent returns completed task answer to test_client.py CLI.',
+                    transport: 'A2A JSON-RPC Return',
+                    srcName: 'Local A2A Agent',
+                    dstName: 'A2A Client (test_client.py)',
+                    payload: `{\n  "jsonrpc": "2.0",\n  "id": 1,\n  "result": {\n    "response": "250 USD is equivalent to 228.50 EUR."\n  }\n}`
+                }
+            }
+        };
+
+        const codeRepository = {
+            'test_client': `# test_client.py
+import requests
+
+def main():
+    agent_url = "http://localhost:10000/a2a"
+    payload = {
+        "jsonrpc": "2.0",
+        "method": "execute_task",
+        "params": {"prompt": "Convert 250 USD to EUR"},
+        "id": 1
+    }
+    
+    print("Dispatching query to Local A2A Agent (:10000)...")
+    res = requests.post(agent_url, json=payload)
+    print("Response Received:", res.json()["result"]["response"])
+
+if __name__ == "__main__":
+    main()`,
+
+            'agent': `# agent.py
+from google.adk import Agent
+from google.adk.tools.mcp import MCPClient
+
+# Local gcloud Auth Proxy endpoint on port 8080
+mcp_proxy_url = "http://localhost:8080"
+mcp_client = MCPClient(server_url=mcp_proxy_url)
+
+# Initialize Agent with Vertex AI Gemini 2.5 Flash
+agent = Agent(
+    name="GCPCurrencyAgent",
+    model="vertexai/gemini-2.5-flash",
+    instruction="Perform live FX conversions using Private Cloud Run MCP tool.",
+    tools=[mcp_client]
+)
+
+if __name__ == "__main__":
+    agent.serve(port=10000)`,
+
+            'mcp_server': `# mcp-server/server.py (Runs on Private Cloud Run)
+from mcp.server import FastMCP
+import httpx
+
+mcp = FastMCP("Private Cloud Run Currency Service")
+
+@mcp.tool()
+async def get_exchange_rate(from_curr: str, to_curr: str, amount: float = 1.0) -> dict:
+    url = f"https://api.frankfurter.app/latest?amount={amount}&from={from_curr}&to={to_curr}"
+    async with httpx.AsyncClient() as client:
+        res = await client.get(url)
+        data = res.json()
+        return {
+            "from": from_curr,
+            "to": to_curr,
+            "amount": amount,
+            "converted": data["rates"].get(to_curr)
+        }
+
+if __name__ == "__main__":
+    mcp.run(host="0.0.0.0", port=8080)`
+        };
+
+        function calculateHVPath(fromNodeId, toNodeId) {
+            const container = document.getElementById('hierarchy-container');
+            if (!container) return { pathD: '', midPoint: { x: 0, y: 0 } };
+
+            const cRect = container.getBoundingClientRect();
+            const elFrom = document.getElementById(`node-${fromNodeId}`);
+            const elTo = document.getElementById(`node-${toNodeId}`);
+
+            if (!elFrom || !elTo) return { pathD: '', midPoint: { x: 0, y: 0 } };
+
+            const rFrom = elFrom.getBoundingClientRect();
+            const rTo = elTo.getBoundingClientRect();
+
+            const fTop = rFrom.top - cRect.top;
+            const fBottom = rFrom.bottom - cRect.top;
+            const fLeft = rFrom.left - cRect.left;
+            const fRight = rFrom.right - cRect.left;
+            const fCenterX = fLeft + rFrom.width / 2;
+            const fCenterY = fTop + rFrom.height / 2;
+
+            const tTop = rTo.top - cRect.top;
+            const tBottom = rTo.bottom - cRect.top;
+            const tLeft = rTo.left - cRect.left;
+            const tRight = rTo.right - cRect.left;
+            const tCenterX = tLeft + rTo.width / 2;
+            const tCenterY = tTop + rTo.height / 2;
+
+            let startX, startY, endX, endY, pathD, midX, midY;
+
+            // Connector rules matching the exact image topology layout
+            if (fromNodeId === 1 && toNodeId === 2) {
+                // Client -> Agent (Vertical Down)
+                startX = fCenterX; startY = fBottom;
+                endX = tCenterX; endY = tTop;
+                midX = startX; midY = (startY + endY) / 2;
+                pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+            } else if (fromNodeId === 2 && toNodeId === 4) {
+                // Agent -> Vertex AI (Curved Down Left)
+                startX = fLeft + 40; startY = fBottom;
+                endX = tCenterX; endY = tTop;
+                midX = (startX + endX) / 2 - 20;
+                midY = (startY + endY) / 2;
+                if (routeStyle === 'straight') {
+                    pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+                } else {
+                    pathD = `M ${startX} ${startY} Q ${startX} ${midY + 20}, ${endX} ${endY}`;
+                }
+            } else if (fromNodeId === 2 && toNodeId === 3) {
+                // Agent -> Auth Proxy (Down Right Curve)
+                startX = fRight - 40; startY = fBottom;
+                endX = tCenterX; endY = tTop;
+                midX = (startX + endX) / 2 + 10;
+                midY = (startY + endY) / 2;
+                if (routeStyle === 'straight') {
+                    pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+                } else {
+                    pathD = `M ${startX} ${startY} Q ${endX} ${midY - 10}, ${endX} ${endY}`;
+                }
+            } else if (fromNodeId === 3 && toNodeId === 5) {
+                // Auth Proxy -> Cloud Run (Vertical Down into GCP)
+                startX = tCenterX; startY = fBottom;
+                endX = tCenterX; endY = tTop;
+                midX = startX; midY = (startY + endY) / 2;
+                pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+            } else {
+                // Reverse direction paths
+                return calculateHVPath(toNodeId, fromNodeId);
+            }
+
+            return { pathD, midPoint: { x: midX, y: midY } };
+        }
+
+        function updateSvgPaths() {
+            const container = document.getElementById('hierarchy-container');
+            if (!container) return;
+
+            const pairs = [
+                { id: 'path-c1-c2', from: 1, to: 2, lblId: 'lbl-1', rectId: 'rect-lbl-1' },
+                { id: 'path-c2-c4', from: 2, to: 4, lblId: 'lbl-2', rectId: 'rect-lbl-2' },
+                { id: 'path-c2-c3', from: 2, to: 3, lblId: 'lbl-3', rectId: 'rect-lbl-3' },
+                { id: 'path-c3-c5', from: 3, to: 5, lblId: 'lbl-4', rectId: 'rect-lbl-4' }
+            ];
+
+            const staticMarker = `url(#arrow-${arrowType === 'stealth' ? 'stealth-static' : 'classic-req'})`;
+
+            pairs.forEach(pair => {
+                const pathEl = document.getElementById(pair.id);
+                if (pathEl) {
+                    const res = calculateHVPath(pair.from, pair.to);
+                    pathEl.setAttribute('d', res.pathD);
+                    pathEl.setAttribute('marker-end', staticMarker);
+
+                    // Position text labels along path midpoints
+                    const lblText = document.getElementById(pair.lblId);
+                    const lblRect = document.getElementById(pair.rectId);
+                    if (lblText && lblRect) {
+                        lblText.setAttribute('x', res.midPoint.x);
+                        lblText.setAttribute('y', res.midPoint.y);
+
+                        // Position background pill for legibility
+                        const bbox = lblText.getBBox();
+                        lblRect.setAttribute('x', bbox.x - 6);
+                        lblRect.setAttribute('y', bbox.y - 3);
+                        lblRect.setAttribute('width', bbox.width + 12);
+                        lblRect.setAttribute('height', bbox.height + 6);
+                    }
+                }
+            });
+
+            // Update Active Step Packet
+            const step = sequenceData[currentPass][currentStep];
+            const activeLine = document.getElementById('active-flow-line');
+
+            ['orb', 'pill', 'trail'].forEach(e => {
+                const p = document.getElementById(`packet-${e}`);
+                if (p) p.setAttribute('opacity', '0');
+            });
+
+            if (step && activeLine) {
+                const res = calculateHVPath(step.fromNode, step.toNode);
+                activeLine.setAttribute('d', res.pathD);
+                activeLine.setAttribute('opacity', '1');
+
+                const activeMarker = `url(#arrow-${arrowType}-${currentPass === 'request' ? 'req' : 'res'})`;
+
+                if (currentPass === 'request') {
+                    activeLine.setAttribute('class', 'svg-path-req');
+                    activeLine.setAttribute('stroke', 'url(#grad-req-path)');
+                } else {
+                    activeLine.setAttribute('class', 'svg-path-res');
+                    activeLine.setAttribute('stroke', 'url(#grad-res-path)');
+                }
+                activeLine.setAttribute('marker-end', activeMarker);
+
+                const activePacket = document.getElementById(`packet-${packetEffect}`);
+                if (activePacket) {
+                    activePacket.setAttribute('opacity', '1');
+                    activePacket.setAttribute('transform', `translate(${res.midPoint.x}, ${res.midPoint.y})`);
+
+                    if (packetEffect === 'pill') {
+                        const pillText = document.getElementById('packet-pill-text');
+                        if (pillText) pillText.textContent = step.tag || 'DATA';
+                    }
+                }
+            }
+        }
+
+        function renderStep(stepIndex) {
+            currentStep = stepIndex;
+            const step = sequenceData[currentPass][stepIndex];
+            if (!step) return;
+
+            // Pipeline Buttons
+            const pipelineContainer = document.getElementById('pipeline-steps');
+            if (pipelineContainer) {
+                let html = '';
+                for (let i = 1; i <= 4; i++) {
+                    const isCurrent = i === stepIndex;
+                    let bgClass = "bg-white text-slate-600 border-slate-300";
+                    if (isCurrent) bgClass = currentPass === 'request' ? "bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs" : "bg-emerald-600 text-white border-emerald-600 font-bold shadow-xs";
+
+                    html += `
+                        <button onclick="jumpToStep(${i})" class="px-3 py-1 rounded-md border text-[11px] transition flex items-center space-x-1 ${bgClass}">
+                            <span>Step ${i}</span>
+                        </button>
+                    `;
+                }
+                pipelineContainer.innerHTML = html;
+            }
+
+            // Node Highlights
+            for (let i = 1; i <= 5; i++) {
+                const node = document.getElementById(`node-${i}`);
+                if (node) {
+                    if (i === step.fromNode || i === step.toNode) {
+                        node.classList.add('active-diagram-block');
+                    } else {
+                        node.classList.remove('active-diagram-block');
+                    }
+                }
+            }
+
+            // Update Inspector Details
+            document.getElementById('inspector-step-title').innerText = step.title;
+            document.getElementById('inspector-sub').innerHTML = step.sub;
+            document.getElementById('inspector-desc').innerText = step.desc;
+            document.getElementById('inspector-direction').innerText = currentPass === 'request' ? 'Request Pass' : 'Response Pass';
+            document.getElementById('inspector-direction').className = currentPass === 'request' ? 'text-indigo-400 font-bold mt-0.5' : 'text-emerald-400 font-bold mt-0.5';
+            document.getElementById('inspector-transport').innerText = step.transport;
+            document.getElementById('inspector-src').innerText = step.srcName;
+            document.getElementById('inspector-dst').innerText = step.dstName;
+            document.getElementById('inspector-payload').innerText = step.payload;
+
+            updateSvgPaths();
+        }
+
+        function selectNode(nodeId) {
+            const steps = sequenceData[currentPass];
+            for (let s in steps) {
+                if (steps[s].fromNode === nodeId || steps[s].toNode === nodeId) {
+                    renderStep(parseInt(s));
+                    break;
+                }
+            }
+        }
+
+        function jumpToStep(stepNum) {
+            if (isPlaying) togglePlayPause();
+            renderStep(stepNum);
+        }
+
+        function startTimer() {
+            stopTimer();
+            animationInterval = setInterval(() => {
+                if (currentPass === 'request') {
+                    if (currentStep < 4) currentStep++;
+                    else { setDirection('response'); currentStep = 4; }
+                } else {
+                    if (currentStep > 1) currentStep--;
+                    else { setDirection('request'); currentStep = 1; }
+                }
+                renderStep(currentStep);
+            }, 2600 / playSpeed);
+        }
+
+        function stopTimer() {
+            if (animationInterval) clearInterval(animationInterval);
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const btnText = document.getElementById('play-text');
+            const btnIcon = document.getElementById('play-icon');
+
+            if (isPlaying) {
+                btnText.innerText = "Pause";
+                btnIcon.className = "fa-solid fa-pause text-xs";
+                startTimer();
+            } else {
+                btnText.innerText = "Play";
+                btnIcon.className = "fa-solid fa-play text-xs";
+                stopTimer();
+            }
+        }
+
+        function setDirection(pass) {
+            currentPass = pass;
+            const btnReq = document.getElementById('btn-pass-req');
+            const btnRes = document.getElementById('btn-pass-res');
+
+            if (pass === 'request') {
+                btnReq.className = "px-3 py-1.5 rounded-md font-bold text-white bg-indigo-600 transition shadow-xs";
+                btnRes.className = "px-3 py-1.5 rounded-md font-bold text-slate-700 hover:bg-white transition";
+                currentStep = 1;
+            } else {
+                btnRes.className = "px-3 py-1.5 rounded-md font-bold text-white bg-emerald-600 transition shadow-xs";
+                btnReq.className = "px-3 py-1.5 rounded-md font-bold text-slate-700 hover:bg-white transition";
+                currentStep = 4;
+            }
+            renderStep(currentStep);
+        }
+
+        function setArrowType(type) {
+            arrowType = type;
+            updateSvgPaths();
+        }
+
+        function setPacketEffect(effect) {
+            packetEffect = effect;
+            updateSvgPaths();
+        }
+
+        function setRouteStyle(style) {
+            routeStyle = style;
+            updateSvgPaths();
+        }
+
+        function nextStep() {
+            if (isPlaying) togglePlayPause();
+            if (currentPass === 'request') {
+                if (currentStep < 4) currentStep++;
+                else { setDirection('response'); currentStep = 4; }
+            } else {
+                if (currentStep > 1) currentStep--;
+                else { setDirection('request'); currentStep = 1; }
+            }
+            renderStep(currentStep);
+        }
+
+        function prevStep() {
+            if (isPlaying) togglePlayPause();
+            if (currentPass === 'request') {
+                if (currentStep > 1) currentStep--;
+                else { setDirection('response'); currentStep = 1; }
+            } else {
+                if (currentStep < 4) currentStep++;
+                else { setDirection('request'); currentStep = 4; }
+            }
+            renderStep(currentStep);
+        }
+
+        function resetFlow() {
+            if (isPlaying) togglePlayPause();
+            setDirection('request');
+            renderStep(1);
+        }
+
+        function setSpeed(val) {
+            playSpeed = parseFloat(val);
+            if (isPlaying) startTimer();
+        }
+
+        function copyPayload() {
+            const text = document.getElementById('inspector-payload').innerText;
+            const area = document.createElement("textarea");
+            area.value = text;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand('copy');
+            document.body.removeChild(area);
+
+            const label = document.getElementById('copy-text');
+            label.innerText = "Copied!";
+            setTimeout(() => { label.innerText = "Copy Wire Data"; }, 1500);
+        }
+
+        async function runLiveSimulation() {
+            const amount = parseFloat(document.getElementById('sim-amount').value) || 250;
+            const from = document.getElementById('sim-from').value;
+            const to = document.getElementById('sim-to').value;
+            const btn = document.getElementById('btn-run-sim');
+            const log = document.getElementById('sim-log');
+            const status = document.getElementById('sim-status');
+            const result = document.getElementById('sim-result');
+
+            btn.disabled = true;
+            btn.className = "w-full bg-slate-400 text-white py-2.5 rounded-lg text-xs font-bold cursor-not-allowed flex items-center justify-center space-x-2";
+            log.innerHTML = '';
+            status.innerText = "Tracing GCP Pipeline...";
+            result.innerText = "Calculating...";
+
+            const appendLog = (msg, color = "text-slate-300") => {
+                const d = document.createElement('div');
+                d.className = color;
+                d.innerText = msg;
+                log.appendChild(d);
+                log.scrollTop = log.scrollHeight;
+            };
+
+            appendLog(`[0ms] 🚀 test_client.py: Invoking A2A Client "Convert ${amount} ${from} to ${to}"`, "text-purple-300 font-bold");
+
+            await new Promise(r => setTimeout(r, 450));
+            appendLog(`[180ms] ⚡ Local A2A Agent (:10000): Received A2A JSON-RPC request`, "text-purple-400");
+
+            await new Promise(r => setTimeout(r, 450));
+            appendLog(`[380ms] 🧠 Vertex AI API: Gemini 2.5 Flash evaluates tool requirements & returns get_exchange_rate spec`, "text-pink-400");
+
+            await new Promise(r => setTimeout(r, 450));
+            appendLog(`[580ms] 🔌 gcloud Auth Proxy (:8080): Forwarding HTTP request with GCP IAM Identity Token`, "text-blue-300");
+
+            await new Promise(r => setTimeout(r, 450));
+            appendLog(`[780ms] ☁️ Private Cloud Run mcp-server: Executing exchange tool over Authenticated HTTPS`, "text-emerald-400 font-semibold");
+
+            let convertedVal = 0;
+            try {
+                if (from === to) {
+                    convertedVal = amount;
+                } else {
+                    const res = await fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        convertedVal = data.rates[to];
+                    } else throw new Error("API Network issue");
+                }
+            } catch (e) {
+                const fallbackRates = { USD: 1.0, EUR: 0.914, GBP: 0.78, CAD: 1.35, JPY: 152.0 };
+                convertedVal = ((amount / (fallbackRates[from] || 1)) * (fallbackRates[to] || 1)).toFixed(2);
+            }
+
+            await new Promise(r => setTimeout(r, 450));
+            appendLog(`[1050ms] ✅ Cloud Run Return: ${amount} ${from} = ${convertedVal} ${to}`, "text-emerald-400 font-bold");
+
+            await new Promise(r => setTimeout(r, 400));
+            appendLog(`[1250ms] 🏁 Gemini 2.5 Flash synthesizes natural response & returns payload to test_client.py`, "text-purple-300 font-bold");
+
+            status.innerText = "Completed (1.25s)";
+            result.innerText = `${amount} ${from} = ${convertedVal} ${to}`;
+
+            btn.disabled = false;
+            btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-2 shadow-xs";
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            const tabs = ['hierarchy', 'sandbox', 'matrix', 'topology', 'code'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const content = document.getElementById(`content-${t}`);
+                if (t === tabId) {
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-white bg-indigo-600 shadow-xs";
+                    if (content) content.classList.remove('hidden');
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100";
+                    if (content) content.classList.add('hidden');
+                }
+            });
+
+            if (tabId === 'hierarchy') {
+                setTimeout(updateSvgPaths, 100);
+            }
+            if (tabId === 'code') {
+                showCode('test_client');
+            }
+        }
+
+        function showCode(key) {
+            const titles = {
+                'test_client': 'test_client.py',
+                'agent': 'agent.py',
+                'mcp_server': 'mcp-server/server.py'
+            };
+
+            ['test_client', 'agent', 'mcp_server'].forEach(k => {
+                const btn = document.getElementById(`code-btn-${k}`);
+                if (btn) {
+                    if (k === key) btn.className = "cursor-pointer flex items-center space-x-2 text-purple-700 bg-purple-50 p-2 rounded transition font-bold border border-purple-200";
+                    else btn.className = "cursor-pointer flex items-center space-x-2 text-slate-700 hover:bg-slate-100 p-2 rounded transition";
+                }
+            });
+
+            document.getElementById('code-file-title').innerText = titles[key] || key;
+            document.getElementById('code-file-content').textContent = codeRepository[key] || '# Empty code';
+        }
+
+        window.addEventListener('resize', updateSvgPaths);
+        window.onload = function() {
+            renderStep(1);
+            startTimer();
+        };
+    </script>
+</body>
+</html>

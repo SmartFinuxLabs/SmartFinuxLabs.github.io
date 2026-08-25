@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google ADK × Circle Agent Stack Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            900: '#0c4a6e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes dashStream {
+            from {
+                stroke-dashoffset: 32;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes dashStreamReverse {
+            from {
+                stroke-dashoffset: 0;
+            }
+
+            to {
+                stroke-dashoffset: 32;
+            }
+        }
+
+        @keyframes pulseSpendGate {
+
+            0%,
+            100% {
+                stroke: #dc2626;
+                stroke-width: 1.5;
+            }
+
+            50% {
+                stroke: #ef4444;
+                stroke-width: 3.5;
+            }
+        }
+
+        @keyframes pulseNode {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .wire-active {
+            stroke-dasharray: 6 6;
+            animation: dashStream 1.2s linear infinite;
+        }
+
+        .wire-fast {
+            stroke-dasharray: 4 4;
+            animation: dashStream 0.75s linear infinite;
+        }
+
+        .wire-reverse {
+            stroke-dasharray: 6 6;
+            animation: dashStreamReverse 1.2s linear infinite;
+        }
+
+        .spend-active {
+            animation: pulseSpendGate 1.4s ease-in-out infinite;
+        }
+
+        .node-interactive {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .node-interactive:hover {
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 text-slate-800 antialiased flex flex-col h-screen overflow-hidden">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shrink-0 shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div
+                class="w-9 h-9 rounded-lg bg-sky-600 flex items-center justify-center text-white font-black text-sm shadow">
+                ADK</div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-sm font-bold text-slate-900 tracking-tight">Google ADK × Circle Agent Stack
+                        Architecture</h1>
+                    <span class="px-2 py-0.5 text-[10px] font-bold bg-sky-100 text-sky-700 rounded-full">v0.3.0 Starter
+                        Kit</span>
+                </div>
+                <p class="text-xs text-slate-500">Autonomous Payment Lifecycle, x402 Micropayments &amp; Boundary
+                    Execution</p>
+            </div>
+        </div>
+
+        <!-- View Switcher Tabs & Simulation Controls -->
+        <div class="flex items-center space-x-3">
+            <!-- Diagram View Switcher -->
+            <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs font-semibold">
+                <button id="tabBtnComp" onclick="switchView('composition')"
+                    class="px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm transition">Component Composition
+                    View</button>
+                <button id="tabBtnLayers" onclick="switchView('layers')"
+                    class="px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition">7-Layer Boundary
+                    View</button>
+            </div>
+
+            <!-- Lifecycle Simulation Triggers -->
+            <div class="h-6 w-px bg-slate-200"></div>
+            <div class="flex items-center space-x-1.5">
+                <button onclick="triggerPhase(1)"
+                    class="px-2.5 py-1 text-xs font-medium rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition">1.
+                    Auth</button>
+                <button onclick="triggerPhase(2)"
+                    class="px-2.5 py-1 text-xs font-medium rounded bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition">2.
+                    Ingest Skill</button>
+                <button onclick="triggerPhase(3)"
+                    class="px-2.5 py-1 text-xs font-medium rounded bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">3.
+                    Discovery</button>
+                <button onclick="triggerPhase(4)"
+                    class="px-2.5 py-1 text-xs font-medium rounded bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition">4.
+                    Spend Gate</button>
+                <button onclick="resetSimulation()"
+                    class="px-2 py-1 text-xs font-medium rounded bg-slate-200 text-slate-700 hover:bg-slate-300 transition">Reset</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Split Layout -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Left / Center Canvas -->
+        <main class="flex-1 bg-slate-100/70 p-6 md:p-8 pt-8 md:pt-10 overflow-auto relative flex items-start justify-center">
+            <div class="w-full max-w-[1160px] bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 relative my-auto">
+
+                <!-- ========================================================================= -->
+                <!-- VIEW 1: INTERACTIVE COMPONENT COMPOSITION DIAGRAM (SKETCH IMPLEMENTATION) -->
+                <!-- ========================================================================= -->
+                <svg id="view-composition" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 830"
+                    class="w-full h-auto select-none block">
+                    <defs>
+                        <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+                        </marker>
+                        <marker id="arr-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#7c3aed" />
+                        </marker>
+                        <marker id="arr-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#0891b2" />
+                        </marker>
+                        <marker id="arr-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+                        </marker>
+                        <marker id="arr-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6"
+                            orient="auto-start-reverse">
+                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+                        </marker>
+                    </defs>
+
+                    <!-- Top UI Box -->
+                    <g class="node-interactive" onclick="inspectComponent('ui')">
+                        <rect x="360" y="30" width="680" height="75" rx="8" fill="#eff6ff" stroke="#3b82f6"
+                            stroke-width="1.5" />
+                        <text x="700" y="62" text-anchor="middle" fill="#1e3a8a" font-size="15"
+                            font-weight="800">Terminal UI / Ink TTY Frame (@agent-cli)</text>
+                        <text x="700" y="82" text-anchor="middle" fill="#64748b" font-size="10.5">Interactive Prompts
+                            (ask, approve) • Streamed Agent Responses • Pinned Header Balances</text>
+                    </g>
+
+                    <!-- User Interactive Inputs -->
+                    <path d="M 140,52 L 360,52" stroke="#2563eb" stroke-width="2" class="wire-active"
+                        marker-end="url(#arr-blue)" />
+                    <text x="230" y="45" fill="#1d4ed8" font-size="11.5" font-weight="bold">ask (prompt)</text>
+
+                    <path d="M 140,84 L 360,84" stroke="#dc2626" stroke-width="2" class="wire-active"
+                        marker-end="url(#arr-red)" />
+                    <text x="210" y="78" fill="#b91c1c" font-size="11.5" font-weight="bold">approve [y/N]</text>
+
+                    <!-- SESSION BOUNDARY DASHED ENCLOSURE -->
+                    <rect x="460" y="160" width="620" height="230" rx="10" fill="#f8fafc" stroke="#38bdf8"
+                        stroke-width="1.8" stroke-dasharray="6 4" />
+                    <text x="1010" y="185" fill="#0284c7" font-size="12" font-weight="800"
+                        letter-spacing="1">SESSION</text>
+
+                    <!-- LlmAgent Overlap Header Box -->
+                    <g class="node-interactive" onclick="inspectComponent('llmagent')">
+                        <rect x="520" y="140" width="200" height="42" rx="6" fill="#faf5ff" stroke="#a855f7"
+                            stroke-width="1.5" />
+                        <text x="620" y="166" text-anchor="middle" fill="#6b21a8" font-size="12.5"
+                            font-weight="bold">LlmAgent (Google ADK)</text>
+                    </g>
+
+                    <!-- InMemoryRunner Core Container -->
+                    <g class="node-interactive" onclick="inspectComponent('runner')">
+                        <rect x="480" y="188" width="460" height="185" rx="8" fill="#ffffff" stroke="#0284c7"
+                            stroke-width="1.5" />
+                        <text x="500" y="215" fill="#0f172a" font-size="13" font-weight="bold">InMemoryRunner</text>
+                        <text x="500" y="235" fill="#64748b" font-size="10">• Orchestrates Event Loop &amp; Turns</text>
+                        <text x="500" y="250" fill="#64748b" font-size="10">• Hooks before/after Tool Callbacks</text>
+                    </g>
+
+                    <!-- SessionService Oval Checkpointer -->
+                    <g class="node-interactive" onclick="inspectComponent('sessionservice')">
+                        <ellipse cx="840" cy="245" rx="80" ry="36" fill="#f0f9ff" stroke="#0ea5e9" stroke-width="1.5" />
+                        <text x="840" y="242" text-anchor="middle" fill="#0369a1" font-size="11.5"
+                            font-weight="bold">SessionService</text>
+                        <text x="840" y="258" text-anchor="middle" fill="#64748b" font-size="9.5">Turn
+                            Checkpointer</text>
+                    </g>
+
+                    <!-- Spend Gate Trap Node -->
+                    <g id="compSpendGate" class="node-interactive" onclick="inspectComponent('spendgate')">
+                        <rect x="730" y="305" width="200" height="50" rx="6" fill="#fef2f2" stroke="#dc2626"
+                            stroke-width="1.5" />
+                        <text x="830" y="325" text-anchor="middle" fill="#991b1b" font-size="11"
+                            font-weight="bold">beforeToolCallback (Gate)</text>
+                        <text x="830" y="342" text-anchor="middle" fill="#dc2626" font-size="9.5">Catches payService
+                            &amp; deposit</text>
+                    </g>
+
+                    <!-- TOOL CARDS STACK -->
+                    <g class="node-interactive" onclick="inspectComponent('tools')">
+                        <rect x="290" y="285" width="160" height="55" rx="6" fill="#e2e8f0" stroke="#94a3b8" />
+                        <rect x="280" y="295" width="160" height="55" rx="6" fill="#cbd5e1" stroke="#64748b" />
+                        <rect x="270" y="305" width="160" height="55" rx="6" fill="#ecfeff" stroke="#06b6d4"
+                            stroke-width="1.5" />
+                        <text x="350" y="337" text-anchor="middle" fill="#0e7490" font-size="13"
+                            font-weight="bold">Tools Registry</text>
+                    </g>
+
+                    <!-- PayService Node -->
+                    <g class="node-interactive" onclick="inspectComponent('payservice')">
+                        <rect x="90" y="305" width="140" height="55" rx="6" fill="#fff1f2" stroke="#e11d48"
+                            stroke-width="1.5" />
+                        <text x="160" y="337" text-anchor="middle" fill="#9f1239" font-size="12"
+                            font-weight="bold">PayService (x402)</text>
+                    </g>
+
+                    <!-- Complete 15 Starter Kit Tools Box -->
+                    <g transform="translate(60, 395)">
+                        <rect x="0" y="0" width="220" height="415" rx="8" fill="#f8fafc" stroke="#cbd5e1"
+                            stroke-width="1.2" />
+                        <text x="15" y="24" fill="#0f172a" font-size="11" font-weight="800" letter-spacing="0.5">STARTER
+                            KIT TOOLS (15)</text>
+                        <line x1="15" y1="34" x2="205" y2="34" stroke="#e2e8f0" stroke-width="1" />
+
+                        <text x="15" y="54" class="font-mono text-[10px] text-slate-700">• loginTool</text>
+                        <text x="15" y="78" class="font-mono text-[10px] text-slate-700">• logoutTool</text>
+                        <text x="15" y="102" class="font-mono text-[10px] text-slate-700">• fetchSetupSkillTool</text>
+                        <text x="15" y="126" class="font-mono text-[10px] text-slate-700">• fetchSubSkillTool</text>
+                        <text x="15" y="150" class="font-mono text-[10px] text-slate-700">• listAgentWallets</text>
+                        <text x="15" y="174" class="font-mono text-[10px] text-slate-700">• createAgentWallet</text>
+                        <text x="15" y="198" class="font-mono text-[10px] text-slate-700">• getWalletBalance</text>
+                        <text x="15" y="222" class="font-mono text-[10px] text-slate-700">• getGatewayBalance</text>
+                        <text x="15" y="246" class="font-mono text-[10px] text-slate-700">• deployWalletTool</text>
+                        <text x="15" y="270" class="font-mono text-[10px] text-slate-700">• fundFiatTool</text>
+                        <text x="15" y="294" class="font-mono text-[10px] text-slate-700">• searchServices</text>
+                        <text x="15" y="318" class="font-mono text-[10px] text-slate-700">• inspectService</text>
+                        <text x="15" y="342" class="font-mono text-[10px] text-slate-700">• fetchServiceTool</text>
+                        <text x="15" y="366" class="font-mono text-[10px] text-rose-600 font-bold">• payService
+                            [Gate]</text>
+                        <text x="15" y="390" class="font-mono text-[10px] text-rose-600 font-bold">•
+                            gatewayDepositTool</text>
+                    </g>
+
+                    <!-- Gemini LLM Adapter Box -->
+                    <g class="node-interactive" onclick="inspectComponent('gemini')">
+                        <rect x="480" y="520" width="560" height="150" rx="8" fill="#f5f3ff" stroke="#8b5cf6"
+                            stroke-width="1.5" />
+                        <text x="760" y="580" text-anchor="middle" fill="#4c1d95" font-size="18"
+                            font-weight="900">Gemini LLM (@google/genai)</text>
+                        <text x="760" y="605" text-anchor="middle" fill="#6d28d9" font-size="11.5">gemini-2.5-flash •
+                            Structured Function Ingestion &amp; Reasoning</text>
+                    </g>
+
+                    <!-- WIRES & COMMUNICATION FLOWS -->
+                    <!-- UI <-> Runner Turn Loop -->
+                    <path d="M 660,105 L 660,188" stroke="#2563eb" stroke-width="2" class="wire-active"
+                        marker-end="url(#arr-blue)" />
+                    <text x="668" y="130" fill="#1d4ed8" font-size="10.5" font-weight="bold">turn dispatch</text>
+
+                    <!-- SpendGate -> UI Trap Loopback -->
+                    <path d="M 830,305 L 830,105" stroke="#dc2626" stroke-width="2" stroke-dasharray="4 4"
+                        class="wire-reverse" marker-end="url(#arr-red)" />
+                    <text x="838" y="130" fill="#b91c1c" font-size="10.5" font-weight="bold">Approval Trap</text>
+
+                    <!-- LlmAgent -> Tools Bindings -->
+                    <path d="M 520,161 L 350,161 L 350,285" stroke="#a855f7" stroke-width="2" fill="none"
+                        marker-end="url(#arr-purple)" />
+                    <text x="360" y="195" fill="#7c3aed" font-size="10.5" font-weight="bold">tool binding</text>
+
+                    <!-- Runner to Gemini: tools? -->
+                    <path d="M 580,373 L 580,520" stroke="#0284c7" stroke-width="2" class="wire-fast"
+                        marker-end="url(#arr-blue)" />
+                    <text x="590" y="445" fill="#0284c7" font-size="11" font-weight="bold">tools ?</text>
+
+                    <!-- Gemini to Runner: runAsync & response -->
+                    <path d="M 820,520 L 820,373" stroke="#8b5cf6" stroke-width="2" class="wire-active"
+                        marker-end="url(#arr-purple)" />
+                    <text x="830" y="435" fill="#6d28d9" font-size="11" font-weight="bold">runAsync()</text>
+
+                    <path d="M 940,520 L 940,373" stroke="#8b5cf6" stroke-width="2" class="wire-active"
+                        marker-end="url(#arr-purple)" />
+                    <text x="950" y="455" fill="#6d28d9" font-size="11" font-weight="bold">response</text>
+
+                    <!-- Gemini -> Tool Execute -->
+                    <path d="M 480,620 L 300,620 L 300,360" stroke="#0891b2" stroke-width="2" fill="none"
+                        class="wire-fast" marker-end="url(#arr-cyan)" />
+                    <text x="310" y="610" fill="#0891b2" font-size="11" font-weight="bold">execute</text>
+
+                    <!-- Tool Result -> Gemini -->
+                    <path d="M 330,360 L 330,580 L 480,580" stroke="#059669" stroke-width="2" fill="none"
+                        class="wire-active" marker-end="url(#arr-emerald)" />
+                    <text x="340" y="570" fill="#059669" font-size="11" font-weight="bold">result</text>
+
+                    <!-- PayService <-> Tools Registry -->
+                    <path d="M 230,332 L 270,332" stroke="#e11d48" stroke-width="2" marker-end="url(#arr-red)" />
+                </svg>
+
+                <!-- ========================================================================= -->
+                <!-- VIEW 2: 7-LAYER BOUNDARY ARCHITECTURE (FULL ECOSYSTEM PLATFORM VIEW)       -->
+                <!-- ========================================================================= -->
+                <svg id="view-layers" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 830"
+                    class="w-full h-auto select-none hidden">
+                    <!-- Layer 1 -->
+                    <g class="node-interactive" onclick="inspectComponent('l1_detail')">
+                        <rect x="20" y="15" width="1060" height="75" rx="8" fill="#eff6ff" stroke="#bfdbfe"
+                            stroke-width="1.5" />
+                        <text x="35" y="34" fill="#1d4ed8" font-size="10.5" font-weight="800">LAYER 1: USER &amp;
+                            PRESENTATION LAYER (TERMINAL TTY)</text>
+                        <rect x="40" y="42" width="480" height="38" rx="6" fill="#ffffff" stroke="#93c5fd" />
+                        <text x="55" y="65" fill="#0f172a" font-size="11" font-weight="bold">Chat UI / Ink TTY Frame
+                            (@agent-cli)</text>
+                        <rect x="540" y="42" width="520" height="38" rx="6" fill="#ffffff" stroke="#93c5fd" />
+                        <text x="555" y="65" fill="#0f172a" font-size="11" font-weight="bold">Main Entry Orchestrator
+                            (src/index.ts)</text>
+                    </g>
+
+                    <!-- Layer 2 -->
+                    <g class="node-interactive" onclick="inspectComponent('l2_detail')">
+                        <rect x="20" y="100" width="1060" height="95" rx="8" fill="#faf5ff" stroke="#e9d5ff"
+                            stroke-width="1.5" />
+                        <text x="35" y="120" fill="#6d28d9" font-size="10.5" font-weight="800">LAYER 2: AGENT
+                            ORCHESTRATION LAYER (GOOGLE ADK ENGINE)</text>
+                        <rect x="40" y="130" width="190" height="52" rx="6" fill="#ffffff" stroke="#d8b4fe" />
+                        <text x="50" y="152" fill="#0f172a" font-size="11" font-weight="bold">InMemoryRunner</text>
+                        <rect x="245" y="130" width="190" height="52" rx="6" fill="#ffffff" stroke="#d8b4fe" />
+                        <text x="255" y="152" fill="#0f172a" font-size="11" font-weight="bold">SessionService</text>
+                        <rect x="450" y="130" width="190" height="52" rx="6" fill="#ffffff" stroke="#d8b4fe" />
+                        <text x="460" y="152" fill="#0f172a" font-size="11" font-weight="bold">LlmAgent Engine</text>
+                        <rect id="layerSpendGate" x="655" y="130" width="200" height="52" rx="6" fill="#ffffff"
+                            stroke="#fca5a5" />
+                        <text x="667" y="152" fill="#b91c1c" font-size="11" font-weight="bold">beforeToolCallback
+                            (Gate)</text>
+                        <rect x="870" y="130" width="190" height="52" rx="6" fill="#ffffff" stroke="#d8b4fe" />
+                        <text x="880" y="152" fill="#0f172a" font-size="11" font-weight="bold">Gemini Adapter</text>
+                    </g>
+
+                    <!-- Layer 3 -->
+                    <g class="node-interactive" onclick="inspectComponent('l3_detail')">
+                        <rect x="20" y="205" width="510" height="85" rx="8" fill="#ecfeff" stroke="#cffafe"
+                            stroke-width="1.5" />
+                        <text x="35" y="224" fill="#0e7490" font-size="10.5" font-weight="800">LAYER 3: TOOLKIT &amp;
+                            SKILL INTEGRATION LAYER</text>
+                        <rect x="40" y="235" width="145" height="42" rx="6" fill="#ffffff" stroke="#a5f3fc" />
+                        <text x="50" y="258" fill="#0f172a" font-size="10.5" font-weight="bold">FunctionTools
+                            (15)</text>
+                        <rect x="195" y="235" width="150" height="42" rx="6" fill="#ffffff" stroke="#a5f3fc" />
+                        <text x="205" y="258" fill="#0f172a" font-size="10.5" font-weight="bold">Skill Fetcher</text>
+                        <rect x="355" y="235" width="160" height="42" rx="6" fill="#ffffff" stroke="#a5f3fc" />
+                        <text x="365" y="258" fill="#0f172a" font-size="10.5" font-weight="bold">Circle Tools Lib</text>
+                    </g>
+
+                    <!-- Layer 4 -->
+                    <g class="node-interactive" onclick="inspectComponent('l4_detail')">
+                        <rect x="20" y="300" width="510" height="85" rx="8" fill="#ecfdf5" stroke="#d1fae5"
+                            stroke-width="1.5" />
+                        <text x="35" y="318" fill="#047857" font-size="10.5" font-weight="800">LAYER 4: LOCAL SECURITY
+                            &amp; CLI PROCESS LAYER</text>
+                        <rect x="40" y="328" width="225" height="42" rx="6" fill="#ffffff" stroke="#6ee7b7" />
+                        <text x="50" y="352" fill="#0f172a" font-size="10.5" font-weight="bold">Circle CLI Process
+                            (@circle-fin)</text>
+                        <rect x="275" y="328" width="240" height="42" rx="6" fill="#ffffff" stroke="#6ee7b7" />
+                        <text x="285" y="352" fill="#0f172a" font-size="10.5" font-weight="bold">Local Keyring
+                            (~/.circle)</text>
+                    </g>
+
+                    <!-- Layer 5 -->
+                    <g class="node-interactive" onclick="inspectComponent('l5_detail')">
+                        <rect x="570" y="205" width="510" height="180" rx="8" fill="#fffbeb" stroke="#fef3c7"
+                            stroke-width="1.5" />
+                        <text x="585" y="224" fill="#b45309" font-size="10.5" font-weight="800">LAYER 5: EXTERNAL CLOUD
+                            SAAS PROVIDER LAYER</text>
+                        <rect x="585" y="235" width="480" height="40" rx="6" fill="#ffffff" stroke="#fde68a" />
+                        <text x="595" y="258" fill="#1e40af" font-size="11" font-weight="bold">Google AI Cloud
+                            (gemini-2.5-flash)</text>
+                        <rect x="585" y="285" width="150" height="85" rx="6" fill="#ffffff" stroke="#fde68a" />
+                        <text x="595" y="310" fill="#0f172a" font-size="10.5" font-weight="bold">Skill Server</text>
+                        <rect x="750" y="285" width="150" height="85" rx="6" fill="#ffffff" stroke="#fde68a" />
+                        <text x="760" y="310" fill="#0f172a" font-size="10.5" font-weight="bold">Marketplace API</text>
+                        <rect x="915" y="285" width="150" height="85" rx="6" fill="#ffffff" stroke="#fde68a" />
+                        <text x="925" y="310" fill="#0f172a" font-size="10.5" font-weight="bold">Auth Relay</text>
+                    </g>
+
+                    <!-- Layer 6 -->
+                    <g class="node-interactive" onclick="inspectComponent('l6_detail')">
+                        <rect x="20" y="395" width="1060" height="80" rx="8" fill="#fdf2f8" stroke="#fce7f3"
+                            stroke-width="1.5" />
+                        <text x="35" y="414" fill="#be185d" font-size="10.5" font-weight="800">LAYER 6: MERCHANT &amp;
+                            X402 PROTOCOL SERVICE LAYER</text>
+                        <rect x="40" y="425" width="310" height="38" rx="6" fill="#ffffff" stroke="#fbcfe8" />
+                        <text x="50" y="448" fill="#0f172a" font-size="10.5" font-weight="bold">Free Tier Endpoint (HTTP
+                            200)</text>
+                        <rect x="370" y="425" width="370" height="38" rx="6" fill="#ffffff" stroke="#fbcfe8" />
+                        <text x="380" y="448" fill="#be185d" font-size="10.5" font-weight="bold">x402 Paid Endpoint
+                            (HTTP 402 Challenge)</text>
+                        <rect x="760" y="425" width="300" height="38" rx="6" fill="#ffffff" stroke="#fbcfe8" />
+                        <text x="770" y="448" fill="#0f172a" font-size="10.5" font-weight="bold">Transak Fiat
+                            On-Ramp</text>
+                    </g>
+
+                    <!-- Layer 7 -->
+                    <g class="node-interactive" onclick="inspectComponent('l7_detail')">
+                        <rect x="20" y="485" width="1060" height="90" rx="8" fill="#eef2ff" stroke="#e0e7ff"
+                            stroke-width="1.5" />
+                        <text x="35" y="504" fill="#4338ca" font-size="10.5" font-weight="800">LAYER 7: PUBLIC EVM
+                            BLOCKCHAIN SETTLEMENT LAYER</text>
+                        <rect x="40" y="515" width="310" height="48" rx="6" fill="#ffffff" stroke="#c7d2fe" />
+                        <text x="50" y="536" fill="#2563eb" font-size="10.5" font-weight="bold">Base L2 Network (SCA +
+                            USDC)</text>
+                        <rect x="370" y="515" width="320" height="48" rx="6" fill="#ffffff" stroke="#c7d2fe" />
+                        <text x="380" y="536" fill="#7c3aed" font-size="10.5" font-weight="bold">Polygon L2 Network (SCA
+                            + USDC)</text>
+                        <rect x="710" y="515" width="350" height="48" rx="6" fill="#ffffff" stroke="#c7d2fe" />
+                        <text x="720" y="536" fill="#059669" font-size="10.5" font-weight="bold">Circle Gateway Pool
+                            Contract</text>
+                    </g>
+
+                    <!-- Layer Animated Wires -->
+                    <path d="M 800,75 L 800,90 L 135,90 L 135,130" stroke="#2563eb" stroke-width="2" fill="none"
+                        class="wire-active" marker-end="url(#arr-blue)" />
+                    <path d="M 965,182 L 965,235" stroke="#2563eb" stroke-width="2" fill="none" class="wire-fast"
+                        marker-end="url(#arr-blue)" />
+                    <path d="M 755,130 L 755,85 L 400,85 L 400,75" stroke="#dc2626" stroke-width="2"
+                        stroke-dasharray="4 4" fill="none" class="wire-reverse" marker-end="url(#arr-red)" />
+                    <path d="M 680,182 L 680,195 L 115,195 L 115,235" stroke="#0891b2" stroke-width="2" fill="none"
+                        class="wire-fast" marker-end="url(#arr-cyan)" />
+                    <path d="M 435,277 L 435,290 L 150,290 L 150,328" stroke="#059669" stroke-width="2" fill="none"
+                        class="wire-fast" marker-end="url(#arr-emerald)" />
+                    <path d="M 150,370 L 150,385 L 555,385 L 555,425" stroke="#db2777" stroke-width="2" fill="none"
+                        class="wire-fast" marker-end="url(#arr-pink)" />
+                    <path d="M 80,370 L 80,515" stroke="#4f46e5" stroke-width="2" fill="none" class="wire-fast"
+                        marker-end="url(#arr-indigo)" />
+                </svg>
+
+                <!-- Dynamic Status Notification Footer -->
+                <div id="simStatus"
+                    class="mt-3 py-2 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600 flex items-center justify-between">
+                    <span><strong>Current State:</strong> Ready. Click any node in the diagram or trigger a simulation
+                        phase.</span>
+                    <span class="text-slate-400 font-mono text-[11px]">@agent-stack-ecosystem-kits/google-adk</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar Inspector -->
+        <aside
+            class="w-96 bg-white border-l border-slate-200 p-5 flex flex-col justify-between overflow-y-auto shrink-0 shadow-sm">
+            <div id="detailsPanel">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span id="badgeCat"
+                        class="px-2 py-0.5 text-[10px] font-bold bg-slate-100 text-slate-700 rounded uppercase tracking-wider">COMPONENT</span>
+                    <h2 id="panelTitle" class="text-sm font-bold text-slate-900 tracking-tight">Interactive Inspector
+                    </h2>
+                </div>
+                <p id="panelDesc" class="text-xs text-slate-500 leading-relaxed mb-4">Click any block in the
+                    architecture diagram to inspect its internal mechanics, execution boundaries, and communication
+                    parameters.</p>
+
+                <div id="panelContent" class="space-y-3">
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600">
+                        <span class="font-bold text-slate-800 block mb-1">Architecture Composition:</span>
+                        <span>Reflects the exact turn lifecycle where <strong>InMemoryRunner</strong> coordinates with
+                            <strong>SessionService</strong>, binds 15 Zod tools to <strong>Gemini LLM</strong>, and uses
+                            <strong>beforeToolCallback</strong> for spend gating.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Function Tool Registry Schema Matrix -->
+            <div class="mt-6 pt-4 border-t border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Tool Registry (15 Tools)</h3>
+                    <span class="text-[10px] text-slate-400 font-mono">Zod Validated</span>
+                </div>
+                <div
+                    class="grid grid-cols-2 gap-1.5 text-[11px] font-mono text-slate-600 max-h-36 overflow-y-auto bg-slate-50 p-2 rounded-lg border border-slate-200">
+                    <span class="truncate">loginTool</span>
+                    <span class="truncate">logoutTool</span>
+                    <span class="truncate">fetchSetupSkill</span>
+                    <span class="truncate">fetchSubSkill</span>
+                    <span class="truncate">listAgentWallets</span>
+                    <span class="truncate">createAgentWallet</span>
+                    <span class="truncate">getWalletBalance</span>
+                    <span class="truncate">getGatewayBalance</span>
+                    <span class="truncate">deployWalletTool</span>
+                    <span class="truncate">fundFiatTool</span>
+                    <span class="truncate">searchServices</span>
+                    <span class="truncate">inspectService</span>
+                    <span class="truncate">fetchServiceTool</span>
+                    <span class="truncate text-rose-600 font-bold">payService [Gate]</span>
+                    <span class="truncate text-rose-600 font-bold">gatewayDeposit</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        const compData = {
+            ui: {
+                cat: "PRESENTATION",
+                title: "Chat UI / Ink TTY Frame",
+                desc: "Terminal interface powered by Ink (`@agent-cli`). Manages pinned wallet balances, formatted agent text streams, and handles interactive user prompt/confirmation cycles.",
+                items: [
+                    { name: "ask (prompt)", desc: "Captures natural language requests from the operator (e.g., 'Find weather service and get report')." },
+                    { name: "approve [y/N]", desc: "Captures explicit user confirmation when the spend gate traps financial transactions." }
+                ]
+            },
+            runner: {
+                cat: "ADK RUNTIME",
+                title: "InMemoryRunner & Turn Orchestrator",
+                desc: "Core ADK lifecycle controller managing asynchronous turn dispatching, before/after tool callback hooks, and context propagation to the Gemini model adapter.",
+                items: [
+                    { name: "Event Loop Dispatch", desc: "Forwards user prompts to Gemini and iterates until tool calls are fulfilled." },
+                    { name: "Intercept Hook", desc: "Invokes `beforeToolCallback` before executing any LLM tool call." }
+                ]
+            },
+            sessionservice: {
+                cat: "CONTEXT STORE",
+                title: "InMemorySessionService",
+                desc: "Maintains session checkpoints, memory state, and conversation turn histories across multi-step execution graphs.",
+                items: [
+                    { name: "Turn History", desc: "Stores past user messages, tool results, and model responses in memory." },
+                    { name: "State Checkpoint", desc: "Preserves execution tokens and auth states between user queries." }
+                ]
+            },
+            llmagent: {
+                cat: "ADK ENGINE",
+                title: "LlmAgent (circle_payment_agent)",
+                desc: "The agent entity containing Gemini model configurations, system instructions, and tool bindings.",
+                items: [
+                    { name: "Tool Bindings", desc: "Binds 15 Circle ecosystem tools with strongly typed Zod parameter schemas." },
+                    { name: "Model Bindings", desc: "Configured with explicit `GOOGLE_API_KEY` and temperature parameters." }
+                ]
+            },
+            spendgate: {
+                cat: "SECURITY GATE",
+                title: "beforeToolCallback (Spend Gate)",
+                desc: "Human-in-the-Loop security interceptor. Intercepts sensitive spend operations (`payService`, `gatewayDeposit`) and suspends execution until the user grants approval.",
+                items: [
+                    { name: "SPEND_TOOLS Set", desc: "Targets state-changing financial tools requiring verified human consent." },
+                    { name: "Terminal Approval Loop", desc: "Prompts `[y/N]`. If rejected, returns an error object back to the LLM." }
+                ]
+            },
+            tools: {
+                cat: "INTEGRATION",
+                title: "FunctionTools Registry",
+                desc: "Wrapper collection exposing 15 strongly typed tools for wallet management, service discovery, skill parsing, and x402 payments.",
+                items: [
+                    { name: "Zod Schema Validation", desc: "Guarantees JSON payloads from Gemini strictly match expected parameter formats." },
+                    { name: "Execution Delegation", desc: "Delegates operations to `@circle-fin/cli` via `execFileSync`." }
+                ]
+            },
+            payservice: {
+                cat: "X402 PROTOCOL",
+                title: "PayService & x402 Micropayments",
+                desc: "Handles HTTP 402 Payment Required challenges, resolves payment options, deploys counterfactual wallets if needed, and signs USDC transfers.",
+                items: [
+                    { name: "Challenge Resolution", desc: "Parses payment address and amount requirements from merchant endpoints." },
+                    { name: "Settlement Proof", desc: "Transmits transaction hash / authorization headers to unlock API payloads." }
+                ]
+            },
+            gemini: {
+                cat: "AI CLOUD",
+                title: "Gemini LLM (@google/genai)",
+                desc: "Remote multimodal reasoning engine (`gemini-2.5-flash`). Synthesizes high-level autonomous plans, evaluates service schemas, and triggers tool execution.",
+                items: [
+                    { name: "Autonomous Reasoning", desc: "Determines which tool to invoke next based on setup skills and API specs." },
+                    { name: "Response Synthesis", desc: "Formats final results returned by tools into user-readable Markdown." }
+                ]
+            },
+            // Layers Details Mapping
+            l1_detail: { cat: "LAYER 1", title: "User & Presentation Layer", desc: "Terminal TTY frames, ink prompts, and process entrypoint lifecycle controllers.", items: [{ name: "Chat UI", desc: "Interactive prompt stream" }, { name: "src/index.ts", desc: "Session bootstrap hook" }] },
+            l2_detail: { cat: "LAYER 2", title: "Google ADK Orchestration Engine", desc: "InMemoryRunner, InMemorySessionService, LlmAgent, and Spend Gate interceptors.", items: [{ name: "Turn Loop", desc: "Asynchronous turn engine" }, { name: "Spend Gate", desc: "HITL approval trap" }] },
+            l3_detail: { cat: "LAYER 3", title: "Toolkit & Skill Integration", desc: "15 Zod validated FunctionTools and remote Markdown setup skill fetchers.", items: [{ name: "FunctionTools", desc: "Strongly typed schemas" }, { name: "Skill Fetcher", desc: "Remote playbook downloader" }] },
+            l4_detail: { cat: "LAYER 4", title: "Local Security & CLI Process Layer", desc: "Circle CLI sub-process boundary (`@circle-fin/cli`) and local keyring storage.", items: [{ name: "execFileSync", desc: "Isolated CLI execution" }, { name: "Keyring", desc: "Stored in ~/.circle" }] },
+            l5_detail: { cat: "LAYER 5", title: "External Cloud SaaS Provider Layer", desc: "Google AI Cloud (Gemini) and Circle Cloud (Skill server, marketplace, auth relay).", items: [{ name: "Gemini API", desc: "Tool call generation" }, { name: "Skill Server", desc: "agents.circle.com" }] },
+            l6_detail: { cat: "LAYER 6", title: "Merchant & x402 Service Layer", desc: "Free tier endpoints and HTTP 402 paywalled APIs requiring USDC micro-settlement.", items: [{ name: "x402 Paid Endpoint", desc: "Issues HTTP 402 challenge" }, { name: "Transak Fiat", desc: "Card on-ramp" }] },
+            l7_detail: { cat: "LAYER 7", title: "Blockchain Settlement Layer", desc: "Base and Polygon Smart Contract Accounts (SCAs), USDC token contracts, and Gateway pools.", items: [{ name: "Base / Polygon SCAs", desc: "ERC-4337 Smart Accounts" }, { name: "Gateway Pool", desc: "Off-chain settlement" }] }
+        };
+
+        function inspectComponent(key) {
+            const data = compData[key];
+            if (!data) return;
+
+            document.getElementById('badgeCat').innerText = data.cat;
+            document.getElementById('panelTitle').innerText = data.title;
+            document.getElementById('panelDesc').innerText = data.desc;
+
+            const content = document.getElementById('panelContent');
+            content.innerHTML = '';
+
+            data.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-slate-50 rounded-lg border border-slate-200';
+                div.innerHTML = `<span class="font-bold text-slate-800 text-xs block mb-0.5">${item.name}</span>
+                         <span class="text-slate-600 text-xs">${item.desc}</span>`;
+                content.appendChild(div);
+            });
+        }
+
+        function switchView(view) {
+            const compView = document.getElementById('view-composition');
+            const layersView = document.getElementById('view-layers');
+            const tabComp = document.getElementById('tabBtnComp');
+            const tabLayers = document.getElementById('tabBtnLayers');
+
+            if (view === 'composition') {
+                compView.classList.remove('hidden');
+                layersView.classList.add('hidden');
+                tabComp.className = "px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm transition";
+                tabLayers.className = "px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition";
+                inspectComponent('runner');
+            } else {
+                compView.classList.add('hidden');
+                layersView.classList.remove('hidden');
+                tabLayers.className = "px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm transition";
+                tabComp.className = "px-3 py-1 rounded-md text-slate-500 hover:text-slate-800 transition";
+                inspectComponent('l2_detail');
+            }
+        }
+
+        function triggerPhase(phase) {
+            const status = document.getElementById('simStatus');
+            const compSpend = document.getElementById('compSpendGate');
+            const layerSpend = document.getElementById('layerSpendGate');
+
+            compSpend.classList.remove('spend-active');
+            layerSpend.classList.remove('spend-active');
+
+            if (phase === 1) {
+                status.innerHTML = "<span><strong>Phase 1:</strong> Validating CLI session, reading balance, and initializing <code>InMemoryRunner</code> with <code>InMemorySessionService</code>.</span>";
+                inspectComponent('runner');
+            } else if (phase === 2) {
+                status.innerHTML = "<span><strong>Phase 2:</strong> Invoking <code>fetchSetupSkillTool</code> to download autonomous playbooks from <code>agents.circle.com</code>.</span>";
+                inspectComponent('tools');
+            } else if (phase === 3) {
+                status.innerHTML = "<span><strong>Phase 3:</strong> Discovering marketplace services &amp; inspecting x402 payment pricing schemas via Gemini.</span>";
+                inspectComponent('gemini');
+            } else if (phase === 4) {
+                compSpend.classList.add('spend-active');
+                layerSpend.classList.add('spend-active');
+                status.innerHTML = "<span class='text-rose-600 font-bold'><strong>Phase 4 (Spend Trap):</strong> <code>beforeToolCallback</code> intercepted <code>circle_pay_service</code>. Prompting user in UI: 'Approve? [y/N]'</span>";
+                inspectComponent('spendgate');
+            }
+        }
+
+        function resetSimulation() {
+            document.getElementById('compSpendGate').classList.remove('spend-active');
+            document.getElementById('layerSpendGate').classList.remove('spend-active');
+            document.getElementById('simStatus').innerHTML = "<span><strong>Current State:</strong> Ready. Click any node in the diagram or trigger a simulation phase.</span><span class='text-slate-400 font-mono text-[11px]'>@agent-stack-ecosystem-kits/google-adk</span>";
+            inspectComponent('runner');
+        }
+    </script>
+</body>
+
+</html>
