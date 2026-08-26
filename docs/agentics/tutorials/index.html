@@ -477,18 +477,87 @@
             color: var(--primary);
         }
 
+        /* Mobile Navigation Toggle Button */
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .mobile-menu-toggle:hover {
+            background: var(--bg-accent);
+            border-color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.1rem;
+                font-size: 2rem;
             }
             .header-container {
-                padding: 14px 16px;
+                position: relative;
+                padding: 12px 16px;
+            }
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             .nav-links {
-                gap: 12px;
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(16px);
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                padding: 12px 16px 20px;
+                z-index: 100;
+            }
+            .nav-links.active {
+                display: flex;
+                animation: fadeInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            @keyframes fadeInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-8px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
             .nav-link {
-                font-size: 0.85rem;
+                padding: 10px 14px;
+                border-radius: 8px;
+                font-size: 0.925rem;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+            .nav-btn {
+                margin-top: 8px;
+                text-align: center;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 16px;
+                width: 100%;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -507,7 +576,10 @@
                     Smart Finux <span>Agentic(s)</span>
                 </div>
             </a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Navigation Menu">
+                <i class="fa-solid fa-bars" id="menu-icon"></i>
+            </button>
+            <div class="nav-links" id="nav-links">
                 <a href="../../index.html" class="nav-link">Home</a>
                 <a href="../../about.html" class="nav-link">About Labs</a>
                 <a href="index.html" class="nav-link active">Agentic(s)</a>
@@ -671,5 +743,40 @@
         </div>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            const menuIcon = document.getElementById('menu-icon');
+
+            if (mobileMenuToggle && navLinks) {
+                mobileMenuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                    if (menuIcon) {
+                        if (navLinks.classList.contains('active')) {
+                            menuIcon.className = 'fa-solid fa-xmark';
+                        } else {
+                            menuIcon.className = 'fa-solid fa-bars';
+                        }
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        if (menuIcon) menuIcon.className = 'fa-solid fa-bars';
+                    }
+                });
+
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        if (menuIcon) menuIcon.className = 'fa-solid fa-bars';
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
