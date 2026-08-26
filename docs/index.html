@@ -139,6 +139,25 @@
             color: var(--primary);
         }
 
+        .nav-link-highlight {
+            color: #059669;
+            background: #ecfdf5;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(5, 150, 105, 0.25);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-link-highlight:hover {
+            background: #059669;
+            color: #ffffff;
+            border-color: #059669;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
         .nav-btn {
             background: var(--text-primary);
             color: var(--bg-card);
@@ -677,7 +696,7 @@
             </a>
             <div class="nav-links">
                 <a href="about.html" class="nav-link">About Labs</a>
-                <a href="agentics/tutorials/index.html" class="nav-link">Agentic(s)</a>
+                <a href="agentics/tutorials/index.html" class="nav-link nav-link-highlight"><span>✨</span> Agentic(s)</a>
                 <a href="interledger/index.html" class="nav-link">Interledger Portal</a>
                 <a href="gtt/index.html" class="nav-link">GTT Explorer</a>
                 <a href="verity/index.html" class="nav-link">Verity</a>
