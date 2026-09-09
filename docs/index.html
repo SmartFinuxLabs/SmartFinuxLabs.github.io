@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Finux Labs Signal — Tech Portal</title>
-    <meta name="description" content="Signal of programmable finance, open account settlement, supply chain finance, and Interledger protocol specifications.">
-    
+    <meta name="description"
+        content="Signal of programmable finance, open account settlement, supply chain finance, and Interledger protocol specifications.">
+
     <!-- Modern Typography & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* Design System Variables - Premium Bright Mode */
         :root {
-            --bg-base: #f9fafb; /* Docusaurus warm light gray base */
+            --bg-base: #f9fafb;
+            /* Docusaurus warm light gray base */
             --bg-card: #ffffff;
             --bg-accent: #f3f4f6;
             --border-color: rgba(24, 32, 29, 0.08);
             --border-hover: rgba(13, 190, 133, 0.3);
-            
-            --text-primary: #18201d; /* Apache Doris dark text */
-            --text-secondary: #4b5563; 
-            --text-muted: #6b7280; 
-            
-            --primary: #0DBE85; /* Apache Doris Teal */
+
+            --text-primary: #18201d;
+            /* Apache Doris dark text */
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+
+            --primary: #0DBE85;
+            /* Apache Doris Teal */
             --primary-light: #e6f9f3;
             --primary-dark: #0aad79;
-            
+
             --emerald: #059669;
             --emerald-light: #d1fae5;
-            
+
             --teal: #0891b2;
             --teal-light: #ecfeff;
 
             --amber: #d97706;
             --amber-light: #fef3c7;
-            
+
             --font-display: 'Outfit', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
-            
+
             --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             --shadow-sm: 0 2px 8px rgba(24, 32, 29, 0.04);
             --shadow-md: 0 10px 30px rgba(24, 32, 29, 0.06);
@@ -235,6 +242,7 @@
                     opacity: 0;
                     transform: translateY(-8px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateY(0);
@@ -418,10 +426,12 @@
                 transform: perspective(400px) rotateY(0deg) rotateZ(0deg) scale(1);
                 filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.4));
             }
+
             50% {
                 transform: perspective(400px) rotateY(180deg) rotateZ(180deg) scale(1.25);
                 filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.95)) drop-shadow(0 0 30px rgba(251, 191, 36, 0.8));
             }
+
             100% {
                 transform: perspective(400px) rotateY(360deg) rotateZ(360deg) scale(1);
                 filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.4));
@@ -432,9 +442,11 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
@@ -585,8 +597,15 @@
         }
 
         @keyframes pulse-slow {
-            0% { transform: scale(1); opacity: 0.7; }
-            100% { transform: scale(1.08); opacity: 0.95; }
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.08);
+                opacity: 0.95;
+            }
         }
 
         .featured-content {
@@ -615,9 +634,20 @@
             text-transform: uppercase;
         }
 
-        .tag-ilp { background: var(--primary-light); color: var(--primary); }
-        .tag-scf { background: var(--emerald-light); color: var(--emerald); }
-        .tag-cdsc { background: var(--teal-light); color: var(--teal); }
+        .tag-ilp {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .tag-scf {
+            background: var(--emerald-light);
+            color: var(--emerald);
+        }
+
+        .tag-cdsc {
+            background: var(--teal-light);
+            color: var(--teal);
+        }
 
         .featured-content h2 {
             font-family: var(--font-display);
@@ -697,9 +727,17 @@
             position: relative;
         }
 
-        .card-header-visual.ilp { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); }
-        .card-header-visual.scf { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
-        .card-header-visual.cdsc { background: linear-gradient(135deg, #ecfeff, #cffafe); }
+        .card-header-visual.ilp {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+        }
+
+        .card-header-visual.scf {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+
+        .card-header-visual.cdsc {
+            background: linear-gradient(135deg, #ecfeff, #cffafe);
+        }
 
         .card-header-icon {
             font-size: 2.5rem;
@@ -848,8 +886,204 @@
             color: var(--text-muted);
             font-family: var(--font-mono);
         }
+
+        /* Announcement Section */
+        .announcement-section {
+            background: var(--bg-card);
+            border: 1px solid rgba(13, 190, 133, 0.28);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 36px;
+            box-shadow: 0 10px 30px rgba(13, 190, 133, 0.08);
+            position: relative;
+            transition: var(--transition-smooth);
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 900px) {
+            .announcement-section {
+                grid-template-columns: 1.15fr 1fr;
+            }
+        }
+
+        .announcement-section:hover {
+            border-color: rgba(13, 190, 133, 0.5);
+            box-shadow: 0 16px 44px rgba(13, 190, 133, 0.14);
+            transform: translateY(-2px);
+        }
+
+        .announcement-media {
+            position: relative;
+            min-height: 280px;
+            background: #0b1120;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .announcement-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .announcement-section:hover .announcement-media img {
+            transform: scale(1.03);
+        }
+
+        .announcement-media-badge {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            background: rgba(11, 17, 32, 0.82);
+            backdrop-filter: blur(8px);
+            color: var(--primary);
+            border: 1px solid rgba(13, 190, 133, 0.4);
+            font-family: var(--font-mono);
+            font-size: 0.725rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 99px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .announcement-body {
+            padding: 36px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(230, 249, 243, 0.25));
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .announcement-tag {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .announcement-date {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .announcement-title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin-bottom: 14px;
+            letter-spacing: -0.015em;
+        }
+
+        .announcement-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 24px;
+        }
+
+        .announcement-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .announcement-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 14px rgba(13, 190, 133, 0.28);
+        }
+
+        .announcement-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 190, 133, 0.38);
+        }
+
+        .announcement-secondary-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            transition: var(--transition-smooth);
+        }
+
+        .announcement-secondary-cta:hover {
+            color: var(--primary);
+            border-color: rgba(13, 190, 133, 0.4);
+            background: var(--primary-light);
+        }
+
+        @media (max-width: 768px) {
+            .announcement-body {
+                padding: 24px 20px;
+            }
+
+            .announcement-title {
+                font-size: 1.35rem;
+            }
+
+            .announcement-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .announcement-cta,
+            .announcement-secondary-cta {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Header Navigation -->
@@ -868,30 +1102,77 @@
             </button>
             <div class="nav-links" id="nav-links">
                 <a href="about.html" class="nav-link">About Labs</a>
-                <a href="agentics/tutorials/index.html" class="nav-link nav-link-highlight"><span>✨</span> Agentic(s)</a>
+                <a href="agentics/tutorials/index.html" class="nav-link nav-link-highlight"><span>✨</span>
+                    Agentic(s)</a>
                 <a href="interledger/index.html" class="nav-link">Interledger Portal</a>
                 <a href="gtt/index.html" class="nav-link">GTT Explorer</a>
+                <a href="https://gtt-apidocs.vercel.app/" target="_blank" rel="noopener noreferrer" class="nav-link"
+                    style="color: var(--teal); font-weight: 600;"><i class="fa-solid fa-code"
+                        style="font-size: 0.8rem; margin-right: 4px;"></i> API Docs <i
+                        class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem; opacity: 0.8;"></i></a>
                 <a href="verity/index.html" class="nav-link">Verity</a>
                 <a href="cdsc/index.html" class="nav-link">CDSC</a>
-                <a href="https://github.com/SmartFinuxLabs" target="_blank" class="nav-btn">GitHub <i class="fa-brands fa-github"></i></a>
+                <a href="https://github.com/SmartFinuxLabs" target="_blank" class="nav-btn">GitHub <i
+                        class="fa-brands fa-github"></i></a>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <main>
-        
+
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-tag">System Architecture & Specs</div>
-            <h1>The Agentic: <span class="hero-finance">Finance</span> <span class="hero-plus">✦</span> <span class="hero-commerce">Commerce</span></h1>
-            <p>High-fidelity specifications, clearing mechanics, and programmable finance structures built by Smart Finux Labs.</p>
+            <h1>The Agentic: <span class="hero-finance">Finance</span> <span class="hero-plus">✦</span> <span
+                    class="hero-commerce">Commerce</span></h1>
+            <p>High-fidelity specifications, clearing mechanics, and programmable finance structures built by Smart
+                Finux Labs.</p>
+        </section>
+
+        <!-- Ecosystem Announcement Section: GTT Business Client API & Echo Environment -->
+        <section class="announcement-section" id="announcement-gtt-api">
+            <div class="announcement-media">
+                <img src="images/gtt-api-announcement.jpg"
+                    alt="Global Trade Treasury Business Client API - Abstract Vision">
+                <div class="announcement-media-badge">
+                    <i class="fa-solid fa-satellite-dish"></i> Echo Environment
+                </div>
+            </div>
+            <div class="announcement-body">
+                <div class="announcement-meta">
+                    <span class="announcement-tag">Official Announcement</span>
+                    <span class="announcement-date"><i class="fa-regular fa-calendar"></i> September 8, 2026</span>
+                </div>
+                <h2 class="announcement-title">Global Trade Treasury Business Client API</h2>
+                <p class="announcement-desc">
+                    We are excited to share the Global Trade Treasury Business Client API as part of our echo
+                    environment initiative for partnership build and integration.
+                    This release is designed to help partners onboard faster, test confidently, and integrate with a
+                    stable, developer-friendly surface.
+                </p>
+                <div class="announcement-actions">
+                    <a href="https://gtt-apidocs.vercel.app/" target="_blank" rel="noopener noreferrer"
+                        class="announcement-cta">
+                        <span>Explore the docs</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                    <a href="gtt/index.html" class="announcement-secondary-cta">
+                        <span>View GTT Architecture</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
         </section>
 
         <!-- Featured Article Card: GTT Explorer -->
-        <div class="featured-card" data-category="scf" data-search="gtt explorer global trade treasury on-chain scf supply chain finance ada usdc stablecoin" style="cursor: pointer; margin-bottom: 24px;" onclick="if(!event.target.closest('a')){ window.location.href='gtt/index.html'; }">
+        <div class="featured-card" data-category="scf"
+            data-search="gtt explorer global trade treasury on-chain scf supply chain finance ada usdc stablecoin business client api apidocs echo environment partnership"
+            style="cursor: pointer; margin-bottom: 24px;"
+            onclick="if(!event.target.closest('a')){ window.location.href='gtt/index.html'; }">
             <div class="featured-img-area" style="padding: 0; overflow: hidden; position: relative;">
-                <img src="gtt/GttWeb.png" alt="Gtt Explorer" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                <img src="gtt/GttWeb.png" alt="Gtt Explorer"
+                    style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
                 <span class="featured-img-badge" style="z-index: 2; background: var(--primary);">LAUNCHING</span>
             </div>
             <div class="featured-content">
@@ -900,15 +1181,36 @@
                     <span>•</span>
                     <span>8 Min Read</span>
                 </div>
-                <h2><a href="gtt/index.html" style="text-decoration: none; color: inherit;">Global Trade Treasury: GTT Explorer</a></h2>
-                <p>Modernizing supply chain finance with on-chain Accounts of Digital Assets (ADA). GTT eliminates opaque ledgers and delayed settlements, providing cryptographic certainty and automated accounting for Suppliers, Buyers, and Investors.</p>
+                <h2><a href="gtt/index.html" style="text-decoration: none; color: inherit;">Global Trade Treasury: GTT
+                        Explorer</a></h2>
+                <p>Modernizing supply chain finance with on-chain Accounts of Digital Assets (ADA). GTT eliminates
+                    opaque ledgers and delayed settlements, providing cryptographic certainty and automated accounting
+                    for Suppliers, Buyers, and Investors.</p>
+                <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                    <a href="gtt/index.html"
+                        style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem; color: var(--primary); text-decoration: none;">
+                        Open Explorer <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <span style="color: var(--border-color); font-size: 0.85rem;">•</span>
+                    <a href="https://gtt-apidocs.vercel.app/" target="_blank" rel="noopener noreferrer"
+                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.825rem; font-weight: 600; color: var(--text-secondary); text-decoration: none; padding: 4px 10px; background: var(--bg-accent); border-radius: 6px; border: 1px solid var(--border-color); transition: var(--transition-smooth);"
+                        onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)';"
+                        onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-secondary)';">
+                        <i class="fa-solid fa-code"></i> Business Client API Docs <i
+                            class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Featured Article Card: Verity -->
-        <div class="featured-card" data-category="scf" data-search="verity on-chain supply chain finance capital due value invoice validation" style="cursor: pointer;" onclick="if(!event.target.closest('a')){ window.location.href='verity/index.html'; }">
+        <div class="featured-card" data-category="scf"
+            data-search="verity on-chain supply chain finance capital due value invoice validation"
+            style="cursor: pointer;"
+            onclick="if(!event.target.closest('a')){ window.location.href='verity/index.html'; }">
             <div class="featured-img-area" style="padding: 0; overflow: hidden; position: relative;">
-                <img src="images/verity-flagship.png" alt="Verity Flagship" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+                <img src="images/verity-flagship.png" alt="Verity Flagship"
+                    style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
                 <span class="featured-img-badge" style="z-index: 2;">Flagship Project</span>
             </div>
             <div class="featured-content">
@@ -917,8 +1219,11 @@
                     <span>•</span>
                     <span>12 Min Read</span>
                 </div>
-                <h2><a href="verity/index.html" style="text-decoration: none; color: inherit;">Verity: Supply Chain Finance for Capital Due Value</a></h2>
-                <p>An architectural blueprint that resolves real-world commercial value before releasing capital. Learn how Verity bridges invoice truth, buyer-seller consensus, wallet funding, and settlement execution.</p>
+                <h2><a href="verity/index.html" style="text-decoration: none; color: inherit;">Verity: Supply Chain
+                        Finance for Capital Due Value</a></h2>
+                <p>An architectural blueprint that resolves real-world commercial value before releasing capital. Learn
+                    how Verity bridges invoice truth, buyer-seller consensus, wallet funding, and settlement execution.
+                </p>
                 <div class="author-box" style="flex-direction: column; align-items: flex-start; gap: 10px;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div class="author-avatar" title="Tørence">TJ</div>
@@ -946,7 +1251,8 @@
             </div>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search specifications, guides, topics..." id="search-input">
+                <input type="text" class="search-input" placeholder="Search specifications, guides, topics..."
+                    id="search-input">
             </div>
         </div>
 
@@ -954,7 +1260,8 @@
         <section class="article-grid" id="article-grid">
 
             <!-- Card 1: CDSC Commerce -->
-            <a href="cdsc/index.html" class="article-card" data-category="cdsc" data-search="cdsc commerce chapter receivables factoring assets">
+            <a href="cdsc/index.html" class="article-card" data-category="cdsc"
+                data-search="cdsc commerce chapter receivables factoring assets">
                 <div class="card-header-visual cdsc">
                     <i class="fa-solid fa-building-columns card-header-icon"></i>
                 </div>
@@ -965,13 +1272,15 @@
                         <span>5 Min Read</span>
                     </div>
                     <h3>CDSC Commerce Chapter</h3>
-                    <p>An overview of structured receivables management, factoring frameworks, and digital asset tracking within the CDSC architecture.</p>
+                    <p>An overview of structured receivables management, factoring frameworks, and digital asset
+                        tracking within the CDSC architecture.</p>
                     <span class="read-more-link">Open Specification <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 1b: CDSC Factoring -->
-            <a href="cdsc/factoring/index.html" class="article-card" data-category="cdsc" data-search="cdsc factoring netting architecture invoice submission confirmation swap accounting settlement">
+            <a href="cdsc/factoring/index.html" class="article-card" data-category="cdsc"
+                data-search="cdsc factoring netting architecture invoice submission confirmation swap accounting settlement">
                 <div class="card-header-visual cdsc">
                     <i class="fa-solid fa-network-wired card-header-icon"></i>
                 </div>
@@ -982,13 +1291,15 @@
                         <span>6 Min Read</span>
                     </div>
                     <h3>Supply Chain Factoring Architecture</h3>
-                    <p>Interactive process flow model for invoice submission, anchor confirmation, factoring, and swap accounting settlement mechanics.</p>
+                    <p>Interactive process flow model for invoice submission, anchor confirmation, factoring, and swap
+                        accounting settlement mechanics.</p>
                     <span class="read-more-link">Open Flow Model <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 2: Interledger Portal -->
-            <a href="interledger/index.html" class="article-card" data-category="ilp" data-search="interledger portal clearing settlement engines ilp stack">
+            <a href="interledger/index.html" class="article-card" data-category="ilp"
+                data-search="interledger portal clearing settlement engines ilp stack">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-circle-nodes card-header-icon"></i>
                 </div>
@@ -999,13 +1310,15 @@
                         <span>8 Min Read</span>
                     </div>
                     <h3>Interledger Portal Hub</h3>
-                    <p>Centralized documentation vault for Interledger Protocol (ILP) node architectures, clearing mechanics, and settlement adapters.</p>
+                    <p>Centralized documentation vault for Interledger Protocol (ILP) node architectures, clearing
+                        mechanics, and settlement adapters.</p>
                     <span class="read-more-link">Open Portal Hub <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 3: ArcCommerce Roadmap -->
-            <a href="interledger/interledger_accelerator2026/index.html" class="article-card" data-category="ilp" data-search="arccommerce accelerator 2026 roadmap netting stablecoin settlement">
+            <a href="interledger/interledger_accelerator2026/index.html" class="article-card" data-category="ilp"
+                data-search="arccommerce accelerator 2026 roadmap netting stablecoin settlement">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-route card-header-icon"></i>
                 </div>
@@ -1016,13 +1329,15 @@
                         <span>6 Min Read</span>
                     </div>
                     <h3>ArcCommerce Accelerator 2026</h3>
-                    <p>A detailed phase-by-phase roadmap detailing stablecoin settlements, multi-lateral netting, and open payment standards.</p>
+                    <p>A detailed phase-by-phase roadmap detailing stablecoin settlements, multi-lateral netting, and
+                        open payment standards.</p>
                     <span class="read-more-link">Open Roadmap <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 4: ILP Protocol Architecture -->
-            <a href="interledger/interledger_learning2026/1_interledger_protocol_architecture.html" class="article-card" data-category="ilp" data-search="interledger protocol architecture packet flow routing connectors hop">
+            <a href="interledger/interledger_learning2026/1_interledger_protocol_architecture.html" class="article-card"
+                data-category="ilp" data-search="interledger protocol architecture packet flow routing connectors hop">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-server card-header-icon"></i>
                 </div>
@@ -1033,13 +1348,16 @@
                         <span>10 Min Read</span>
                     </div>
                     <h3>1. Interledger Protocol Architecture</h3>
-                    <p>Dive deep into ILP packets, connectors, hop-by-hop forwarding mechanics, and cryptographic conditional payments.</p>
+                    <p>Dive deep into ILP packets, connectors, hop-by-hop forwarding mechanics, and cryptographic
+                        conditional payments.</p>
                     <span class="read-more-link">Read Guide <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 5: ILP Protocol Stack -->
-            <a href="interledger/interledger_learning2026/2_interledger_protocol_stack_architecture.html" class="article-card" data-category="ilp" data-search="interledger protocol stack architecture layers transport payload stream">
+            <a href="interledger/interledger_learning2026/2_interledger_protocol_stack_architecture.html"
+                class="article-card" data-category="ilp"
+                data-search="interledger protocol stack architecture layers transport payload stream">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-layer-group card-header-icon"></i>
                 </div>
@@ -1050,13 +1368,16 @@
                         <span>7 Min Read</span>
                     </div>
                     <h3>2. ILP Stack Architecture</h3>
-                    <p>An exploration of the transport and routing layers, STREAM protocol, paychan mechanics, and packet format layouts.</p>
+                    <p>An exploration of the transport and routing layers, STREAM protocol, paychan mechanics, and
+                        packet format layouts.</p>
                     <span class="read-more-link">Read Guide <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 6: ILP Clearing & Settlement -->
-            <a href="interledger/interledger_learning2026/3_ilp_clearing_and_settlement_architecture.html" class="article-card" data-category="ilp" data-search="ilp clearing and settlement architecture trustlines ledger peer credit limit">
+            <a href="interledger/interledger_learning2026/3_ilp_clearing_and_settlement_architecture.html"
+                class="article-card" data-category="ilp"
+                data-search="ilp clearing and settlement architecture trustlines ledger peer credit limit">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-scale-balanced card-header-icon"></i>
                 </div>
@@ -1067,13 +1388,16 @@
                         <span>9 Min Read</span>
                     </div>
                     <h3>3. ILP Clearing & Settlement</h3>
-                    <p>Analyze peer-to-peer trustlines, balance tracking, credit limits, and settlement triggers in modern payment networks.</p>
+                    <p>Analyze peer-to-peer trustlines, balance tracking, credit limits, and settlement triggers in
+                        modern payment networks.</p>
                     <span class="read-more-link">Read Guide <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 7: Settlement Engines -->
-            <a href="interledger/interledger_learning2026/4_settlement_engines_architecture.html" class="article-card" data-category="ilp" data-search="settlement engines architecture ase payments transfers ledger integration">
+            <a href="interledger/interledger_learning2026/4_settlement_engines_architecture.html" class="article-card"
+                data-category="ilp"
+                data-search="settlement engines architecture ase payments transfers ledger integration">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-gears card-header-icon"></i>
                 </div>
@@ -1084,13 +1408,16 @@
                         <span>8 Min Read</span>
                     </div>
                     <h3>4. Settlement Engines Architecture</h3>
-                    <p>Technical details of the Settlement Engine (ASE), external ledger integrations, APIs, and direct asset transfers.</p>
+                    <p>Technical details of the Settlement Engine (ASE), external ledger integrations, APIs, and direct
+                        asset transfers.</p>
                     <span class="read-more-link">Read Guide <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 8: Alice & Bob Settlement -->
-            <a href="interledger/interledger_learning2026_02/alice_and_bob_settlement_example-1.html" class="article-card" data-category="ilp" data-search="alice and bob settlement example walkthrough balance transfer flow">
+            <a href="interledger/interledger_learning2026_02/alice_and_bob_settlement_example-1.html"
+                class="article-card" data-category="ilp"
+                data-search="alice and bob settlement example walkthrough balance transfer flow">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-people-arrows card-header-icon"></i>
                 </div>
@@ -1101,13 +1428,16 @@
                         <span>6 Min Read</span>
                     </div>
                     <h3>Alice & Bob Settlement Walkthrough</h3>
-                    <p>A step-by-step trace of how peer balances adjust dynamically as small transactions route across an ILP connection.</p>
+                    <p>A step-by-step trace of how peer balances adjust dynamically as small transactions route across
+                        an ILP connection.</p>
                     <span class="read-more-link">View Case Study <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 9: Peering & Clearing Flow -->
-            <a href="interledger/interledger_learning2026_02/interledger_peering_clearing_and_settlement_flow-2.html" class="article-card" data-category="ilp" data-search="interledger peering clearing and settlement flow multi hop routing">
+            <a href="interledger/interledger_learning2026_02/interledger_peering_clearing_and_settlement_flow-2.html"
+                class="article-card" data-category="ilp"
+                data-search="interledger peering clearing and settlement flow multi hop routing">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-network-wired card-header-icon"></i>
                 </div>
@@ -1118,13 +1448,16 @@
                         <span>7 Min Read</span>
                     </div>
                     <h3>ILP Peering & Clearing Flows</h3>
-                    <p>Visual diagrams and step-by-step ledger reconciliations mapping out cross-network trust relationships.</p>
+                    <p>Visual diagrams and step-by-step ledger reconciliations mapping out cross-network trust
+                        relationships.</p>
                     <span class="read-more-link">View Case Study <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 10: Open Payments & ASE -->
-            <a href="interledger/interledger_learning2026_02/open_payments_animated_ase_collaboration.html" class="article-card" data-category="ilp" data-search="open payments animated ase collaboration automated settlement engine api">
+            <a href="interledger/interledger_learning2026_02/open_payments_animated_ase_collaboration.html"
+                class="article-card" data-category="ilp"
+                data-search="open payments animated ase collaboration automated settlement engine api">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-play card-header-icon"></i>
                 </div>
@@ -1135,13 +1468,16 @@
                         <span>5 Min Read</span>
                     </div>
                     <h3>Open Payments + ASE Collaboration</h3>
-                    <p>Interactive playground highlighting the handshake between Open Payments APIs and automated settlement engines.</p>
+                    <p>Interactive playground highlighting the handshake between Open Payments APIs and automated
+                        settlement engines.</p>
                     <span class="read-more-link">View Case Study <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 11: Universalized Token Logistics -->
-            <a href="interledger/cases/universalized_token_logistics_open_account_settlement-1.html" class="article-card" data-category="scf" data-search="universalized token logistics open account settlement logistics supply chain finance">
+            <a href="interledger/cases/universalized_token_logistics_open_account_settlement-1.html"
+                class="article-card" data-category="scf"
+                data-search="universalized token logistics open account settlement logistics supply chain finance">
                 <div class="card-header-visual scf">
                     <i class="fa-solid fa-cubes card-header-icon"></i>
                 </div>
@@ -1152,13 +1488,15 @@
                         <span>9 Min Read</span>
                     </div>
                     <h3>Universalized Token Logistics</h3>
-                    <p>Integrating supply chain checkpoints with multi-token settlement engines to enable real-time delivery-vs-payment flows.</p>
+                    <p>Integrating supply chain checkpoints with multi-token settlement engines to enable real-time
+                        delivery-vs-payment flows.</p>
                     <span class="read-more-link">View Case Study <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
 
             <!-- Card 12: ILP Settlement Mechanics -->
-            <a href="interledger/interledger_learning2026_02/ilp_settlement_mechanics.html" class="article-card" data-category="ilp" data-search="ilp settlement mechanics routing accounting credit clearing">
+            <a href="interledger/interledger_learning2026_02/ilp_settlement_mechanics.html" class="article-card"
+                data-category="ilp" data-search="ilp settlement mechanics routing accounting credit clearing">
                 <div class="card-header-visual ilp">
                     <i class="fa-solid fa-calculator card-header-icon"></i>
                 </div>
@@ -1169,7 +1507,8 @@
                         <span>6 Min Read</span>
                     </div>
                     <h3>ILP Settlement Mechanics</h3>
-                    <p>A breakdown of net-settlement cycles, engine handshakes, and credit-limit management on multi-hop pathways.</p>
+                    <p>A breakdown of net-settlement cycles, engine handshakes, and credit-limit management on multi-hop
+                        pathways.</p>
                     <span class="read-more-link">View Case Study <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
@@ -1180,7 +1519,7 @@
                 <h3>No articles found</h3>
                 <p>Try adjusting your filters or search query to find what you are looking for.</p>
             </div>
-            
+
         </section>
     </main>
 
@@ -1196,9 +1535,10 @@
                         The Finux <span>Labs</span>
                     </div>
                 </a>
-                <p>Modernizing how value, accounting, and settlement work across digital and traditional financial systems.</p>
+                <p>Modernizing how value, accounting, and settlement work across digital and traditional financial
+                    systems.</p>
             </div>
-            
+
             <div class="footer-links">
                 <div class="footer-group">
                     <h4>Pillars</h4>
@@ -1212,6 +1552,9 @@
                 <div class="footer-group">
                     <h4>Resources</h4>
                     <ul class="footer-list">
+                        <li><a href="https://gtt-apidocs.vercel.app/" target="_blank" rel="noopener noreferrer">GTT
+                                Business Client API Docs <i class="fa-solid fa-arrow-up-right-from-square"
+                                    style="font-size: 0.7rem; margin-left: 3px;"></i></a></li>
                         <li><a href="about.html">About Smart Finux Labs</a></li>
                         <li><a href="https://github.com/SmartFinuxLabs" target="_blank">Organization Profile</a></li>
                     </ul>
@@ -1267,7 +1610,7 @@
             const articles = document.querySelectorAll('.article-card');
             const featuredCards = document.querySelectorAll('.featured-card');
             const emptyState = document.getElementById('empty-state');
-            
+
             let currentFilter = 'all';
             let searchQuery = '';
 
@@ -1310,7 +1653,7 @@
                 articles.forEach(card => {
                     const cardCategory = card.getAttribute('data-category');
                     const cardSearchData = card.getAttribute('data-search').toLowerCase();
-                    
+
                     const matchesFilter = (currentFilter === 'all' || cardCategory === currentFilter);
                     const matchesSearch = (searchQuery === '' || cardSearchData.includes(searchQuery));
 
@@ -1332,4 +1675,5 @@
         });
     </script>
 </body>
+
 </html>
