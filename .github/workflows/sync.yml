@@ -14,13 +14,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Full history is required to push/sync branches properly
+          persist-credentials: false # Prevents default github-actions[bot] token from overriding our PAT
 
       - name: Push to Destination Repository
         env:
           DEST_REPO_TOKEN: ${{ secrets.DEST_REPO_TOKEN }}
         run: |
-          # Configure remote with authenticated token
-          git remote add dest "https://x-access-token:${DEST_REPO_TOKEN}@github.com/finuxlabs/FinuxLabs.github.io.git"
-          
-          # Push the main branch to destination repository's main branch
-          git push --force dest main:main
+          # Push directly with the PAT credentials
+          git push --force "https://oauth2:${DEST_REPO_TOKEN}@github.com/finuxlabs/FinuxLabs.github.io.git" main:main
