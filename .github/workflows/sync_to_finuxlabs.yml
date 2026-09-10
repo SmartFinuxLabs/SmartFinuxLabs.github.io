@@ -8,6 +8,7 @@ on:
 
 jobs:
   sync:
+    if: github.repository == 'SmartFinuxLabs/SmartFinuxLabs.github.io'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Repository
