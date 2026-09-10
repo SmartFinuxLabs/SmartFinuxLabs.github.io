@@ -1,0 +1,26 @@
+name: Sync to FinuxLabs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger from Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history is required to push/sync branches properly
+
+      - name: Push to Destination Repository
+        env:
+          DEST_REPO_TOKEN: ${{ secrets.DEST_REPO_TOKEN }}
+        run: |
+          # Configure remote with authenticated token
+          git remote add dest "https://x-access-token:${DEST_REPO_TOKEN}@github.com/finuxlabs/FinuxLabs.github.io.git"
+          
+          # Push the main branch to destination repository's main branch
+          git push --force dest main:main
