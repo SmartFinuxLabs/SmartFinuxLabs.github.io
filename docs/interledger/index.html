@@ -819,6 +819,64 @@
             --icon-color: #a78bfa;
             --icon-border: rgba(139, 92, 246, 0.1);
         }
+
+        /* Category Header & Horizontal Divider */
+        .category-header {
+            grid-column: 1 / -1;
+            margin-top: 32px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        .category-header:first-of-type {
+            margin-top: 8px;
+        }
+
+        .category-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .category-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(13, 190, 133, 0.12);
+            border: 1px solid rgba(13, 190, 133, 0.28);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(13, 190, 133, 0.15);
+        }
+
+        .category-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.015em;
+            line-height: 1.2;
+        }
+
+        .category-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        .category-divider-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(13, 190, 133, 0.7) 0%, rgba(255, 255, 255, 0.16) 45%, rgba(255, 255, 255, 0.02) 100%);
+        }
     </style>
 </head>
 <body>
@@ -848,6 +906,7 @@
             <div class="nav-links" id="nav-links">
                 <a href="index.html" class="nav-link active">ILP Hub</a>
                 <a href="interledger_learning2026/index.html" class="nav-link">Core Learning</a>
+                <a href="architecture_account_servicing_entity/index.html" class="nav-link">ASE Accounting</a>
                 <a href="interledger_learning2026_02/ilp_settlement_mechanics.html" class="nav-link">Settlement Flows</a>
                 <a href="cases/universalized_token_logistics_open_account_settlement-1.html" class="nav-link">Logistics Case</a>
                 <a href="interledger_accelerator2026/index.html" class="nav-link nav-link-badge"><span>🚀</span> Accelerator 2026</a>
@@ -873,7 +932,7 @@
                     <span>ILP Network Online</span>
                 </div>
                 <span>•</span>
-                <div>10 Modules Available</div>
+                <div>12 Modules Available</div>
             </div>
         </div>
 
@@ -886,6 +945,7 @@
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">All Modules</button>
                 <button class="filter-btn" data-filter="learning-1">Core Learning</button>
+                <button class="filter-btn" data-filter="accounting">ASE Accounting</button>
                 <button class="filter-btn" data-filter="learning-2">Settlement Flows</button>
                 <button class="filter-btn" data-filter="cases">Case Studies & Roadmap</button>
             </div>
@@ -894,6 +954,20 @@
         <!-- Navigation Grid -->
         <main class="blog-grid" id="modules-grid">
             
+            <!-- Category 1 Divider: Core Learning -->
+            <div class="category-header" data-category-header="learning-1">
+                <div class="category-title-wrap">
+                    <div class="category-icon-box">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h2 class="category-title">Core Learning & Protocol Architecture</h2>
+                        <p class="category-subtitle">Foundational specifications, packet structures, connector routing, and multi-layer stacks</p>
+                    </div>
+                </div>
+                <div class="category-divider-line"></div>
+            </div>
+
             <!-- Card 1 -->
             <a href="interledger_learning2026/1_interledger_protocol_architecture.html" class="blog-card theme-indigo" data-category="learning-1">
                 <div>
@@ -994,6 +1068,74 @@
                 </div>
             </a>
 
+            <!-- Category 2 Divider: ASE Accounting -->
+            <div class="category-header" data-category-header="accounting">
+                <div class="category-title-wrap">
+                    <div class="category-icon-box" style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.28); color: var(--accent);">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <h2 class="category-title">Account Servicing Entity (ASE) Accounting</h2>
+                        <p class="category-subtitle">Double-entry ledger rules, multi-instance isolation, liquidity lifecycles & interactive simulator</p>
+                    </div>
+                </div>
+                <div class="category-divider-line" style="background: linear-gradient(90deg, rgba(16, 185, 129, 0.7) 0%, rgba(255, 255, 255, 0.16) 45%, rgba(255, 255, 255, 0.02) 100%);"></div>
+            </div>
+
+            <!-- Card 12: ASE Accounting Architecture -->
+            <a href="architecture_account_servicing_entity/index.html" class="blog-card theme-emerald" data-category="accounting">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Architecture</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>ASE Accounting & Liquidity Invariants</h3>
+                        <p>Deep dive into Rafiki double-entry ledger rules, multi-instance isolation, peer credit limits, asset conversion, and settlement counterbalance mechanics.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Specs & Walkthroughs</span>
+                    <span class="read-more">Open Architecture <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- Card 13: Rafiki Multi-Instance Flow Simulator -->
+            <a href="architecture_account_servicing_entity/rafiki_accounting_architecture_animated_flows.html" target="_blank" class="blog-card theme-cyan" data-category="accounting">
+                <div>
+                    <div class="card-header">
+                        <span class="card-badge">Interactive Simulation</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3>Rafiki Double-Entry Flow Simulator</h3>
+                        <p>Interactive visual state-machine demonstrating instance isolation, deposit inflows, ILP packet hops, and withdrawal sweeps across TigerBeetle ledgers.</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>Live Simulator</span>
+                    <span class="read-more">Launch Simulator <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </div>
+            </a>
+
+            <!-- Category 3 Divider: Settlement Flows -->
+            <div class="category-header" data-category-header="learning-2">
+                <div class="category-title-wrap">
+                    <div class="category-icon-box" style="background: rgba(6, 182, 212, 0.12); border-color: rgba(6, 182, 212, 0.28); color: var(--secondary);">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <div>
+                        <h2 class="category-title">Settlement Flows & Clearing Mechanics</h2>
+                        <p class="category-subtitle">Peer clearing handshakes, threshold triggers, and automated settlement engine cycles</p>
+                    </div>
+                </div>
+                <div class="category-divider-line" style="background: linear-gradient(90deg, rgba(6, 182, 212, 0.7) 0%, rgba(255, 255, 255, 0.16) 45%, rgba(255, 255, 255, 0.02) 100%);"></div>
+            </div>
+
             <!-- Card 6 -->
             <a href="interledger_learning2026_02/alice_and_bob_settlement_example-1.html" class="blog-card theme-cyan" data-category="learning-2">
                 <div>
@@ -1074,6 +1216,20 @@
                 </div>
             </a>
 
+            <!-- Category 4 Divider: Cases & Roadmap -->
+            <div class="category-header" data-category-header="cases">
+                <div class="category-title-wrap">
+                    <div class="category-icon-box" style="background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.28); color: #a78bfa;">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <h2 class="category-title">Case Studies & Strategic Roadmap</h2>
+                        <p class="category-subtitle">Applied open account settlement, global trade logistics, and accelerator milestones</p>
+                    </div>
+                </div>
+                <div class="category-divider-line" style="background: linear-gradient(90deg, rgba(139, 92, 246, 0.7) 0%, rgba(255, 255, 255, 0.16) 45%, rgba(255, 255, 255, 0.02) 100%);"></div>
+            </div>
+
             <!-- Card 10 -->
             <a href="cases/universalized_token_logistics_open_account_settlement-1.html" class="blog-card theme-emerald" data-category="cases">
                 <div>
@@ -1140,6 +1296,7 @@
                         <li><a href="interledger_learning2026/2_interledger_protocol_stack_architecture.html">02. ILP Stack Architecture</a></li>
                         <li><a href="interledger_learning2026/3_ilp_clearing_and_settlement_architecture.html">03. Clearing & Settlement</a></li>
                         <li><a href="interledger_learning2026/4_settlement_engines_architecture.html">04. Settlement Engines Architecture</a></li>
+                        <li><a href="architecture_account_servicing_entity/index.html">05. ASE Accounting Architecture</a></li>
                         <li><a href="interledger_learning2026/index.html">Core Curriculum Portal</a></li>
                     </ul>
                 </div>
@@ -1150,6 +1307,7 @@
                         <li><a href="interledger_learning2026_02/ilp_settlement_mechanics.html">ILP Peering & Clearing Mechanics</a></li>
                         <li><a href="interledger_learning2026_02/open_payments_animated_ase_collaboration.html">Open Payments + ASE Collaboration</a></li>
                         <li><a href="cases/universalized_token_logistics_open_account_settlement-1.html">Universalized Token Logistics</a></li>
+                        <li><a href="architecture_account_servicing_entity/rafiki_accounting_architecture_animated_flows.html" target="_blank">Rafiki Flow Simulator</a></li>
                         <li><a href="interledger_accelerator2026/index.html">ILP Accelerator 2026 Roadmap</a></li>
                     </ul>
                 </div>
@@ -1294,28 +1452,44 @@
         const searchInput = document.getElementById('search-input');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.blog-card');
+        const categoryHeaders = document.querySelectorAll('.category-header');
 
         function filterAndSearch() {
             const query = searchInput.value.toLowerCase().trim();
             const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
 
-            cards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const desc = card.querySelector('p').textContent.toLowerCase();
-                const category = card.getAttribute('data-category');
+            categoryHeaders.forEach(header => {
+                const headerCat = header.getAttribute('data-category-header');
+                let catMatches = 0;
 
-                const matchesSearch = title.includes(query) || desc.includes(query);
-                const matchesFilter = activeFilter === 'all' || category === activeFilter;
+                cards.forEach(card => {
+                    const cardCat = card.getAttribute('data-category');
+                    if (cardCat === headerCat) {
+                        const title = card.querySelector('h3').textContent.toLowerCase();
+                        const desc = card.querySelector('p').textContent.toLowerCase();
+                        const matchesSearch = query === '' || title.includes(query) || desc.includes(query);
+                        const matchesFilter = activeFilter === 'all' || cardCat === activeFilter;
 
-                if (matchesSearch && matchesFilter) {
-                    card.style.display = 'flex';
-                    // Smooth entrance
-                    card.style.opacity = '1';
-                    card.style.transform = 'scale(1)';
+                        if (matchesSearch && matchesFilter) {
+                            card.style.display = 'flex';
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                            catMatches++;
+                        } else {
+                            card.style.display = 'none';
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                        }
+                    }
+                });
+
+                // Dynamically show/hide the category header and horizontal divider
+                if (catMatches > 0) {
+                    header.style.display = 'flex';
+                    header.style.opacity = '1';
                 } else {
-                    card.style.display = 'none';
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.95)';
+                    header.style.display = 'none';
+                    header.style.opacity = '0';
                 }
             });
         }
