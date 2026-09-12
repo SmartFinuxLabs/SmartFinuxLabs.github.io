@@ -344,14 +344,17 @@
                 top: 100%;
                 left: 0;
                 right: 0;
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
                 background: rgba(255, 255, 255, 0.98);
                 backdrop-filter: blur(16px);
                 border-bottom: 1px solid var(--border-color);
                 box-shadow: 0 16px 32px rgba(24, 32, 29, 0.12);
                 flex-direction: column;
                 align-items: stretch;
-                gap: 4px;
-                padding: 12px 16px 20px;
+                gap: 6px;
+                padding: 14px 16px 28px;
                 z-index: 100;
             }
 
@@ -379,6 +382,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             .nav-link:hover {
@@ -390,6 +394,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: stretch;
+                position: static !important;
             }
 
             .nav-dropdown-toggle {
@@ -400,35 +405,74 @@
                 align-items: center;
                 justify-content: space-between;
                 font-size: 0.925rem;
+                background: transparent;
+                box-sizing: border-box;
             }
 
-            .nav-dropdown-toggle:hover {
+            .nav-dropdown-toggle:hover,
+            .nav-dropdown.open .nav-dropdown-toggle {
                 background: var(--bg-accent);
+                color: var(--primary);
             }
 
             .nav-dropdown-menu {
-                position: static;
-                transform: none;
-                min-width: 100%;
-                box-shadow: none;
-                border: 1px solid var(--border-color);
-                background: rgba(0, 0, 0, 0.02);
-                opacity: 1;
-                visibility: visible;
-                pointer-events: auto;
-                display: none;
-                margin-top: 4px;
-                padding: 6px;
+                position: static !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: 1px solid rgba(13, 190, 133, 0.2) !important;
+                background: rgba(243, 244, 246, 0.8) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                display: none !important;
+                margin: 4px 0 8px !important;
+                padding: 8px !important;
+                border-radius: 12px !important;
+                box-sizing: border-box !important;
             }
 
             .nav-dropdown.open .nav-dropdown-menu {
-                display: flex;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 6px !important;
+            }
+
+            .dropdown-item {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 12px;
+                border-radius: 8px;
+                background: #ffffff;
+                border: 1px solid rgba(24, 32, 29, 0.06);
+            }
+
+            .dropdown-item:hover {
+                background: var(--primary-light);
+                border-color: rgba(13, 190, 133, 0.3);
+            }
+
+            .dropdown-item-title {
+                font-size: 0.875rem;
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            .dropdown-item-desc {
+                font-size: 0.75rem;
+                white-space: normal;
+                word-break: break-word;
             }
 
             .nav-link-highlight {
-                margin: 4px 0;
+                margin: 2px 0;
                 justify-content: flex-start;
                 padding: 10px 14px;
+                box-sizing: border-box;
             }
 
             .nav-btn {
@@ -438,8 +482,9 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                padding: 10px 16px;
+                padding: 11px 16px;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             main {
