@@ -420,7 +420,7 @@
       }
 
       .principle {
-        margin-top: 24px;
+        margin-top: 20px;
         padding: 12px 16px;
         background: var(--white);
         border: 1px solid var(--line);
@@ -433,6 +433,55 @@
         font-family: var(--font-display);
         font-size: clamp(0.95rem, 1.4vw, 1.35rem);
         color: var(--dark);
+      }
+
+      .live-case-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        padding: 9px 16px;
+        background: var(--dark);
+        color: var(--white);
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: clamp(0.74rem, 0.9vw, 0.88rem);
+        font-weight: 600;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 14px rgba(24, 32, 29, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .live-case-cta:hover {
+        background: var(--green-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(13, 190, 133, 0.28);
+        color: var(--white);
+      }
+
+      .live-pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        animation: pulse-green 2s infinite;
+        flex-shrink: 0;
+      }
+
+      @keyframes pulse-green {
+        0% {
+          transform: scale(0.95);
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+        70% {
+          transform: scale(1);
+          box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        }
+        100% {
+          transform: scale(0.95);
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
       }
 
       .actor-panel {
@@ -1453,6 +1502,13 @@
             <div class="principle">
               <p class="eyebrow">Product principle</p>
               <strong>Make Capital Due Value financeable.</strong>
+            </div>
+            <div>
+              <a href="https://verity-alpha.connextium.xyz/" target="_blank" rel="noopener noreferrer" class="live-case-cta" title="Launch Verity Alpha Live">
+                <span class="live-pulse"></span>
+                <span>Verity ( Alpha Live )</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem; opacity: 0.85;"></i>
+              </a>
             </div>
           </div>
           <div class="actor-panel">
