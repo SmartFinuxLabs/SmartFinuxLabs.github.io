@@ -61,13 +61,15 @@ style: |
   <!-- Right Half: 2 Stacked Image Boxes in Full Display -->
   <div style="flex: 1; display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
     <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff;">
-      <p style="font-size: 14px; margin-bottom: 6px; color: #0891b2; font-weight: 700;">Liquidity Fragmentation: Multi-Chain Chaos</p>
+      <p style="font-size: 14px; margin-bottom: 2px; color: #0891b2; font-weight: 700;">Liquidity Fragmentation: Multi-Chain Chaos</p>
+      <p style="font-size: 12px; margin-bottom: 6px; color: #64748b; font-weight: 600;">Liquidity Complexity: Diversity of Chains and Coins</p>
       <div style="height: 130px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
         <img src="../verity/assets/DiversityOfChains-Coins.png" alt="Liquidity complexity from diversity of chains and coins" style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.12);">
       </div>
     </div>
     <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff;">
-      <p style="font-size: 14px; margin-bottom: 6px; color: #e11d48; font-weight: 700;">The Control Gap: Wallet Misuse in Treasury</p>
+      <p style="font-size: 14px; margin-bottom: 2px; color: #e11d48; font-weight: 700;">The Control Gap: Wallet Misuse in Treasury</p>
+      <p style="font-size: 12px; margin-bottom: 6px; color: #64748b; font-weight: 600;">Wallet-to-Wallet Misuse in lacking support to Corporate-grade Treasury Cash Flow</p>
       <div style="height: 130px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
         <img src="../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png" alt="Mis-usage of wallet-to-wallet coin transfers for corporate treasury" style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.12);">
       </div>
