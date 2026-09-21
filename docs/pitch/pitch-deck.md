@@ -69,8 +69,9 @@ style: |
     </div>
     <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff;">
       <p style="font-size: 14px; margin-bottom: 2px; color: #e11d48; font-weight: 700;">The Control Gap: Wallet Misuse in Treasury</p>
-      <p style="font-size: 12px; margin-bottom: 6px; color: #64748b; font-weight: 600;">Wallet-to-Wallet Misuse in lacking support to Corporate-grade Treasury Cash Flow</p>
-      <div style="height: 130px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
+      <p style="font-size: 12px; margin-bottom: 2px; color: #64748b; font-weight: 600;">Wallet-to-Wallet Misuse in lacking support to Corporate-grade Treasury Cash Flow</p>
+      <p style="font-size: 11px; margin-bottom: 6px; color: #94a3b8; font-style: italic;">The frequent appearance of prototype "coin transfer" doesn't work for corporate treasury in reality.</p>
+      <div style="height: 125px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
         <img src="../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png" alt="Mis-usage of wallet-to-wallet coin transfers for corporate treasury" style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.12);">
       </div>
     </div>
