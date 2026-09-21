@@ -58,21 +58,25 @@ style: |
     </div>
   </div>
 
-  <!-- Right Half: 2 Stacked Image Boxes in Full Display -->
+  <!-- Right Half: 2 Stacked Image Boxes with 2-Lane Inner Layout (1/3 text, 2/3 image) -->
   <div style="flex: 1; display: flex; flex-direction: column; gap: 14px; justify-content: space-between;">
-    <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff;">
-      <p style="font-size: 14px; margin-bottom: 2px; color: #0891b2; font-weight: 700;">Liquidity Fragmentation: Multi-Chain Chaos</p>
-      <p style="font-size: 12px; margin-bottom: 6px; color: #64748b; font-weight: 600;">Liquidity Complexity: Diversity of Chains and Coins</p>
-      <div style="height: 130px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
-        <img src="../verity/assets/DiversityOfChains-Coins.png" alt="Liquidity complexity from diversity of chains and coins" style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.12);">
+    <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; background: #ffffff; display: flex; gap: 14px; align-items: center;">
+      <div style="flex: 1;">
+        <p style="font-size: 14px; margin-bottom: 2px; color: #0891b2; font-weight: 700;">Liquidity Fragmentation: Multi-Chain Chaos</p>
+        <p style="font-size: 12.5px; color: #475569; font-weight: 600; line-height: 1.35;">Liquidity Complexity: Diversity of Chains and Coins</p>
+      </div>
+      <div style="flex: 2; height: 125px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
+        <img src="../verity/assets/DiversityOfChains-Coins.png" alt="Liquidity complexity from diversity of chains and coins" style="width: 100%; height: 100%; object-fit: contain;">
       </div>
     </div>
-    <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; background: #ffffff;">
-      <p style="font-size: 14px; margin-bottom: 2px; color: #e11d48; font-weight: 700;">The Control Gap: Wallet Misuse in Treasury</p>
-      <p style="font-size: 12px; margin-bottom: 2px; color: #64748b; font-weight: 600;">Wallet-to-Wallet Misuse in lacking support to Corporate-grade Treasury Cash Flow</p>
-      <p style="font-size: 11px; margin-bottom: 6px; color: #94a3b8; font-style: italic;">The frequent appearance of prototype "coin transfer" doesn't work for corporate treasury in reality.</p>
-      <div style="height: 125px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
-        <img src="../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png" alt="Mis-usage of wallet-to-wallet coin transfers for corporate treasury" style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.12);">
+
+    <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; background: #ffffff; display: flex; gap: 14px; align-items: center;">
+      <div style="flex: 1;">
+        <p style="font-size: 14px; margin-bottom: 2px; color: #e11d48; font-weight: 700;">The Control Gap: Wallet Misuse in Treasury</p>
+        <p style="font-size: 12.5px; color: #475569; font-weight: 600; line-height: 1.35;">The popular prototype Wallet-to-Wallet "coin transfer" lack support to corporate treasury cash flow in reality.</p>
+      </div>
+      <div style="flex: 2; height: 125px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px;">
+        <img src="../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png" alt="Mis-usage of wallet-to-wallet coin transfers for corporate treasury" style="width: 100%; height: 100%; object-fit: contain;">
       </div>
     </div>
   </div>
@@ -355,7 +359,7 @@ style: |
 ### Round Structure & Terms
 - **Target Raise:** **$1,250,000**
 - **Equity Offered:** **15.0%**
-- **Valuation:** **Valuation round at $8.4 M** ($8,400,000 Post-Money / $7,150,000 Pre-Money)
+- **Valuation:** **Valuation round at $8.4 M** ($8,400,000 Post-Money)
 - **Structure:** Priced Seed Round / SAFE with $8.4M Post-Money Cap
 
 ### Capital Allocation ($1.25M)
