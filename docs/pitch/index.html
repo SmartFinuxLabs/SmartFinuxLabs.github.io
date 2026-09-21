@@ -981,9 +981,20 @@
 
         /* Print / PDF Styles */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            @page {
+                size: landscape;
+                margin: 0;
+            }
+
             body {
-                background: white;
-                padding: 0;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
 
             .top-navbar,
@@ -994,18 +1005,33 @@
             }
 
             .deck-container {
-                width: 100%;
-                margin: 0;
-                gap: 0;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                gap: 0 !important;
             }
 
             .slide {
                 page-break-after: always;
-                box-shadow: none;
-                border: 1px solid #ddd;
+                page-break-inside: avoid;
+                break-after: page;
+                box-shadow: none !important;
+                border: none !important;
                 aspect-ratio: 16 / 9;
-                height: 100vh;
-                margin-bottom: 0;
+                width: 100vw !important;
+                height: 100vh !important;
+                margin: 0 !important;
+                padding: 28px !important;
+            }
+
+            .hero-title-main,
+            .hero-title-main span {
+                color: #0DBE85 !important;
+                -webkit-text-fill-color: #0DBE85 !important;
+                background: none !important;
+                display: inline-block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
         }
     </style>
