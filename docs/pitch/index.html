@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connextium.xyz — VC Pitch Deck | $1.25M Seed Round (15% Equity)</title>
+    <meta name="description"
+        content="Official VC Pitch Deck for Connextium.xyz — $1.25M Seed Round (15% Equity, Valuation round at $8.4 M) | Programmable Treasury Accounting, Stablecoin Cash Flow Management & Settlement Platform.">
+
+    <!-- Modern Typography & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Design Tokens - Doris Teal / Emerald Theme */
+        :root {
+            --ink: #18201d;
+            --ink-secondary: #33403c;
+            --muted: #5d6a67;
+            --muted-light: #7e8c89;
+            --primary: #0DBE85;
+            --primary-dark: #0aa372;
+            --primary-light: #e6f9f3;
+            --emerald: #059669;
+            --teal: #0891b2;
+            --teal-light: #ecfeff;
+            --amber: #d97706;
+            --amber-light: #fef3c7;
+            --coral: #e11d48;
+            --coral-light: #ffe4e6;
+            --purple: #7c3aed;
+            --purple-light: #f5f3ff;
+            --line: #d7dfda;
+            --line-subtle: #e6ece9;
+            --paper: #f9fafb;
+            --white: #ffffff;
+            --dark-card: #141d1a;
+            --dark-surface: #0f1614;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --shadow-sm: 0 4px 14px rgba(22, 32, 31, 0.05);
+            --shadow-md: 0 14px 36px rgba(22, 32, 31, 0.08);
+            --shadow-lg: 0 24px 56px rgba(22, 32, 31, 0.12);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: #e9efe8;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 60px;
+        }
+
+        /* Top Sticky Navigation Bar */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 2px 10px rgba(22, 32, 31, 0.04);
+            padding: 10px 24px;
+        }
+
+        .top-navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .back-hub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 8px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            transition: all 0.2s ease;
+        }
+
+        .back-hub-link:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-color: var(--primary);
+        }
+
+        .nav-badge-pitch {
+            background: linear-gradient(135deg, #0DBE85, #0891b2);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .nav-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-deck-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .nav-deck-subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-counter {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--muted);
+            padding: 6px 14px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            padding: 0 14px;
+            gap: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: var(--ink);
+            color: var(--white);
+            border-color: var(--ink);
+        }
+
+        .nav-btn-action {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
+        .nav-btn-action:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+
+        .slide-select {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            cursor: pointer;
+            outline: none;
+            max-width: 270px;
+        }
+
+        /* Main Deck Container */
+        .deck-container {
+            width: min(1380px, calc(100% - 36px));
+            margin: 28px auto 0;
+            display: grid;
+            gap: 36px;
+        }
+
+        /* Slide Shell (16:9 Aspect on Desktop) */
+        .slide {
+            position: relative;
+            width: 100%;
+            background: var(--white);
+            border: 1px solid #cfd9d4;
+            border-radius: 14px;
+            box-shadow: var(--shadow-lg);
+            scroll-margin-top: 80px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 1080px) {
+            .slide {
+                aspect-ratio: 16 / 9;
+                min-height: 660px;
+            }
+
+            .slide-inner {
+                position: absolute;
+                inset: 0;
+                padding: 3.5% 4.5% 3%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-sizing: border-box;
+            }
+        }
+
+        @media (max-width: 1079px) {
+            .slide {
+                padding: 28px 24px;
+                min-height: auto;
+            }
+
+            .slide-inner {
+                display: flex;
+                flex-direction: column;
+                gap: 22px;
+            }
+        }
+
+        /* Slide Header & Meta */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--line-subtle);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .slide-title-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slide-category {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 2.7vw, 2.4rem);
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-subtitle {
+            font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .slide-number-badge {
+            font-family: var(--font-mono);
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--muted-light);
+            background: var(--paper);
+            border: 1px solid var(--line);
+            padding: 5px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        /* Slide Body Content */
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* Slide Footer */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--line-subtle);
+            padding-top: 12px;
+            margin-top: 16px;
+            font-size: 0.82rem;
+            color: var(--muted-light);
+            font-family: var(--font-mono);
+        }
+
+        .slide-footer a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Card Layout Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .deck-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+            transition: all 0.2s ease;
+        }
+
+        .deck-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .deck-card.highlight-card {
+            background: var(--primary-light);
+            border-color: rgba(13, 190, 133, 0.4);
+        }
+
+        .deck-card.dark-card {
+            background: var(--dark-card);
+            color: #e5edea;
+            border-color: #2b3935;
+        }
+
+        .deck-card.purple-card {
+            background: var(--purple-light);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .deck-card-title {
+            font-family: var(--font-display);
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-card .deck-card-title {
+            color: #ffffff;
+        }
+
+        .deck-card-text {
+            font-size: 0.92rem;
+            color: var(--ink-secondary);
+            line-height: 1.5;
+        }
+
+        .dark-card .deck-card-text {
+            color: #b0c2bc;
+        }
+
+        /* Valuation Badge & Highlight */
+        .valuation-callout {
+            background: linear-gradient(135deg, rgba(13, 190, 133, 0.12), rgba(8, 145, 178, 0.1));
+            border: 1px solid rgba(13, 190, 133, 0.4);
+            border-radius: 10px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        /* T-Account Visual Block */
+        .t-account-container {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 0.84rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .t-account-header {
+            background: #18201d;
+            color: #ffffff;
+            padding: 8px 14px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .t-account-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 2px solid #18201d;
+        }
+
+        .t-debit {
+            padding: 12px 14px;
+            border-right: 1px solid var(--line);
+            background: #fdfdfd;
+        }
+
+        .t-credit {
+            padding: 12px 14px;
+            background: #f9fafb;
+        }
+
+        .t-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        /* Visual Stat Callouts */
+        .stat-box {
+            text-align: center;
+            padding: 18px 14px;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-val {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--primary-dark);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: var(--ink);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-sub {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        /* Architecture Stack Box */
+        .arch-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .arch-layer {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .arch-layer.active-layer {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .arch-layer-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .arch-layer-desc {
+            font-size: 0.84rem;
+            color: var(--muted);
+            font-family: var(--font-mono);
+        }
+
+        /* Flow Diagrams */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: var(--paper);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--line);
+            overflow-x: auto;
+        }
+
+        .flow-node {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--ink);
+            min-width: 110px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .flow-node.active-node {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .flow-arrow {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        /* Growth Roadmap Flow */
+        .growth-roadmap {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .growth-roadmap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .growth-step {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            position: relative;
+        }
+
+        .growth-step-badge {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        .deck-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .deck-table th {
+            background: var(--paper);
+            color: var(--ink);
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line);
+            font-family: var(--font-display);
+        }
+
+        .deck-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line-subtle);
+            color: var(--ink-secondary);
+        }
+
+        .deck-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .deck-table tr:hover td {
+            background: var(--paper);
+        }
+
+        /* Demo Buttons & Badges */
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            transition: all 0.2s ease;
+        }
+
+        .demo-badge:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .demo-badge-live {
+            background: #0DBE85;
+            color: white;
+            border-color: #0aa372;
+        }
+
+        .demo-badge-live:hover {
+            background: #0aa372;
+            color: white;
+        }
+
+        /* Speaker Notes Panel (Toggleable) */
+        .notes-panel {
+            background: #1e2825;
+            color: #d1ded9;
+            padding: 14px 22px;
+            border-radius: 0 0 14px 14px;
+            font-size: 0.85rem;
+            border-top: 1px solid #32433e;
+            display: none;
+        }
+
+        .notes-panel.open {
+            display: block;
+        }
+
+        .notes-title {
+            font-family: var(--font-mono);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        /* Slide 1: Hero Cover */
+        .hero-cover {
+            background: radial-gradient(circle at 80% 20%, rgba(13, 190, 133, 0.12), transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.1), transparent 50%),
+                var(--white);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hero-title-main {
+            font-family: var(--font-display);
+            font-size: clamp(2.6rem, 4.8vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+        }
+
+        .hero-title-main span {
+            background: linear-gradient(135deg, #0DBE85, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+            font-weight: 600;
+            color: var(--ink-secondary);
+            max-width: 920px;
+            margin-top: 10px;
+            line-height: 1.35;
+        }
+
+        .hero-subtext {
+            font-size: 0.98rem;
+            color: var(--muted);
+            max-width: 840px;
+            margin-top: 6px;
+        }
+
+        /* Diagram Cards & Lightbox Modal */
+        .diagram-preview-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .diagram-preview-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .diagram-img-wrap {
+            position: relative;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--line-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 190px;
+        }
+
+        .diagram-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .diagram-preview-card:hover .diagram-img {
+            transform: scale(1.02);
+        }
+
+        .diagram-zoom-badge {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(24, 32, 29, 0.88);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(4px);
+        }
+
+        .diagram-caption {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Diagram Feature Slide Layouts */
+        .diagram-feature-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+            align-items: stretch;
+            height: 100%;
+        }
+
+        @media (max-width: 960px) {
+            .diagram-feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .diagram-feature-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            text-align: left;
+        }
+
+        .diagram-feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .diagram-feature-img-wrap {
+            position: relative;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--line-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 310px;
+        }
+
+        .diagram-feature-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .diagram-feature-card:hover .diagram-feature-img {
+            transform: scale(1.02);
+        }
+
+        /* Image Zoom Lightbox Modal */
+        .img-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 22, 20, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .img-modal.active {
+            display: flex;
+        }
+
+        .img-modal-content {
+            position: relative;
+            max-width: 95vw;
+            max-height: 92vh;
+            background: white;
+            padding: 16px;
+            border-radius: 14px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .img-modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+        }
+
+        .img-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .img-modal-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .img-modal-close {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--ink);
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .img-modal-close:hover {
+            background: #e11d48;
+            color: white;
+            border-color: #e11d48;
+        }
+
+        /* Print / PDF Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .top-navbar,
+            .notes-panel,
+            .nav-controls,
+            .img-modal {
+                display: none !important;
+            }
+
+            .deck-container {
+                width: 100%;
+                margin: 0;
+                gap: 0;
+            }
+
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                aspect-ratio: 16 / 9;
+                height: 100vh;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="top-navbar">
+        <div class="top-navbar-inner">
+            <div class="nav-left">
+                <a href="../index.html" class="back-hub-link" title="Return to Signal Tech Hub">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Portal Hub</span>
+                </a>
+                <span class="nav-badge-pitch">$1.25M Seed (15% Equity)</span>
+                <div class="nav-title-group">
+                    <div class="nav-deck-title">Connextium.xyz</div>
+                    <div class="nav-deck-subtitle">Treasury Accounting & Settlement Platform</div>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <select id="slide-jump" class="slide-select" onchange="jumpToSlide(this.value)">
+                    <option value="slide-1">1. Executive Overview (Platform)</option>
+                    <option value="slide-2">2. Industry Core Problem (Modernization Gap)</option>
+                    <option value="slide-3">3. Cash Flow & Treasury Bottleneck</option>
+                    <option value="slide-4">4. Market Opportunity ($150T TAM)</option>
+                    <option value="slide-5">5. Platform Core Architecture</option>
+                    <option value="slide-6">6. Corporate Treasury & Stablecoins</option>
+                    <option value="slide-7">7. Case Study: Dual T-Account Accounting & ERP Sync</option>
+                    <option value="slide-8">8. Account Servicing & Invariants</option>
+                    <option value="slide-9">9. Case Study: Supply Chain Finance</option>
+                    <option value="slide-10">10. ADA Framework (Factoring Case)</option>
+                    <option value="slide-11">11. Verity AI & CDSC Streaming</option>
+                    <option value="slide-12">12. Traction: Live Working Alphas</option>
+                    <option value="slide-13">13. Business & Revenue Model</option>
+                    <option value="slide-14">14. Value Growing Plan (Series A)</option>
+                    <option value="slide-15">15. The Ask: $1.25M (15% Equity)</option>
+                </select>
+
+                <div class="slide-counter" id="slide-indicator">Slide 1 / 15</div>
+
+                <button class="nav-btn" onclick="prevSlide()" title="Previous Slide (← or PageUp)">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn" onclick="nextSlide()" title="Next Slide (→ or Space)">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <button class="nav-btn" onclick="toggleNotes()" title="Toggle Investor Notes (N)">
+                    <i class="fa-regular fa-note-sticky"></i>
+                    <span class="hidden sm:inline">Notes</span>
+                </button>
+
+                <button class="nav-btn" onclick="toggleFullscreen()" title="Fullscreen Mode (F)">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+
+                <a href="pitch-deck.md" download="Connextium-Pitch-Deck.md" class="nav-btn"
+                    title="Download Markdown Deck">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>MD</span>
+                </a>
+
+                <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $1.25M Seed Round (15% Equity).pdf" class="nav-btn nav-btn-action"
+                    target="_blank" title="Static PDF Pitch Deck (15 Slides)">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>PDF</span>
+                </a>
+
+                <button class="nav-btn" onclick="window.print()"
+                    title="Export / Print Slides (P)">
+                    <i class="fa-solid fa-print"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Deck Container -->
+    <main class="deck-container">
+
+        <!-- ========================================== -->
+        <!-- SLIDE 1: Title & Executive Summary -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-1">
+            <div class="slide-inner hero-cover">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Connextium.xyz • Seed Round Deck</span>
+                        </div>
+                    </div>
+                    <div class="slide-number-badge">01 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <h1 class="hero-title-main">
+                        Connextium<span>.xyz</span> 2026
+                    </h1>
+                    <div class="hero-tagline">
+                        Programmable Treasury Accounting, Stablecoin Cash Flow & Multi-Rail Settlement
+                    </div>
+                    <p class="hero-subtext">
+                        Unifying corporate double-entry accounting truth, 24/7 stablecoin cash sweeps, and multi-rail
+                        routing — with <strong>Supply Chain Finance & Receivables Factoring</strong> as our high-yield
+                        beachhead application.
+                    </p>
+
+                    <div class="grid-3" style="margin-top: 22px;">
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-vault" style="color: #0891b2;"></i>
+                                <span>Treasury & ADA Vaults</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Programmable Account of Digital Assets (ADA) managing multi-currency cash sweeps and
+                                Circle USDC/EURC reserves.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-book-journal-whills" style="color: #059669;"></i>
+                                <span>Dual T-Account Truth</span>
+                            </div>
+                            <div class="deck-card-text">
+                                GAAP/IFRS synchronized double-entry accounting bridging ERP general ledgers with
+                                cryptographically verifiable settlement.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-bolt" style="color: #d97706;"></i>
+                                <span>Business App: SCF</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Verity AI dynamic discounting turning Net-60 invoice liabilities into yield-generating
+                                early liquidity payouts.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div><strong>Founders:</strong> Tørence Juhe & Dr. Haroël Lee (Ph.D.)</div>
+                    <div><strong>The Ask:</strong> $1.25M Seed for 15% Equity (Valuation round at $8.4 M)</div>
+                    <div><strong>Live Portal:</strong> <a href="https://connextium.xyz"
+                            target="_blank">connextium.xyz</a></div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-1">
+                <div class="notes-title">Investor Notes • Platform Positioning</div>
+                Connextium is the programmable financial operating system for corporate treasury. We automate cash flow
+                velocity using institutional stablecoins and double-entry ledger truth, deploying Supply Chain Finance
+                and Factoring to capture immediate high-yield enterprise volume.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 2: Industry Core Problem -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-2">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-diagram-project" style="color: #d97706;"></i>
+                            <span>Industry Core Problem</span>
+                        </div>
+                        <div class="slide-title">Modernization joint with StableCoin Missed the "Core"</div>
+                        <div class="slide-subtitle">Non-accomplished success at ISO20022 programs and Blind spot remains
+                            in treasury-core architecture.</div>
+                    </div>
+                    <div class="slide-number-badge">02 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; height: 100%;">
+                        <!-- Left Half: 3 High-Impact Structural Blind Spots -->
+                        <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%;">
+                            <div class="deck-card" style="padding: 16px 20px; border-left: 4px solid #d97706; background: #ffffff; display: flex; flex-direction: column; justify-content: center; flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <span style="background: #fef3c7; color: #b45309; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 6px; font-family: var(--font-mono);">01</span>
+                                    <strong style="color: var(--ink); font-size: 1.05rem; font-family: var(--font-display);">Messaging ≠ Core Engine</strong>
+                                </div>
+                                <div style="font-size: 0.95rem; line-height: 1.5; color: var(--ink-secondary); padding-left: 32px;">
+                                    ISO 20022 modernized transaction messages, but left legacy, batch-processed accounting cores untouched.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 16px 20px; border-left: 4px solid #0891b2; background: #ffffff; display: flex; flex-direction: column; justify-content: center; flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <span style="background: #e0f2fe; color: #0369a1; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 6px; font-family: var(--font-mono);">02</span>
+                                    <strong style="color: var(--ink); font-size: 1.05rem; font-family: var(--font-display);">The DLT Perimeter Rush</strong>
+                                </div>
+                                <div style="font-size: 0.95rem; line-height: 1.5; color: var(--ink-secondary); padding-left: 32px;">
+                                    Institutions built external wrappers (RWAs, tokenized deposits) rather than solving core ledger synchronization.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 16px 20px; border-left: 4px solid #e11d48; background: #ffffff; display: flex; flex-direction: column; justify-content: center; flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <span style="background: #ffe4e6; color: #be123c; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 6px; font-family: var(--font-mono);">03</span>
+                                    <strong style="color: var(--ink); font-size: 1.05rem; font-family: var(--font-display);">The Control Vacuum</strong>
+                                </div>
+                                <div style="font-size: 0.95rem; line-height: 1.5; color: var(--ink-secondary); padding-left: 32px;">
+                                    Moving tokens wallet-to-wallet without double-entry accounting breaks corporate treasury and audit compliance.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Half: 2 Stacked Image Boxes in Full Display -->
+                        <div style="display: flex; flex-direction: column; gap: 14px; justify-content: space-between; height: 100%;">
+                            <!-- Top Image Card -->
+                            <div class="diagram-preview-card" style="margin: 0; padding: 10px 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;" onclick="openImageModal('../verity/assets/DiversityOfChains-Coins.png', 'Liquidity Complexity: Diversity of Chains and Coins')">
+                                <div class="deck-card-title" style="color: #0891b2; font-size: 0.98rem; margin-bottom: 6px;">
+                                    <i class="fa-solid fa-circle-nodes"></i>
+                                    <span>Liquidity Fragmentation: Multi-Chain Chaos</span>
+                                </div>
+                                <div class="diagram-img-wrap" style="height: 135px; overflow: hidden; border-radius: 8px;">
+                                    <img src="../verity/assets/DiversityOfChains-Coins.png" alt="Diversity of chains and coins liquidity complexity" class="diagram-img" style="transform: scale(1.12); transform-origin: center center;">
+                                    <div class="diagram-zoom-badge" style="font-size: 0.72rem; padding: 3px 8px;">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                        <span>Click to Zoom</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Image Card -->
+                            <div class="diagram-preview-card" style="margin: 0; padding: 10px 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;" onclick="openImageModal('../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png', 'Wallet-to-Wallet Misuse in Corporate Treasury Cash Flow')">
+                                <div class="deck-card-title" style="color: #e11d48; font-size: 0.98rem; margin-bottom: 6px;">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                    <span>The Control Gap: Wallet Misuse in Treasury</span>
+                                </div>
+                                <div class="diagram-img-wrap" style="height: 135px; overflow: hidden; border-radius: 8px;">
+                                    <img src="../verity/assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png" alt="Mis-usage of wallet to wallet coin transfer for corporate treasury" class="diagram-img" style="transform: scale(1.12); transform-origin: center center;">
+                                    <div class="diagram-zoom-badge" style="font-size: 0.72rem; padding: 3px 8px;">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                        <span>Click to Zoom</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Core Thesis: Real transformation requires modernizing internal treasury accounting truth — not
+                        just token movement.</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-2">
+                <div class="notes-title">Investor Notes • Why Now</div>
+                The startup opportunity is not another wallet or token wrapper. It is enterprise-grade internal treasury
+                accounting and control architecture that can safely orchestrate multi-chain liquidity and programmable
+                settlement at scale.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 3: Cash Flow & Treasury Bottleneck -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-3">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: #e11d48;"></i>
+                            <span>The Core Friction</span>
+                        </div>
+                        <div class="slide-title">Enterprise Cash Flow emerging inflow of StableCoin</div>
+                        <div class="slide-subtitle">Global B2B commerce relies on fragmented, batch-processed 1970s
+                            banking rails</div>
+                    </div>
+                    <div class="slide-number-badge">03 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <!-- Top Row: 3 Core Frictions -->
+                    <div class="grid-3" style="gap: 14px;">
+                        <div class="deck-card" style="padding: 14px 18px;">
+                            <div class="deck-card-title" style="color: #e11d48; font-size: 1.05rem; margin-bottom: 6px;">
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+                                <span>$150T Trapped Float</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.92rem; line-height: 1.45;">
+                                Trillions in corporate cash sit locked in transit, buffer accounts, and unpaid Net-60 supplier invoices.
+                            </div>
+                        </div>
+
+                        <div class="deck-card" style="padding: 14px 18px;">
+                            <div class="deck-card-title" style="color: #e11d48; font-size: 1.05rem; margin-bottom: 6px;">
+                                <i class="fa-solid fa-file-circle-xmark"></i>
+                                <span>Disconnected Accounting</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.92rem; line-height: 1.45;">
+                                ERP general ledgers, SWIFT wires, and waybills operate in silos, requiring slow manual reconciliations.
+                            </div>
+                        </div>
+
+                        <div class="deck-card" style="padding: 14px 18px;">
+                            <div class="deck-card-title" style="color: #e11d48; font-size: 1.05rem; margin-bottom: 6px;">
+                                <i class="fa-solid fa-percent"></i>
+                                <span>3% to 7% Fee Friction</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.92rem; line-height: 1.45;">
+                                Intermediary wire fees, correspondent bank cuts, and opaque FX conversion spreads erode enterprise margins.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle: The CFO Dilemma Quote Box -->
+                    <div class="deck-card dark-card" style="margin-top: 0; padding: 14px 20px;">
+                        <div class="deck-card-title" style="color: #0DBE85; font-size: 1.02rem; margin-bottom: 4px;">
+                            <i class="fa-solid fa-quote-left"></i>
+                            <span>The CFO's Dilemma</span>
+                        </div>
+                        <div class="deck-card-text" style="font-size: 0.95rem; color: #d1ded9; line-height: 1.5;">
+                            "Enterprises are managing 21st-century global supply chains with 1970s batch-processed
+                            banking rails. Treasurers lack the infrastructure to program real-time stablecoin cash flows
+                            and capture instant invoice yields."
+                        </div>
+                    </div>
+
+                    <!-- Bottom: Abstracted Ledger Divergence & Authoritative State Block -->
+                    <div class="deck-card" style="background: linear-gradient(135deg, rgba(8, 145, 178, 0.05), rgba(13, 190, 133, 0.05)); border: 1px solid rgba(8, 145, 178, 0.3); padding: 14px 18px; margin-top: 0;">
+                        <div class="deck-card-title" style="color: #0891b2; font-size: 1.02rem; margin-bottom: 10px;">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span>The Ledger Divergence: Conventional Accounting vs. DLT &amp; MPC State</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                            <div style="background: #ffffff; border: 1px solid var(--line-subtle); border-radius: 8px; padding: 10px 14px; border-left: 3px solid #64748b;">
+                                <strong style="color: var(--ink); font-size: 0.92rem; display: block; margin-bottom: 4px;">Conventional Ledger</strong>
+                                <div style="font-size: 0.88rem; color: var(--ink-secondary); line-height: 1.4;">
+                                    Maintained system of record where state updates via controlled transactions propagating across accounts.
+                                </div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid var(--line-subtle); border-radius: 8px; padding: 10px 14px; border-left: 3px solid #0891b2;">
+                                <strong style="color: #0891b2; font-size: 0.92rem; display: block; margin-bottom: 4px;">DLT &amp; MPC Computation</strong>
+                                <div style="font-size: 0.88rem; color: var(--ink-secondary); line-height: 1.4;">
+                                    Tokenization shifted focus toward multi-party state synchronization (MPC as the true computational mechanism).
+                                </div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid var(--line-subtle); border-radius: 8px; padding: 10px 14px; border-left: 3px solid #d97706;">
+                                <strong style="color: #d97706; font-size: 0.92rem; display: block; margin-bottom: 4px;">Authoritative State Gap</strong>
+                                <div style="font-size: 0.88rem; color: var(--ink-secondary); line-height: 1.4;">
+                                    Maintaining transactional or eventual consistency across stablecoins and tokenized deposits is the core design hurdle.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Data: McKinsey Global Payments Report & Association for Financial Professionals (AFP)</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-3">
+                <div class="notes-title">Investor Notes • The Problem</div>
+                Corporate CFOs have idle cash earning low treasury yields while their SME suppliers are starved for
+                liquidity and pay 20%+ APR to factoring loan sharks. Connextium bridges this gap programmatically.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 4: Market Opportunity -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-4">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Market Opportunity</span>
+                        </div>
+                        <div class="slide-title">Multi-Trillion Dollar Market Opportunity</div>
+                        <div class="slide-subtitle">Capturing the massive enterprise transition to programmable
+                            liquidity and on-chain settlement</div>
+                    </div>
+                    <div class="slide-number-badge">04 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-3">
+                        <div class="stat-box">
+                            <div class="stat-val">$150 T</div>
+                            <div class="stat-label">Global B2B Payments (TAM)</div>
+                            <div class="stat-sub">Annual enterprise cross-border cash flow</div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-val">$5.2 T</div>
+                            <div class="stat-label">Supply Chain Finance (SAM)</div>
+                            <div class="stat-sub">Unmet trade liquidity & factoring demand</div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-val">$25 B</div>
+                            <div class="stat-label">Initial Target Volume (SOM)</div>
+                            <div class="stat-sub">High-velocity cross-border trade corridors</div>
+                        </div>
+                    </div>
+
+                    <div class="deck-card"
+                        style="background: var(--paper); border-color: var(--line); margin-top: 4px;">
+                        <div class="deck-card-title">
+                            <i class="fa-solid fa-chess-knight" style="color: var(--primary-dark);"></i>
+                            <span>The Platform + Application Playbook</span>
+                        </div>
+                        <div class="grid-3" style="margin-top: 8px;">
+                            <div>
+                                <strong>1. Build the Rail (Platform)</strong>
+                                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 3px;">
+                                    GTT payment and treasury router with automated stablecoin cash sweeps.
+                                </p>
+                            </div>
+                            <div>
+                                <strong>2. Deploy Flagship App (SCF)</strong>
+                                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 3px;">
+                                    Verity dynamic discounting captures high transaction volume on Day 1.
+                                </p>
+                            </div>
+                            <div>
+                                <strong>3. Expand Ecosystem (APIs)</strong>
+                                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 3px;">
+                                    Neobanks, logistics carriers, and fintechs build vertical applications on top.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Data: Bank for International Settlements (BIS) & World Trade Organization (WTO)</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-4">
+                <div class="notes-title">Investor Notes • Market Sizing</div>
+                Even 0.1% market share of target cross-border trade finance flow represents over $25M in high-margin
+                recurring net revenue.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 5: Platform Core Architecture -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-5">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-microchip" style="color: var(--primary);"></i>
+                            <span>Platform Architecture</span>
+                        </div>
+                        <div class="slide-title">The Connextium Universal Platform Stack</div>
+                        <div class="slide-subtitle">A layered infrastructure connecting ERP business logic to
+                            programmable on-chain settlement</div>
+                    </div>
+                    <div class="slide-number-badge">05 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="arch-stack">
+                        <!-- Layer 3 -->
+                        <div class="arch-layer">
+                            <div class="arch-layer-title">
+                                <span style="color: #d97706;">APPLICATION LAYER</span>
+                                <span style="font-weight: 500; font-size: 0.84rem; color: var(--muted);">Business cases
+                                    running on the platform</span>
+                            </div>
+                            <div class="arch-layer-desc">
+                                [ Verity AI SCF ] • [ CDSC Factoring ] • [ Dynamic Discounting ]
+                            </div>
+                        </div>
+
+                        <!-- Layer 2 -->
+                        <div class="arch-layer active-layer">
+                            <div class="arch-layer-title">
+                                <span style="color: var(--primary-dark);">CONNEXTIUM TREASURY & PAYMENT CORE
+                                    (GTT)</span>
+                                <span style="font-weight: 600; font-size: 0.84rem; color: var(--primary-dark);">Project
+                                    ADA Engine</span>
+                            </div>
+                            <div class="arch-layer-desc">
+                                Programmable ADA Vaults • Dual T-Account Journal Engine • ILP Multi-Hop Router
+                            </div>
+                        </div>
+
+                        <!-- Layer 1 -->
+                        <div class="arch-layer">
+                            <div class="arch-layer-title">
+                                <span style="color: #0891b2;">MULTI-RAIL SETTLEMENT ADAPTERS</span>
+                                <span style="font-weight: 500; font-size: 0.84rem; color: var(--muted);">Interoperable
+                                    execution rails</span>
+                            </div>
+                            <div class="arch-layer-desc">
+                                [ Circle USDC / EURC ] • [ FedNow / RTP ] • [ SEPA Instant ]
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 8px;">
+                        <div class="deck-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-bolt" style="color: var(--primary-dark);"></i>
+                                <span>
+                                    < 3s Settlement</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Packetized value routing executes atomic, multi-hop cross-currency transfers in seconds.
+                            </div>
+                        </div>
+
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="color: #0891b2;">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                                <span>Double-Entry Invariants</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Specialized financial ledgers guarantee zero-sum debit/credit balance constraints at
+                                100k+ ops/sec.
+                            </div>
+                        </div>
+
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="color: #d97706;">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span>Multi-Rail Neutrality</span>
+                            </div>
+                            <div class="deck-card-text">
+                                No vendor lock-in. Seamlessly routes value across fiat banking rails and regulated
+                                stablecoins.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Interledger Protocol (ILP) RFC & Open Payments Standard Compliant</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-5">
+                <div class="notes-title">Investor Notes • Core Architecture</div>
+                Our architecture separates customer banking ledgers from internal liquidity routing. This ensures
+                institutional regulatory compliance: banks maintain custody while Connextium powers the high-speed
+                routing engine.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 6: Corporate Treasury Structure -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-6">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-vault"></i>
+                            <span>Treasury Infrastructure</span>
+                        </div>
+                        <div class="slide-title">Corporate Treasury Structure Embedded with Stablecoins</div>
+                        <div class="slide-subtitle">Multi-tier institutional framework connecting ERP operating cash
+                            with programmable Circle USDC/EURC reserves</div>
+                    </div>
+                    <div class="slide-number-badge">06 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="diagram-feature-grid">
+                        <!-- Left: Large Featured Diagram -->
+                        <div class="diagram-feature-card"
+                            onclick="openImageModal('../verity/assets/corporate-trasure-structure.png', 'Corporate Treasury Structure Embedded with Stablecoins')">
+                            <div class="diagram-feature-img-wrap">
+                                <img src="../verity/assets/corporate-trasure-structure.png"
+                                    alt="Corporate Treasury Structure Embedded with Stablecoins"
+                                    class="diagram-feature-img">
+                                <div class="diagram-zoom-badge">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                    <span>Click to Zoom</span>
+                                </div>
+                            </div>
+                            <div class="diagram-caption">
+                                <span><i class="fa-solid fa-diagram-project" style="color: var(--primary);"></i>
+                                    Corporate Treasury Topology</span>
+                                <span style="color: var(--muted); font-size: 0.72rem;">Circle USDC / EURC
+                                    Liquidity</span>
+                            </div>
+                        </div>
+
+                        <!-- Right: Structural Breakdown -->
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div class="deck-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-building-columns" style="color: #0891b2;"></i>
+                                    <span>Tier 1: Bank Operating Accounts</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Commercial banking rails handling standard corporate payroll, tax, and fiat wire
+                                    operations.
+                                </div>
+                            </div>
+
+                            <div class="deck-card highlight-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title"
+                                    style="font-size: 0.92rem; margin-bottom: 2px; color: var(--primary-dark);">
+                                    <i class="fa-solid fa-coins" style="color: var(--primary-dark);"></i>
+                                    <span>Tier 2: Regulated Stablecoin Reserves</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Circle USDC & EURC liquidity pools enabling instant, 24/7 cross-border settlement
+                                    without correspondent bank fees.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-vault" style="color: #d97706;"></i>
+                                    <span>Tier 3: Programmable ADA Vaults</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Isolated smart vaults holding trade finance escrows with verifiable ledger
+                                    invariants.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 10px 14px; background: var(--paper);">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-arrows-rotate" style="color: #059669;"></i>
+                                    <span>24/7 Automated Sweeps & Rebalancing</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Automated liquidity sweeps eliminate trapped float, earning <strong>8%–18%
+                                        APR</strong> in dynamic discounting.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Treasury Architecture: Multi-Tier Institutional Reserve Model</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-6">
+                <div class="notes-title">Investor Notes • Corporate Treasury Structure</div>
+                We embed regulated Circle USDC/EURC stablecoins directly into the corporate treasury hierarchy. This
+                enables corporate treasurers to maintain traditional commercial banking while deploying liquidity into
+                programmable ADA Vaults for instant global settlement.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 7: Dual T-Account Accounting -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-7">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-book-journal-whills"></i>
+                            <span>Double-Entry Accounting</span>
+                        </div>
+                        <div class="slide-title">Case Study: Dual T-Account Accounting & Real-Time ERP Sync</div>
+                        <div class="slide-subtitle">Project ADA: Synchronizing enterprise general ledgers with on-chain
+                            settlement across the 3-event lifecycle</div>
+                    </div>
+                    <div class="slide-number-badge">07 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-3">
+                        <!-- Event 1 -->
+                        <div class="t-account-container">
+                            <div class="t-account-header">
+                                <span>EVENT 1: Recognition</span>
+                                <span style="color: #0DBE85;">PO Matched</span>
+                            </div>
+                            <div class="t-account-body">
+                                <div class="t-debit">
+                                    <div class="t-label">Debit (Asset / Expense)</div>
+                                    <strong style="font-size: 0.92rem;">Inventory $100k</strong>
+                                </div>
+                                <div class="t-credit">
+                                    <div class="t-label">Credit (Operating Liability)</div>
+                                    <strong style="font-size: 0.92rem;">A/P $100k (Net-60)</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 2 -->
+                        <div class="t-account-container" style="border-color: #0DBE85;">
+                            <div class="t-account-header" style="background: #0DBE85; color: white;">
+                                <span>EVENT 2: Financing & Discount</span>
+                                <span>Early Liquidity Payout</span>
+                            </div>
+                            <div class="t-account-body">
+                                <div class="t-debit">
+                                    <div class="t-label">Debit (Clear Vendor A/P)</div>
+                                    <strong style="font-size: 0.92rem; color: #059669;">A/P $100k</strong>
+                                </div>
+                                <div class="t-credit">
+                                    <div class="t-label">Credit (Obligation + Yield)</div>
+                                    <strong style="font-size: 0.92rem;">Obligation $98.5k</strong><br>
+                                    <strong style="color: #059669; font-size: 0.92rem;">Yield +$1.5k (18% APR)</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 3 -->
+                        <div class="t-account-container">
+                            <div class="t-account-header">
+                                <span>EVENT 3: Settlement</span>
+                                <span style="color: #0891b2;">Net-60 Due Date</span>
+                            </div>
+                            <div class="t-account-body">
+                                <div class="t-debit">
+                                    <div class="t-label">Debit (Extinguish)</div>
+                                    <strong style="font-size: 0.92rem;">Obligation $98.5k</strong>
+                                </div>
+                                <div class="t-credit">
+                                    <div class="t-label">Credit (USDC Treasury)</div>
+                                    <strong style="font-size: 0.92rem; color: #0891b2;">USDC Cash $98.5k</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 8px;">
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="font-size: 0.92rem;">
+                                <i class="fa-solid fa-file-shield" style="color: #059669;"></i>
+                                <span>GAAP / IFRS Compliance</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.82rem;">
+                                Automatic dual journal posting eliminates manual month-end audit friction across SAP &
+                                NetSuite.
+                            </div>
+                        </div>
+
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="font-size: 0.92rem;">
+                                <i class="fa-solid fa-chart-line" style="color: var(--primary-dark);"></i>
+                                <span>Real-Time Yield Capture</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.82rem;">
+                                Anchor buyers earn 8%–18% annualized APR by discounting invoices with idle stablecoin
+                                treasury float.
+                            </div>
+                        </div>
+
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="font-size: 0.92rem;">
+                                <i class="fa-solid fa-shield-halved" style="color: #0891b2;"></i>
+                                <span>Solvency Invariant Truth</span>
+                            </div>
+                            <div class="deck-card-text" style="font-size: 0.82rem;">
+                                TigerBeetle ledgers enforce strict zero-sum debit/credit balance proofs on every
+                                transaction packet.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Explore Interactive Ledger Model: <a href="../gtt/index.html#accounting">GTT Double-Entry
+                            Inspector</a></div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-7">
+                <div class="notes-title">Investor Notes • Double-Entry Synchronization</div>
+                This is our core IP: we synchronize dual-entry T-Accounts for enterprise ERPs (SAP/NetSuite) in real
+                time while executing sub-second atomic settlement on Circle USDC rails.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 8: Account Servicing & Invariants -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-8">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Treasury Infrastructure</span>
+                        </div>
+                        <div class="slide-title">Account Servicing & Liquidity Invariants</div>
+                        <div class="slide-subtitle">Precision multi-account liquidity tracking</div>
+                    </div>
+                    <div class="slide-number-badge">08 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-4">
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-coins" style="color: #059669;"></i>
+                                <span>Asset Liquidity</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Pre-funded to absorb cross-currency conversions and stablecoin float. Balance
+                                constraint: <strong>≥ 0</strong>.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-handshake" style="color: #0891b2;"></i>
+                                <span>Peer Credit</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Tracks bilateral connector credit lines in real time across routing hops. Balance
+                                constraint: <strong>≥ 0</strong>.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #d97706;">
+                                <i class="fa-solid fa-lock" style="color: #d97706;"></i>
+                                <span>Payment Escrow</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Escrows outgoing & incoming Open Payments during transit until delivery. Balance
+                                constraint: <strong>≥ 0</strong>.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-building-columns" style="color: #4f46e5;"></i>
+                                <span>Settlement Account</span>
+                            </div>
+                            <div class="deck-card-text">
+                                Anchors net institutional deposits vs. withdrawals against banking reserves. Balance
+                                constraint: <strong>≤ 0</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 8px;">
+                        <div class="stat-box">
+                            <div class="stat-val">
+                                < $0.05</div>
+                                    <div class="stat-label">Routing Cost / Txn</div>
+                                    <div class="stat-sub">vs. $25–$65 bank wire fee</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-val">
+                                    < 0.15%</div>
+                                        <div class="stat-label">FX Conversion Spread</div>
+                                        <div class="stat-sub">vs. 2.5%–4.0% bank spread</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">100k+</div>
+                                    <div class="stat-label">Ledger Txns / Second</div>
+                                    <div class="stat-sub">TigerBeetle throughput</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-footer">
+                            <div><a href="../interledger/architecture_account_servicing_entity/index.html">Explore
+                                    Accounting Architecture</a></div>
+                            <div>Connextium.xyz Pitch Deck</div>
+                        </div>
+                    </div>
+                    <div class="notes-panel" id="notes-slide-8">
+                        <div class="notes-title">Investor Notes • Account Mechanics</div>
+                        This rigorous separation of accounts prevents insolvency risks and guarantees that all
+                        cross-border packet transfers are backed by verified, pre-allocated liquidity or approved peer
+                        credit lines.
+                    </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 9: Flagship App: SCF & Factoring -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-9">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <span>Flagship Business Application</span>
+                        </div>
+                        <div class="slide-title">Case Study: Supply Chain Finance & Receivables Factoring</div>
+                        <div class="slide-subtitle">Deploying stablecoin treasury operations to unlock trapped working
+                            capital via early liquidity payouts</div>
+                    </div>
+                    <div class="slide-number-badge">09 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="flow-diagram">
+                        <div class="flow-node">
+                            <i class="fa-solid fa-file-invoice"
+                                style="color: #0891b2; display:block; margin-bottom: 2px;"></i>
+                            Net-60 Invoice
+                        </div>
+                        <div class="flow-arrow">➔</div>
+                        <div class="flow-node active-node">
+                            <i class="fa-solid fa-brain" style="color: #0DBE85; display:block; margin-bottom: 2px;"></i>
+                            Verity AI Underwriting
+                        </div>
+                        <div class="flow-arrow">➔</div>
+                        <div class="flow-node active-node">
+                            <i class="fa-solid fa-percent"
+                                style="color: #0DBE85; display:block; margin-bottom: 2px;"></i>
+                            Dynamic Discount (1.5%)
+                        </div>
+                        <div class="flow-arrow">➔</div>
+                        <div class="flow-node active-node">
+                            <i class="fa-solid fa-vault" style="color: #0891b2; display:block; margin-bottom: 2px;"></i>
+                            USDC Vault Payout
+                        </div>
+                        <div class="flow-arrow">➔</div>
+                        <div class="flow-node">
+                            <i class="fa-solid fa-hand-holding-dollar"
+                                style="color: #059669; display:block; margin-bottom: 2px;"></i>
+                            Early Liquidity Paid
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: var(--primary-dark);">
+                                <i class="fa-solid fa-building"></i>
+                                <span>For Enterprise Anchor Buyers</span>
+                            </div>
+                            <div class="deck-card-text">
+                                • Deploy idle treasury cash on the platform to earn <strong>8% to 18% annualized
+                                    APR</strong>.<br>
+                                • Strengthen fragile supplier tiers without adding balance sheet debt.<br>
+                                • Automated ERP journal reconciliation with zero manual intervention.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #0891b2;">
+                                <i class="fa-solid fa-truck-fast"></i>
+                                <span>For SME Suppliers & Factoring</span>
+                            </div>
+                            <div class="deck-card-text">
+                                • Receive early liquidity payouts in USDC or fiat instead of waiting 60–90 days.<br>
+                                • Transparent, fractional dynamic discounts vs. predatory 15–30% factoring rates.<br>
+                                • Eliminate cash flow uncertainty and accelerate inventory turnover.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Flagship Application: Dynamic Discounting & Factoring</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-9">
+                <div class="notes-title">Investor Notes • SCF Unit Economics</div>
+                By providing the rails for dynamic discounting, Connextium transforms corporate accounts payable from a
+                cost center into a high-margin yield engine for buyers, while injecting instant liquidity into
+                suppliers.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 10: ADA Accounting Framework (Factoring) -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-10">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span>Factoring Accounting Architecture</span>
+                        </div>
+                        <div class="slide-title">ADA Accounting Framework Applied on Factoring Finance</div>
+                        <div class="slide-subtitle">Account of Digital Asset (ADA): Multi-entity double-entry ledger
+                            invariants powering early liquidity receivables payouts</div>
+                    </div>
+                    <div class="slide-number-badge">10 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="diagram-feature-grid">
+                        <!-- Left: Large Featured Diagram -->
+                        <div class="diagram-feature-card"
+                            onclick="openImageModal('../verity/assets/ADA-Framework-AccountOfDigitalAsset.png', 'ADA Accounting Framework — Applied on Factoring Finance Case')">
+                            <div class="diagram-feature-img-wrap">
+                                <img src="../verity/assets/ADA-Framework-AccountOfDigitalAsset.png"
+                                    alt="ADA Accounting Framework Applied on Factoring Finance"
+                                    class="diagram-feature-img">
+                                <div class="diagram-zoom-badge">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                    <span>Click to Zoom</span>
+                                </div>
+                            </div>
+                            <div class="diagram-caption">
+                                <span><i class="fa-solid fa-scale-balanced" style="color: var(--primary);"></i> ADA
+                                    Framework: Factoring Topology</span>
+                                <span style="color: var(--muted); font-size: 0.72rem;">Zero-Sum Ledger Invariants</span>
+                            </div>
+                        </div>
+
+                        <!-- Right: Structural Breakdown -->
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div class="deck-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-users" style="color: var(--primary);"></i>
+                                    <span>Multi-Entity Vault Topology</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Cryptographically isolates <strong>Buyer ADA</strong>, <strong>Supplier
+                                        ADA</strong>, <strong>Investor ADA</strong>, and <strong>Escrow ADA</strong>.
+                                </div>
+                            </div>
+
+                            <div class="deck-card highlight-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title"
+                                    style="font-size: 0.92rem; margin-bottom: 2px; color: var(--primary-dark);">
+                                    <i class="fa-solid fa-equals" style="color: var(--primary-dark);"></i>
+                                    <span>Zero-Sum Balance Invariants</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Strict mathematical rule ($\sum \text{Debit} = \sum \text{Credit}$) guarantees zero
+                                    double-financing and real-time solvency.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-bolt" style="color: #0891b2;"></i>
+                                    <span>Early Liquidity Payout Swaps</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Smart escrow releases instant USDC liquidity to suppliers upon Verity AI risk
+                                    scoring, locking maturity claims.
+                                </div>
+                            </div>
+
+                            <div class="deck-card" style="padding: 10px 14px; background: var(--paper);">
+                                <div class="deck-card-title" style="font-size: 0.92rem; margin-bottom: 2px;">
+                                    <i class="fa-solid fa-sync" style="color: #059669;"></i>
+                                    <span>Automated Counterparty Mirroring</span>
+                                </div>
+                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.4;">
+                                    Simultaneously updates Buyer, Supplier, and Investor ERP accounts with GAAP/IFRS
+                                    verifiable journal entries.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Explore Factoring Architecture: <a href="../cdsc/factoring/index.html">CDSC Factoring Ledger
+                            Model</a></div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-10">
+                <div class="notes-title">Investor Notes • ADA Factoring Architecture</div>
+                The Account of Digital Asset (ADA) framework applies mathematical zero-sum ledger invariants across
+                Buyer, Supplier, Investor, and Escrow vaults. By automating dynamic discounting with USDC settlement, we
+                unlock trillions in trapped supplier working capital.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 11: Verity AI & CDSC Streaming -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-11">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Application Mechanics</span>
+                        </div>
+                        <div class="slide-title">Verity AI Risk & CDSC Milestone Escrow</div>
+                        <div class="slide-subtitle">Combining AI underwriting with programmable stablecoin cash flow
+                            streaming</div>
+                    </div>
+                    <div class="slide-number-badge">11 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="color: var(--primary-dark);">
+                                <i class="fa-solid fa-robot"></i>
+                                <span>Verity AI Risk & Fraud Resolution</span>
+                            </div>
+                            <div class="deck-card-text">
+                                <p><strong>• Multimodal Document Parsing:</strong> Ingests complex multi-currency
+                                    invoices, POs, and bills of lading in sub-seconds.</p>
+                                <p style="margin-top: 6px;"><strong>• 3-Way Reconciliation:</strong> Cross-checks
+                                    invoice data with ERP records, logistics telematics, and supplier fulfillment
+                                    reliability.</p>
+                                <p style="margin-top: 6px;"><strong>• Cryptographic Anti-Fraud Stamp:</strong> Generates
+                                    unique invoice fingerprints on-chain to completely eliminate double-financing risks.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="deck-card">
+                            <div class="deck-card-title" style="color: #0891b2;">
+                                <i class="fa-solid fa-arrows-spin"></i>
+                                <span>CDSC Continuous Settlement Protocol</span>
+                            </div>
+                            <div class="deck-card-text">
+                                <p><strong>• Milestone Escrow Streaming:</strong> Releases micro-payments automatically
+                                    as freight passes GPS transit gates and customs checkpoints.</p>
+                                <p style="margin-top: 6px;"><strong>• Automated Factoring Swaps:</strong> Liquidity
+                                    providers fund verified invoices instantly, while the CDSC engine routes repayments
+                                    at maturity.</p>
+                                <p style="margin-top: 6px;"><strong>• Dual-Entry Sync:</strong> Generates GAAP-compliant
+                                    debits/credits for enterprise ERPs simultaneously with on-chain proofs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="background: var(--paper); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                        <div style="font-size: 0.88rem; font-weight: 700; color: var(--ink);">
+                            Automated Risk Assessment:
+                        </div>
+                        <div
+                            style="font-size: 1.15rem; font-weight: 900; color: var(--primary-dark); font-family: var(--font-display);">
+                            Sub-Second API Execution <span
+                                style="font-size: 0.8rem; font-weight: 600; color: var(--muted);">(vs. Multi-Day Bank
+                                Approval)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Explore Factoring Model: <a href="../cdsc/factoring/index.html">CDSC Factoring Architecture</a>
+                    </div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-11">
+                <div class="notes-title">Investor Notes • Risk Automation</div>
+                Legacy factoring fails because manual underwriting costs $500+ per invoice, making small invoices
+                uneconomical. Verity reduces underwriting cost to $0.01 per invoice, opening up massive mid-market
+                factoring volume.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 12: Live Product Validation -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-12">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-code" style="color: #0DBE85;"></i>
+                            <span>Traction & Software</span>
+                        </div>
+                        <div class="slide-title">Built, Deployed, & Testable Today</div>
+                        <div class="slide-subtitle">We have shipped working alphas across the treasury router and
+                            application suite</div>
+                    </div>
+                    <div class="slide-number-badge">12 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <div class="deck-card" style="background: var(--paper); border: 1px solid var(--line);">
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-globe" style="color: #0DBE85;"></i>
+                                <span>Live Deployed Environments</span>
+                            </div>
+                            <div class="deck-card-text" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line);">
+                                    <div>
+                                        <strong>Project ADA / GTT Explorer</strong>
+                                        <div style="font-size: 0.78rem; color: var(--muted);">On-chain payment router &
+                                            double-entry ledger</div>
+                                    </div>
+                                    <a href="https://ada-alpha.connextium.xyz/" target="_blank"
+                                        class="demo-badge demo-badge-live">Launch ↗</a>
+                                </div>
+
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line);">
+                                    <div>
+                                        <strong>OpenAPI Documentation Portal</strong>
+                                        <div style="font-size: 0.78rem; color: var(--muted);">Complete developer specs
+                                            for treasury & payment</div>
+                                    </div>
+                                    <a href="https://gtt-apidocs.connextium.xyz/" target="_blank"
+                                        class="demo-badge">Docs ↗</a>
+                                </div>
+
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line);">
+                                    <div>
+                                        <strong>Verity Alpha SCF Application</strong>
+                                        <div style="font-size: 0.78rem; color: var(--muted);">AI risk assessment &
+                                            dynamic discounting portal</div>
+                                    </div>
+                                    <a href="https://verity-alpha.connextium.xyz/" target="_blank"
+                                        class="demo-badge demo-badge-live">Launch ↗</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="deck-card dark-card">
+                            <div class="deck-card-title" style="color: #0DBE85;">
+                                <i class="fa-solid fa-award"></i>
+                                <span>Ecosystem Recognition & Benchmarks</span>
+                            </div>
+                            <div class="deck-card-text"
+                                style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
+                                <div>
+                                    <strong style="color: white;">• Circle Fintech Bootcamp Selected Project:</strong>
+                                    <p style="color: #b0c2bc; margin-top: 2px;">Engineered stablecoin commerce &
+                                        settlement architectures leveraging Circle USDC rails.</p>
+                                </div>
+                                <div>
+                                    <strong style="color: white;">• Interledger Accelerator Architecture:</strong>
+                                    <p style="color: #b0c2bc; margin-top: 2px;">Completed full ILP account servicing
+                                        entity specifications for multi-tier banks.</p>
+                                </div>
+                                <div>
+                                    <strong style="color: white;">• Multi-Tenant Simulator & Ledger:</strong>
+                                    <p style="color: #b0c2bc; margin-top: 2px;">Live interactive T-Account ledger
+                                        visualizer with active buyer and admin roles.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Platform Portal: <a href="https://connextium.xyz" target="_blank">connextium.xyz</a> • Live
+                        Alpha Endpoints</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-12">
+                <div class="notes-title">Investor Notes • Validation</div>
+                Our working codebases, deployed alphas, and API documentation demonstrate that our platform foundation
+                is already operational and ready for pilot scaling.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 13: Business Model & Monetization -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-13">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-coins"></i>
+                            <span>Unit Economics & Monetization</span>
+                        </div>
+                        <div class="slide-title">Multi-Stream Platform Business Model</div>
+                        <div class="slide-subtitle">Compounding revenue from payment routing take-rates, financing
+                            spreads, and enterprise SaaS</div>
+                    </div>
+                    <div class="slide-number-badge">13 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-4">
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #059669;">
+                                <i class="fa-solid fa-percent"></i>
+                                <span>Payment Fee</span>
+                            </div>
+                            <div
+                                style="font-size: 1.35rem; font-weight: 900; color: var(--primary-dark); font-family: var(--font-display); margin-bottom: 2px;">
+                                15 – 35 bps
+                            </div>
+                            <div class="deck-card-text">
+                                Fee on gross settled transaction volume across multi-rail corridors.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #0891b2;">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>Financing Spread</span>
+                            </div>
+                            <div
+                                style="font-size: 1.35rem; font-weight: 900; color: #0891b2; font-family: var(--font-display); margin-bottom: 2px;">
+                                1.0% – 2.5%
+                            </div>
+                            <div class="deck-card-text">
+                                Net spread on third-party liquidity provided to dynamic SCF pools.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #d97706;">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>Enterprise SaaS</span>
+                            </div>
+                            <div
+                                style="font-size: 1.35rem; font-weight: 900; color: #d97706; font-family: var(--font-display); margin-bottom: 2px;">
+                                $3k – $10k/mo
+                            </div>
+                            <div class="deck-card-text">
+                                Enterprise platform license for treasury routing & Verity AI module.
+                            </div>
+                        </div>
+
+                        <div class="deck-card highlight-card">
+                            <div class="deck-card-title" style="color: #4f46e5;">
+                                <i class="fa-solid fa-code-branch"></i>
+                                <span>Developer APIs</span>
+                            </div>
+                            <div
+                                style="font-size: 1.35rem; font-weight: 900; color: #4f46e5; font-family: var(--font-display); margin-bottom: 2px;">
+                                Usage Tiered
+                            </div>
+                            <div class="deck-card-text">
+                                API gateway pricing for logistics, customs brokers, and neobanks.
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="deck-table" style="margin-top: 6px;">
+                        <thead>
+                            <tr>
+                                <th>Milestone</th>
+                                <th>Settled Volume</th>
+                                <th>Enterprise Anchors</th>
+                                <th>Projected Annual Net Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Year 1 (Pilot Phase)</strong></td>
+                                <td>$50 Million</td>
+                                <td>5 Enterprises</td>
+                                <td><strong style="color: var(--primary-dark);">$750,000</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Year 2 (Corridor Scale)</strong></td>
+                                <td>$350 Million</td>
+                                <td>60 Enterprises</td>
+                                <td><strong style="color: var(--primary-dark);">$3.8 Million</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Year 3 (Network Scale)</strong></td>
+                                <td>$1.8 Billion</td>
+                                <td>220 Enterprises</td>
+                                <td><strong style="color: var(--primary-dark);">$18.5 Million</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Gross Margin: > 82% across SaaS subscriptions and routing network</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-13">
+                <div class="notes-title">Investor Notes • Compounding Upside</div>
+                Our revenue engine is multi-stream: SaaS platform fees ($2.5k–$10k/month/anchor), variable routing take-rates (10–25 bps), and liquidity yield spreads (1.0%–2.5%). With 5 anchor buyers in Year 1 scaling to 220 in Year 3, our model scales rapidly with high gross margin leverage.
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 14: Value Growing Plan (Series A) -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-14">
+            <div class="slide-inner">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-seedling" style="color: var(--primary);"></i>
+                            <span>Milestones & Inflection</span>
+                        </div>
+                        <div class="slide-title">Value Growing Plan: Roadmap to Series A</div>
+                        <div class="slide-subtitle">Clear operational milestones driving a 5x–7x valuation step-up from
+                            Seed to Series A</div>
+                    </div>
+                    <div class="slide-number-badge">14 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="growth-roadmap">
+                        <!-- Phase 1 -->
+                        <div class="growth-step">
+                            <div class="growth-step-badge"
+                                style="background: var(--primary-light); color: var(--primary-dark);">
+                                Phase 1: Months 1–6
+                            </div>
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-circle-check" style="color: var(--primary-dark);"></i>
+                                <span>Operational Proof</span>
+                            </div>
+                            <div class="deck-card-text">
+                                • Deploy <strong>5 Enterprise Anchor Buyer</strong> pilots across US-APAC corridors.<br>
+                                • Complete <strong>SOC2 Type 1</strong> & MSB state compliance (BSA/AML, KYB/KYC, OFAC).<br>
+                                • Onboard first 25 enterprise suppliers onto Verity SCF Beta.
+                            </div>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div class="growth-step" style="border-color: rgba(8, 145, 178, 0.4); background: #f4fafb;">
+                            <div class="growth-step-badge" style="background: var(--teal-light); color: var(--teal);">
+                                Phase 2: Months 6–12
+                            </div>
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-gauge-high" style="color: var(--teal);"></i>
+                                <span>Volume & Velocity</span>
+                            </div>
+                            <div class="deck-card-text">
+                                • Cross <strong>$50M+ cumulative settled volume</strong> across 5 Enterprise Anchors.<br>
+                                • Expand corridor lanes across suppliers and deep tier discounting.<br>
+                                • Integrate 3rd-party institutional liquidity pools earning 1.0%–2.5% spread.
+                            </div>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div class="growth-step" style="border-color: rgba(124, 58, 237, 0.4); background: #fbf9ff;">
+                            <div class="growth-step-badge"
+                                style="background: var(--purple-light); color: var(--purple);">
+                                Phase 3: Months 12–18
+                            </div>
+                            <div class="deck-card-title">
+                                <i class="fa-solid fa-rocket" style="color: var(--purple);"></i>
+                                <span>Series A Inflection</span>
+                            </div>
+                            <div class="deck-card-text">
+                                • Hit <strong>$250M+ annualized run-rate</strong> ($3.5M+ ARR).<br>
+                                • Launch self-serve Liquidity & API Partner Gateway.<br>
+                                • <strong>Series A Target:</strong> $8M–$12M at <strong>$40M–$60M valuation (5x–7x
+                                    Step-Up)</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="valuation-callout" style="margin-top: 4px;">
+                        <div>
+                            <div
+                                style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--primary-dark); font-family: var(--font-mono);">
+                                Seed Round (Active Ask)
+                            </div>
+                            <div
+                                style="font-size: 1.1rem; font-weight: 900; color: var(--ink); font-family: var(--font-display);">
+                                $1.25M for 15.0% Equity <span
+                                    style="font-size: 0.85rem; font-weight: 600; color: var(--muted);">(Valuation round
+                                    at $8.4 M)</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div
+                                style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--purple); font-family: var(--font-mono);">
+                                Series A Target (Round 1)
+                            </div>
+                            <div
+                                style="font-size: 1.1rem; font-weight: 900; color: var(--purple); font-family: var(--font-display);">
+                                $40M – $60M Valuation <span
+                                    style="font-size: 0.85rem; font-weight: 700; color: #059669;">(5x–7x Upside)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Inflection Driver: High-velocity transaction volume + 82% SaaS gross margins</div>
+                    <div>Connextium.xyz Pitch Deck</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-14">
+                <div class="notes-title">Investor Notes • Value Growth Strategy & Compliance</div>
+                Our Seed round of $1.25M for 15% equity (Valuation round at $8.4 M) is sized to achieve key enterprise milestones: SOC2 Type 1 certification and complete MSB compliance (BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening/monitoring) required to command a top-tier Series A institutional valuation ($40M–$60M).
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 15: Team & The $1.25M Ask (15% Equity) -->
+        <!-- ========================================== -->
+        <section class="slide" id="slide-15">
+            <div class="slide-inner hero-cover">
+                <div class="slide-header">
+                    <div class="slide-title-wrap">
+                        <div class="slide-category">
+                            <i class="fa-solid fa-bullseye" style="color: var(--primary);"></i>
+                            <span>The Investment Opportunity</span>
+                        </div>
+                        <div class="slide-title">The Ask: $1.25M Seed Round (15% Equity)</div>
+                        <div class="slide-subtitle">Valuation round at $8.4 M to scale payment routing & enterprise
+                            pilots</div>
+                    </div>
+                    <div class="slide-number-badge">15 / 15</div>
+                </div>
+
+                <div class="slide-body">
+                    <div class="grid-2">
+                        <!-- Valuation Terms Card -->
+                        <div class="deck-card highlight-card" style="padding: 16px;">
+                            <div class="deck-card-title" style="color: var(--primary-dark);">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <span>Round Structure & Valuation</span>
+                            </div>
+                            <div
+                                style="display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; margin-top: 6px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--line-subtle); padding-bottom: 4px;">
+                                    <span>Target Investment:</span>
+                                    <strong
+                                        style="font-family: var(--font-mono); color: var(--primary-dark); font-size: 1rem;">$1,250,000</strong>
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--line-subtle); padding-bottom: 4px;">
+                                    <span>Equity Offered:</span>
+                                    <strong
+                                        style="font-family: var(--font-mono); color: var(--ink); font-size: 1rem;">15.0%</strong>
+                                </div>
+                                <div
+                                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--line-subtle); padding-bottom: 4px;">
+                                    <span>Post-Money Valuation:</span>
+                                    <strong
+                                        style="font-family: var(--font-mono); color: var(--ink); font-size: 1rem;">$8,400,000
+                                        ($8.4 M)</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Pre-Money Valuation:</span>
+                                    <strong
+                                        style="font-family: var(--font-mono); color: var(--muted); font-size: 0.92rem;">$7,150,000</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Capital Allocation Card -->
+                        <div class="deck-card" style="padding: 16px;">
+                            <div class="deck-card-title" style="color: var(--teal);">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>Use of Funds ($1.25M)</span>
+                            </div>
+                            <div class="deck-card-text"
+                                style="display: flex; flex-direction: column; gap: 4px; font-size: 0.84rem; margin-top: 6px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span><strong>45%</strong> Platform & Ledger Engineering</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$562.5k</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span><strong>25%</strong> Enterprise Pilots & GTM</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$312.5k</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span><strong>20%</strong> Compliance, SOC2 & MSB (BSA/AML, KYB/KYC)</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$250.0k</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span><strong>10%</strong> Operations & Working Capital</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$125.0k</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 6px;">
+                        <!-- Left: Tørence Juhe -->
+                        <div class="deck-card highlight-card" style="padding: 12px 14px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <div
+                                    style="width: 38px; height: 38px; border-radius: 50%; background: #0DBE85; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; flex-shrink: 0;">
+                                    TJ
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-family: var(--font-display); font-size: 1.02rem; font-weight: 800; color: var(--ink);">
+                                        Tørence Juhe
+                                    </div>
+                                    <div style="font-size: 0.74rem; font-weight: 700; color: var(--primary-dark);">
+                                        Founder & Chief Architect / CEO
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.78rem; line-height: 1.35; color: var(--ink-secondary);">
+                                • <strong>Finance & Payments:</strong> Built & optimized systems across Tier-1 banking projects (Singapore / Europe / Canada).<br>
+                                • <strong>Education:</strong> Business Analytics & Data Science (Singapore Management University), Finance Management.
+                            </div>
+                        </div>
+
+                        <!-- Right: Dr. Haroël Lee -->
+                        <div class="deck-card highlight-card" style="padding: 12px 14px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <div
+                                    style="width: 38px; height: 38px; border-radius: 50%; background: #0891b2; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; flex-shrink: 0;">
+                                    HL
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-family: var(--font-display); font-size: 1.02rem; font-weight: 800; color: var(--ink);">
+                                        Dr. Haroël Lee, Ph.D.
+                                    </div>
+                                    <div style="font-size: 0.74rem; font-weight: 700; color: #0891b2;">
+                                        Co-Founder & Foundation Head Engineering
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.78rem; line-height: 1.35; color: var(--ink-secondary);">
+                                • <strong>AI Models & Risk Engine, Crypto & Distributed Systems:</strong> Cryptographic ledger invariants, smart contract verification, and multi-chain settlement protocols.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="text-align: center; margin-top: 6px; padding: 8px 14px; background: var(--primary-light); border-radius: 8px; border: 1px solid rgba(13, 190, 133, 0.4);">
+                        <div
+                            style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; color: var(--ink);">
+                            Join us in building the financial operating system for global commerce.
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--ink-secondary); margin-top: 2px;">
+                            <strong>Tørence Juhe</strong> • CEO • <a href="mailto:connexis@connexis.fi"
+                                style="color: var(--primary-dark); font-weight: 700; text-decoration: none;">connexis@connexis.fi</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-footer">
+                    <div>Portal: <a href="https://connextium.xyz" target="_blank">connextium.xyz</a> • Connextium © 2026 • <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $1.25M Seed Round (15% Equity).pdf" target="_blank" style="color: var(--primary-dark); font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> PDF Deck (15 Slides)</a>
+                    </div>
+                    <div>Confidential Investor Presentation</div>
+                </div>
+            </div>
+            <div class="notes-panel" id="notes-slide-15">
+                <div class="notes-title">Investor Notes • The Seed Terms & Compliance Moat</div>
+                We are raising $1.25M for 15% equity in a valuation round at $8.4 M ($7.15M pre-money). The 20% compliance allocation ($250k) establishes our institutional moat: SOC2 Type 1 audit, BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening and transaction monitoring.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Fullscreen Diagram Zoom Modal -->
+    <div id="image-modal" class="img-modal" onclick="if(event.target === this) closeImageModal()">
+        <div class="img-modal-content">
+            <div class="img-modal-header">
+                <div id="modal-img-title" class="img-modal-title">Diagram Preview</div>
+                <button class="img-modal-close" onclick="closeImageModal()" title="Close (Esc)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <img id="modal-img-element" src="" alt="Zoomed Diagram">
+        </div>
+    </div>
+
+    <!-- Interactive Navigation Scripts -->
+    <script>
+        const totalSlides = 15;
+        let currentSlide = 1;
+
+        function openImageModal(imgSrc, title) {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('modal-img-element');
+            const titleEl = document.getElementById('modal-img-title');
+            if (modal && img) {
+                img.src = imgSrc;
+                if (titleEl && title) titleEl.textContent = title;
+                modal.classList.add('active');
+            }
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function updateIndicator() {
+            const indicator = document.getElementById('slide-indicator');
+            const select = document.getElementById('slide-jump');
+            if (indicator) indicator.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            if (select) select.value = `slide-${currentSlide}`;
+        }
+
+        function jumpToSlide(slideId) {
+            const target = document.getElementById(slideId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                const num = parseInt(slideId.replace('slide-', ''), 10);
+                if (!isNaN(num)) {
+                    currentSlide = num;
+                    updateIndicator();
+                }
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                jumpToSlide(`slide-${currentSlide}`);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                jumpToSlide(`slide-${currentSlide}`);
+            }
+        }
+
+        function toggleNotes() {
+            const panels = document.querySelectorAll('.notes-panel');
+            panels.forEach(panel => {
+                panel.classList.toggle('open');
+            });
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log('Fullscreen error:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'Escape') {
+                closeImageModal();
+            } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key.toLowerCase() === 'f') {
+                e.preventDefault();
+                toggleFullscreen();
+            } else if (e.key.toLowerCase() === 'n') {
+                e.preventDefault();
+                toggleNotes();
+            } else if (e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                window.print();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 1;
+                jumpToSlide('slide-1');
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides;
+                jumpToSlide(`slide-${totalSlides}`);
+            }
+        });
+
+        // Intersection Observer to update slide indicator on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -30% 0px',
+            threshold: 0.2
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    const num = parseInt(id.replace('slide-', ''), 10);
+                    if (!isNaN(num)) {
+                        currentSlide = num;
+                        updateIndicator();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            slideObserver.observe(slide);
+        });
+    </script>
+</body>
+
+</html>
