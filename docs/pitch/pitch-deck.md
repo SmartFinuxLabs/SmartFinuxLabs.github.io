@@ -21,11 +21,11 @@ style: |
 ---
 
 <!-- Slide 1: Title -->
-# Connextium.xyz 2026
+# <span style="background: linear-gradient(135deg, #0DBE85, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Connextium.xyz 2026</span>
 ### Programmable Treasury Accounting, Stablecoin Cash Flow & Multi-Rail Settlement
 **The Programmable Corporate Treasury Operating System**
 
-*Unifying corporate double-entry accounting truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield beachhead application.*
+*Unifying corporate double-entry accounting truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.*
 
 - **Core Engine:** Global Trade Treasury (GTT) & Interledger (ILP) Router
 - **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual T-Accounts
