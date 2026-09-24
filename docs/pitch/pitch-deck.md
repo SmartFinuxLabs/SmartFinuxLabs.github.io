@@ -25,10 +25,10 @@ style: |
 ### Programmable Treasury Accounting, Stablecoin Cash Flow & Multi-Rail Settlement
 **The Programmable Corporate Treasury Operating System**
 
-*Unifying corporate dual accounting truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.*
+*Unifying corporate dual ledger truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.*
 
 - **Core Engine:** Global Trade Treasury (GTT) & Interledger (ILP) Router
-- **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual Accounting Truth
+- **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual Ledger Truth
 - **Business App: SCF:** Supply Chain Finance & Dynamic Factoring (Verity / CDSC)
 - **Founders:** Tørence Juhe & Dr. Haroël Lee (Ph.D.)
 - **The Ask:** **$1.25M Seed for 15% Equity (Valuation round at $8.4 M)**
@@ -54,7 +54,7 @@ style: |
     </div>
     <div style="background: white; border-left: 4px solid #e11d48; border-radius: 8px; padding: 14px 16px; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
       <strong style="font-size: 16px; color: #18201d; display: block; margin-bottom: 4px;">03. The Control Vacuum</strong>
-      <span style="font-size: 14.5px; line-height: 1.5; color: #475569;">Moving tokens wallet-to-wallet without dual accounting controls breaks corporate treasury and audit compliance.</span>
+      <span style="font-size: 14.5px; line-height: 1.5; color: #475569;">Moving tokens wallet-to-wallet without dual ledger controls breaks corporate treasury and audit compliance.</span>
     </div>
   </div>
 
@@ -180,7 +180,7 @@ style: |
 ```
 
 - **< 3s Settlement:** Packetized value routing executes atomic, multi-hop cross-currency transfers in seconds.
-- **Dual Accounting Invariants:** Specialized financial ledgers guarantee zero-sum debit/credit balance constraints at 100k+ ops/sec.
+- **Dual Ledger Invariants:** Specialized financial ledgers guarantee zero-sum debit/credit balance constraints at 100k+ ops/sec.
 - **Multi-Rail Neutrality:** Seamlessly routes value across fiat banking rails and regulated stablecoins.
 
 ---
@@ -301,7 +301,7 @@ style: |
 ### Working Alphas Across Treasury Router, Developer APIs, and SCF Application
 
 - **Project ADA / GTT Explorer:** [https://ada-alpha.connextium.xyz/](https://ada-alpha.connextium.xyz/)
-  - Live on-chain payment router, multi-tenant dual accounting inspector, and admin console.
+  - Live on-chain payment router, multi-tenant dual ledger inspector, and admin console.
 - **OpenAPI Documentation Portal:** [https://gtt-apidocs.connextium.xyz/](https://gtt-apidocs.connextium.xyz/)
   - Complete developer specifications for corporate ERP and treasury banking integration.
 - **Verity Alpha SCF Application:** [https://verity-alpha.connextium.xyz/](https://verity-alpha.connextium.xyz/)

@@ -27,10 +27,10 @@ style: |
 
 <div style="display: flex; gap: 20px; align-items: center; margin: 15px 0;">
   <div style="flex: 1.2;">
-    <p style="font-size: 16px; color: #475569; line-height: 1.5;"><em>Unifying corporate dual accounting truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.</em></p>
+    <p style="font-size: 16px; color: #475569; line-height: 1.5;"><em>Unifying corporate dual ledger truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.</em></p>
     <ul style="font-size: 15px; margin-top: 10px;">
       <li><strong>Core Engine:</strong> Global Trade Treasury (GTT) & Interledger (ILP) Router</li>
-      <li><strong>Treasury Core:</strong> Programmable ADA Vaults & Dual Accounting Truth</li>
+      <li><strong>Treasury Core:</strong> Programmable ADA Vaults & Dual Ledger Truth</li>
       <li><strong>The Ask:</strong> <strong>$1.25M Seed for 15% Equity ($8.4M Valuation)</strong></li>
     </ul>
   </div>
@@ -61,7 +61,7 @@ style: |
     </div>
     <div style="background: white; border-left: 4px solid #e11d48; border-radius: 8px; padding: 14px 16px; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
       <strong style="font-size: 16px; color: #18201d; display: block; margin-bottom: 4px;">03. The Control Vacuum</strong>
-      <span style="font-size: 14.5px; line-height: 1.5; color: #475569;">Moving tokens wallet-to-wallet without dual accounting controls breaks corporate treasury and audit compliance.</span>
+      <span style="font-size: 14.5px; line-height: 1.5; color: #475569;">Moving tokens wallet-to-wallet without dual ledger controls breaks corporate treasury and audit compliance.</span>
     </div>
   </div>
 
@@ -192,7 +192,7 @@ style: |
 ```
 
 - **< 3s Settlement:** Packetized value routing executes atomic, multi-hop cross-currency transfers in seconds.
-- **Dual Accounting Invariants:** Specialized financial ledgers guarantee zero-sum debit/credit balance constraints at 100k+ ops/sec.
+- **Dual Ledger Invariants:** Specialized financial ledgers guarantee zero-sum debit/credit balance constraints at 100k+ ops/sec.
 - **Multi-Rail Neutrality:** Seamlessly routes value across fiat banking rails and regulated stablecoins.
 
 ---
@@ -210,8 +210,8 @@ style: |
 
 ---
 
-<!-- Slide 7: Dual Accounting & Real-Time ERP Sync -->
-# Case Study: Dual Accounting & Real-Time ERP Sync
+<!-- Slide 7: Dual Ledger & Real-Time ERP Sync -->
+# Case Study: Dual Ledger & Real-Time ERP Sync
 ### Project ADA: Synchronizing General Ledgers with On-Chain Settlement
 
 <div style="display: flex; justify-content: space-between; gap: 15px; margin: 15px 0;">
@@ -313,7 +313,7 @@ style: |
 ### Working Alphas Across Treasury Router, Developer APIs, and SCF Application
 
 - **Project ADA / GTT Explorer:** [https://ada-alpha.connextium.xyz/](https://ada-alpha.connextium.xyz/)
-  - Live on-chain payment router, multi-tenant dual accounting inspector, and admin console.
+  - Live on-chain payment router, multi-tenant dual ledger inspector, and admin console.
 - **OpenAPI Documentation Portal:** [https://gtt-apidocs.connextium.xyz/](https://gtt-apidocs.connextium.xyz/)
   - Complete developer specifications for corporate ERP and treasury banking integration.
 - **Verity Alpha SCF Application:** [https://verity-alpha.connextium.xyz/](https://verity-alpha.connextium.xyz/)
