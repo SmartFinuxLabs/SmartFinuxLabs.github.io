@@ -32,8 +32,9 @@ style: |
 - **Business App: SCF:** Supply Chain Finance & Dynamic Factoring (Verity / CDSC)
 - **Founders:** Tørence Juhe & Dr. Haroël Lee (Ph.D.)
 - **The Ask:** **$2.2M Seed for 15% Equity (Valuation round at $14.7 M)**
-- **Portal:** [https://connextium.xyz](https://connextium.xyz)
-- **Static PDF Deck:** [Download Founder Deck PDF (15 Slides)](./Connextium.xyz%20—%20Founder%20Deck%202026%20_%20Programmable%20Treasury%20OS%20($2.2M%20Seed%20Round).pdf)
+- **Interactive Founder Edition:** [View Founder Web Presentation](./founder-edition.html)
+- **Founder PDF Deck:** [Download Founder Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20Founder%20Pitch%20Deck%202026%20_%20Programmable%20Treasury%20%26%20Liquid%20Factoring%20Engine%20($2.2M%20Seed%20Round).pdf)
+- **Base VC Deck:** [View Base Presentation](./index.html)
 
 ---
 
@@ -380,5 +381,5 @@ style: |
   - AI Models & Risk Engine, Crypto & Distributed Systems, Cryptographic ledger invariants, smart contract verification, and multi-chain settlement protocols.
 
 **Contact:** Tørence Juhe • CEO • [connexis@connexis.fi](mailto:connexis@connexis.fi) • [https://connextium.xyz](https://connextium.xyz)
-**PDF Deck:** [Download Connextium.xyz Founder Deck PDF](./Connextium.xyz%20—%20Founder%20Deck%202026%20_%20Programmable%20Treasury%20OS%20($2.2M%20Seed%20Round).pdf)
+**PDF Deck:** [Download Connextium.xyz VC Pitch Deck PDF](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20(15_%20Equity).pdf)
 
