@@ -1205,10 +1205,10 @@
             line-height: 1.25;
         }
 
-        /* Print / PDF Styles for Clean 16:9 / Letter Landscape PDF Export */
+        /* Print / PDF Styles for Clean 16:9 Desktop Presentation PDF Export */
         @media print {
             @page {
-                size: letter landscape;
+                size: 1920px 1080px;
                 margin: 0;
             }
 
@@ -1220,8 +1220,7 @@
                 print-color-adjust: exact !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                width: 11in !important;
-                height: 8.5in !important;
+                width: 1920px !important;
             }
 
             .top-navbar,
@@ -1230,8 +1229,8 @@
             }
 
             .deck-container {
-                width: 100% !important;
-                max-width: 100% !important;
+                width: 1920px !important;
+                max-width: 1920px !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 display: block !important;
@@ -1243,27 +1242,87 @@
                 break-after: page !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                width: 11in !important;
-                height: 8.5in !important;
-                min-height: 8.5in !important;
-                max-height: 8.5in !important;
+                width: 1920px !important;
+                height: 1080px !important;
+                min-height: 1080px !important;
+                max-height: 1080px !important;
                 border-radius: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
                 margin: 0 !important;
-                aspect-ratio: auto !important;
+                aspect-ratio: 16 / 9 !important;
                 overflow: hidden !important;
                 box-sizing: border-box !important;
+                position: relative !important;
             }
 
             .slide-inner {
-                height: 8.5in !important;
-                max-height: 8.5in !important;
-                padding: 28px 42px 20px !important;
+                position: absolute !important;
+                inset: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                padding: 36px 54px 28px !important;
                 box-sizing: border-box !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: space-between !important;
+            }
+
+            .grid-2 {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+            }
+
+            .grid-3 {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 20px !important;
+            }
+
+            .grid-4 {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 18px !important;
+            }
+
+            .slide2-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr 1fr !important;
+                gap: 20px !important;
+                height: 100% !important;
+                flex: 1 1 0 !important;
+                min-height: 0 !important;
+                align-items: stretch !important;
+            }
+
+            .hero-split-grid {
+                display: grid !important;
+                grid-template-columns: 1.15fr 0.85fr !important;
+                gap: 28px !important;
+                align-items: center !important;
+            }
+
+            .slide4-split-grid {
+                display: grid !important;
+                grid-template-columns: 1.1fr 0.9fr !important;
+                gap: 20px !important;
+                align-items: stretch !important;
+            }
+
+            .slide6-split-grid,
+            .slide10-split-grid {
+                display: grid !important;
+                grid-template-columns: 0.82fr 1.18fr !important;
+                gap: 26px !important;
+                align-items: center !important;
+            }
+
+            .slide15-split-grid {
+                display: grid !important;
+                grid-template-columns: 1.24fr 0.76fr !important;
+                gap: 16px !important;
+                align-items: stretch !important;
             }
         }
     </style>
