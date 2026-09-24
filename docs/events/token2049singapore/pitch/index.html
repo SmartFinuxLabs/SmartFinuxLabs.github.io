@@ -1207,71 +1207,67 @@
                 </div>
 
                 <div class="slide-body">
-                    <div class="grid-2" style="gap: 16px;">
+                    <div style="display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 16px; align-items: stretch;">
                         <!-- Left: 3 Structural Problems -->
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div class="deck-card highlight-amber">
-                                <div class="deck-card-title" style="color: var(--amber);">
+                        <div style="display: flex; flex-direction: column; gap: 8px; justify-content: space-between;">
+                            <div class="deck-card highlight-amber" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="color: var(--amber); font-size: 0.88rem; margin-bottom: 2px;">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                     <span>01. Messaging ≠ Core Engine</span>
                                 </div>
-                                <div class="deck-card-text">
+                                <div class="deck-card-text" style="font-size: 0.78rem; line-height: 1.38;">
                                     ISO 20022 upgraded transaction messages, but internal bank cores and enterprise ERPs
                                     remain locked in batch-processed legacy ledgers.
                                 </div>
                             </div>
 
-                            <div class="deck-card highlight-cyan">
-                                <div class="deck-card-title" style="color: var(--teal);">
+                            <div class="deck-card highlight-cyan" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="color: var(--teal); font-size: 0.88rem; margin-bottom: 2px;">
                                     <i class="fa-solid fa-arrows-split-up-and-left"></i>
                                     <span>02. The DLT Perimeter Rush</span>
                                 </div>
-                                <div class="deck-card-text">
+                                <div class="deck-card-text" style="font-size: 0.78rem; line-height: 1.38;">
                                     Institutions built outward wrappers rather than solving core ledger synchronization,
                                     creating isolated liquidity islands and reconciliation overhead.
                                 </div>
                             </div>
 
-                            <div class="deck-card highlight-coral">
-                                <div class="deck-card-title" style="color: var(--coral);">
+                            <div class="deck-card highlight-coral" style="padding: 10px 14px;">
+                                <div class="deck-card-title" style="color: var(--coral); font-size: 0.88rem; margin-bottom: 2px;">
                                     <i class="fa-solid fa-lock-open"></i>
                                     <span>03. The Control Vacuum</span>
                                 </div>
-                                <div class="deck-card-text">
+                                <div class="deck-card-text" style="font-size: 0.78rem; line-height: 1.38;">
                                     Simple wallet-to-wallet coin transfers lack double-entry bookkeeping, audit
                                     invariants, and corporate approval controls required by enterprise CFOs.
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right: Visual Diagrams -->
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div class="deck-card" style="display: flex; gap: 12px; align-items: center;">
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.82rem; font-weight: 800; color: var(--teal);">Liquidity
-                                        Fragmentation</div>
-                                    <div style="font-size: 0.72rem; color: var(--muted); margin-top: 2px;">Diversity of
-                                        chains and coins creates liquidity traps.</div>
+                        <!-- Right: Visual Diagrams with Top Text & Scaled Images -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; justify-content: space-between;">
+                            <div class="deck-card" style="padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <div style="font-size: 0.84rem; font-weight: 800; color: var(--teal);">Liquidity Fragmentation</div>
+                                    <div style="font-size: 0.72rem; color: var(--muted);">Diversity of chains & coins creates liquidity traps</div>
                                 </div>
                                 <div
-                                    style="flex: 1.2; height: 100px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 8px; padding: 4px;">
+                                    style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border-radius: 6px; padding: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">
                                     <img src="assets/DiversityOfChains-Coins.png" alt="Diversity of Chains and Coins"
-                                        style="max-height: 90px; max-width: 100%; object-fit: contain;">
+                                        style="height: 100%; max-height: 102px; width: 100%; object-fit: contain;">
                                 </div>
                             </div>
 
-                            <div class="deck-card" style="display: flex; gap: 12px; align-items: center;">
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.82rem; font-weight: 800; color: var(--coral);">The Control
-                                        Gap</div>
-                                    <div style="font-size: 0.72rem; color: var(--muted); margin-top: 2px;">Wallet
-                                        transfers lack dual accounting reconciliation.</div>
+                            <div class="deck-card" style="padding: 8px 12px; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <div style="font-size: 0.84rem; font-weight: 800; color: var(--coral);">The Control Gap</div>
+                                    <div style="font-size: 0.72rem; color: var(--muted);">Wallet transfers lack corporate double-entry ledger truth</div>
                                 </div>
                                 <div
-                                    style="flex: 1.2; height: 100px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 8px; padding: 4px;">
+                                    style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border-radius: 6px; padding: 4px; border: 1px solid rgba(244, 63, 94, 0.25);">
                                     <img src="assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png"
                                         alt="Misuse of Wallet Transfer"
-                                        style="max-height: 90px; max-width: 100%; object-fit: contain;">
+                                        style="height: 100%; max-height: 102px; width: 100%; object-fit: contain;">
                                 </div>
                             </div>
                         </div>
