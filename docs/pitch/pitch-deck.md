@@ -32,9 +32,8 @@ style: |
 - **Business App: SCF:** Supply Chain Finance & Dynamic Factoring (Verity / CDSC)
 - **Founders:** Tørence Juhe & Dr. Haroël Lee (Ph.D.)
 - **The Ask:** **$1.25M Seed for 15% Equity (Valuation round at $8.4 M)**
-- **Interactive Founder Edition:** [View Founder Web Presentation](./founder-edition.html)
-- **Founder PDF Deck:** [Download Founder Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20Founder%20Pitch%20Deck%202026%20_%20Programmable%20Treasury%20%26%20Liquid%20Factoring%20Engine%20($1.25M%20Seed%20Round).pdf)
-- **Base VC Deck:** [View Base Presentation](./index.html)
+- **Interactive Web Deck:** [View Web Presentation](./index.html)
+- **PDF Pitch Deck:** [Download VC Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20(15%25%20Equity).pdf)
 
 ---
 
