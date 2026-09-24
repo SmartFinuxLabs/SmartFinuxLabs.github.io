@@ -241,7 +241,7 @@
             flex-direction: column;
         }
 
-        @media (min-width: 1080px) {
+        @media screen and (min-width: 1080px) {
             .slide {
                 aspect-ratio: 16 / 9;
                 min-height: 660px;
@@ -258,7 +258,7 @@
             }
         }
 
-        @media (max-width: 1079px) {
+        @media screen and (max-width: 1079px) {
             .slide {
                 padding: 28px 24px;
                 min-height: auto;
@@ -373,7 +373,7 @@
             gap: 16px;
         }
 
-        @media (max-width: 900px) {
+        @media screen and (max-width: 900px) {
 
             .grid-2,
             .grid-3,
@@ -610,7 +610,7 @@
             gap: 16px;
         }
 
-        @media (max-width: 900px) {
+        @media screen and (max-width: 900px) {
             .growth-roadmap {
                 grid-template-columns: 1fr;
             }
@@ -851,7 +851,7 @@
             height: 100%;
         }
 
-        @media (max-width: 960px) {
+        @media screen and (max-width: 960px) {
             .diagram-feature-grid {
                 grid-template-columns: 1fr;
             }
@@ -979,11 +979,12 @@
             border-color: #e11d48;
         }
 
-        /* Print / PDF Styles */
+        /* Print / PDF Styles - High Fidelity to Web View */
         @media print {
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                color-adjust: exact !important;
             }
 
             @page {
@@ -991,38 +992,132 @@
                 margin: 0;
             }
 
+            html,
             body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                width: 100% !important;
+                -webkit-font-smoothing: antialiased;
             }
 
             .top-navbar,
             .notes-panel,
             .nav-controls,
             .img-modal,
-            #image-modal {
+            #image-modal,
+            .diagram-zoom-badge {
                 display: none !important;
             }
 
             .deck-container {
                 width: 100% !important;
+                max-width: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 gap: 0 !important;
+                display: block !important;
             }
 
             .slide {
-                page-break-after: always;
-                page-break-inside: avoid;
-                break-after: page;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                break-after: page !important;
+                break-inside: avoid !important;
                 box-shadow: none !important;
                 border: none !important;
-                aspect-ratio: 16 / 9;
+                border-radius: 0 !important;
+                aspect-ratio: 16 / 9 !important;
                 width: 100vw !important;
                 height: 100vh !important;
+                min-height: 100vh !important;
+                max-height: 100vh !important;
                 margin: 0 !important;
-                padding: 28px !important;
+                padding: 0 !important;
+                position: relative !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+                background: var(--white) !important;
+            }
+
+            .slide-inner {
+                position: absolute !important;
+                inset: 0 !important;
+                padding: 3.5% 4.5% 3% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                box-sizing: border-box !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .slide-header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: flex-start !important;
+                border-bottom: 1px solid var(--line-subtle) !important;
+                padding-bottom: 10px !important;
+                margin-bottom: 12px !important;
+            }
+
+            .slide-body {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                gap: 12px !important;
+            }
+
+            .slide-footer {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                border-top: 1px solid var(--line-subtle) !important;
+                padding-top: 10px !important;
+                margin-top: 12px !important;
+                font-size: 0.82rem !important;
+                color: var(--muted-light) !important;
+                font-family: var(--font-mono) !important;
+            }
+
+            .grid-2 {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            .grid-3 {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            .grid-4 {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 14px !important;
+            }
+
+            .diagram-feature-grid {
+                display: grid !important;
+                grid-template-columns: 1.15fr 0.85fr !important;
+                gap: 16px !important;
+                align-items: stretch !important;
+                height: 100% !important;
+            }
+
+            .growth-roadmap {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            .flow-diagram {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
             }
 
             .hero-title-main,
