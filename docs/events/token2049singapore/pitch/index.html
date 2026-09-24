@@ -382,11 +382,21 @@
             gap: 14px;
         }
 
+        .slide2-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr 1fr;
+            gap: 16px;
+            height: 100%;
+            min-height: 0;
+            align-items: stretch;
+        }
+
         @media screen and (max-width: 860px) {
 
             .grid-2,
             .grid-3,
-            .grid-4 {
+            .grid-4,
+            .slide2-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1206,69 +1216,79 @@
                     <div class="slide-number-badge">02 / 15</div>
                 </div>
 
-                <div class="slide-body" style="height: 100%; flex: 1; display: flex; flex-direction: column; justify-content: stretch;">
-                    <div style="display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 18px; align-items: stretch; height: 100%; flex: 1;">
-                        <!-- Left: 3 Structural Problems Full Height -->
-                        <div style="display: flex; flex-direction: column; gap: 12px; height: 100%; flex: 1; justify-content: space-between;">
-                            <div class="deck-card highlight-amber" style="flex: 1; min-height: 135px; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="slide-body" style="flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; margin: 6px 0;">
+                    <!-- 3-Column Layout: Full Slide Height Utilization & Large Scaled Diagrams -->
+                    <div class="slide2-grid">
+                        <!-- Column 1: 3 Structural Problems Full Height -->
+                        <div style="display: flex; flex-direction: column; gap: 12px; height: 100%; justify-content: space-between;">
+                            <div class="deck-card highlight-amber" style="flex: 1 1 0; min-height: 0; padding: 12px 16px; display: flex; flex-direction: column; justify-content: center;">
                                 <div class="deck-card-title" style="color: var(--amber); font-size: 0.92rem; margin-bottom: 4px;">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                     <span>01. Messaging ≠ Core Engine</span>
                                 </div>
-                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.45;">
+                                <div class="deck-card-text" style="font-size: 0.81rem; line-height: 1.42;">
                                     ISO 20022 upgraded transaction messages, but internal bank cores and enterprise ERPs
                                     remain locked in batch-processed legacy ledgers.
                                 </div>
                             </div>
 
-                            <div class="deck-card highlight-cyan" style="flex: 1; min-height: 135px; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="deck-card highlight-cyan" style="flex: 1 1 0; min-height: 0; padding: 12px 16px; display: flex; flex-direction: column; justify-content: center;">
                                 <div class="deck-card-title" style="color: var(--teal); font-size: 0.92rem; margin-bottom: 4px;">
                                     <i class="fa-solid fa-arrows-split-up-and-left"></i>
                                     <span>02. The DLT Perimeter Rush</span>
                                 </div>
-                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.45;">
+                                <div class="deck-card-text" style="font-size: 0.81rem; line-height: 1.42;">
                                     Institutions built outward wrappers rather than solving core ledger synchronization,
                                     creating isolated liquidity islands and reconciliation overhead.
                                 </div>
                             </div>
 
-                            <div class="deck-card highlight-coral" style="flex: 1; min-height: 135px; padding: 14px 18px; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="deck-card highlight-coral" style="flex: 1 1 0; min-height: 0; padding: 12px 16px; display: flex; flex-direction: column; justify-content: center;">
                                 <div class="deck-card-title" style="color: var(--coral); font-size: 0.92rem; margin-bottom: 4px;">
                                     <i class="fa-solid fa-lock-open"></i>
                                     <span>03. The Control Vacuum</span>
                                 </div>
-                                <div class="deck-card-text" style="font-size: 0.82rem; line-height: 1.45;">
+                                <div class="deck-card-text" style="font-size: 0.81rem; line-height: 1.42;">
                                     Simple wallet-to-wallet coin transfers lack double-entry bookkeeping, audit
                                     invariants, and corporate approval controls required by enterprise CFOs.
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right: Visual Diagrams Full-Height Utilization & Scaled Large Images -->
-                        <div style="display: flex; flex-direction: column; gap: 14px; height: 100%; flex: 1; justify-content: space-between;">
-                            <div class="deck-card" style="flex: 1; min-height: 220px; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
-                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                                    <div style="font-size: 0.92rem; font-weight: 800; color: var(--teal);">Liquidity Fragmentation</div>
-                                    <div style="font-size: 0.76rem; color: var(--muted);">Diversity of chains & coins creates liquidity traps</div>
+                        <!-- Column 2: Large Visual Card 1 (Liquidity Fragmentation) -->
+                        <div class="deck-card" style="height: 100%; min-height: 0; padding: 14px; display: flex; flex-direction: column; border-color: rgba(56, 189, 248, 0.35); justify-content: space-between;">
+                            <div style="flex: 0 0 auto; margin-bottom: 8px;">
+                                <div style="font-size: 0.95rem; font-weight: 800; color: var(--teal); display: flex; align-items: center; gap: 6px;">
+                                    <i class="fa-solid fa-circle-nodes"></i>
+                                    <span>Liquidity Fragmentation</span>
                                 </div>
-                                <div
-                                    style="width: 100%; flex: 1; min-height: 170px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border-radius: 8px; padding: 8px; border: 1px solid rgba(56, 189, 248, 0.3);">
-                                    <img src="assets/DiversityOfChains-Coins.png" alt="Diversity of Chains and Coins"
-                                        style="height: 100%; width: 100%; max-height: 185px; object-fit: contain; display: block;">
-                                </div>
+                                <div style="font-size: 0.74rem; color: var(--muted); margin-top: 2px;">Chains & coins create isolated liquidity traps</div>
                             </div>
+                            <div style="flex: 1 1 0; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(56, 189, 248, 0.15) 0%, rgba(10, 16, 26, 0.95) 75%); border-radius: 8px; padding: 10px; border: 1px solid rgba(56, 189, 248, 0.3); overflow: hidden;">
+                                <img src="assets/DiversityOfChains-Coins.png" alt="Diversity of Chains and Coins"
+                                    style="height: 100%; width: 100%; max-height: 100%; object-fit: contain; display: block; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.6));">
+                            </div>
+                            <div style="flex: 0 0 auto; font-size: 0.73rem; color: var(--muted); text-align: center; margin-top: 8px;">
+                                Multi-chain fragmentation traps enterprise working capital
+                            </div>
+                        </div>
 
-                            <div class="deck-card" style="flex: 1; min-height: 220px; padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
-                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                                    <div style="font-size: 0.92rem; font-weight: 800; color: var(--coral);">The Control Gap</div>
-                                    <div style="font-size: 0.76rem; color: var(--muted);">Wallet transfers lack corporate double-entry ledger truth</div>
+                        <!-- Column 3: Large Visual Card 2 (The Control Gap) -->
+                        <div class="deck-card" style="height: 100%; min-height: 0; padding: 14px; display: flex; flex-direction: column; border-color: rgba(244, 63, 94, 0.35); justify-content: space-between;">
+                            <div style="flex: 0 0 auto; margin-bottom: 8px;">
+                                <div style="font-size: 0.95rem; font-weight: 800; color: var(--coral); display: flex; align-items: center; gap: 6px;">
+                                    <i class="fa-solid fa-wallet"></i>
+                                    <span>The Control Gap</span>
                                 </div>
-                                <div
-                                    style="width: 100%; flex: 1; min-height: 170px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border-radius: 8px; padding: 8px; border: 1px solid rgba(244, 63, 94, 0.3);">
-                                    <img src="assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png"
-                                        alt="Misuse of Wallet Transfer"
-                                        style="height: 100%; width: 100%; max-height: 185px; object-fit: contain; display: block;">
-                                </div>
+                                <div style="font-size: 0.74rem; color: var(--muted); margin-top: 2px;">Wallet transfers lack double-entry truth</div>
+                            </div>
+                            <div style="flex: 1 1 0; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; background: #ffffff; border-radius: 8px; padding: 8px; border: 1px solid rgba(244, 63, 94, 0.3); overflow: hidden; box-shadow: inset 0 0 12px rgba(0,0,0,0.06);">
+                                <img src="assets/Miss-usageofwallet-coin-transfer-for-coporate-trasure.png"
+                                    alt="Misuse of Wallet Transfer"
+                                    style="height: 100%; width: 100%; max-height: 100%; object-fit: contain; display: block; border-radius: 4px;">
+                            </div>
+                            <div style="flex: 0 0 auto; font-size: 0.73rem; color: var(--muted); text-align: center; margin-top: 8px;">
+                                Simple wallet apps lack ERP ledger rules & controls
                             </div>
                         </div>
                     </div>
