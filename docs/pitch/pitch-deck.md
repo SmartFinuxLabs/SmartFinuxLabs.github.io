@@ -31,9 +31,9 @@ style: |
 - **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual Accounting Truth
 - **Business App: SCF:** Supply Chain Finance & Dynamic Factoring (Verity / CDSC)
 - **Founders:** Tørence Juhe & Dr. Haroël Lee (Ph.D.)
-- **The Ask:** **$2.2M Seed for 15% Equity (Valuation round at $14.7 M)**
+- **The Ask:** **$1.2M Seed for 15% Equity (Valuation round at $8.0 M)**
 - **Interactive Founder Edition:** [View Founder Web Presentation](./founder-edition.html)
-- **Founder PDF Deck:** [Download Founder Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20Founder%20Pitch%20Deck%202026%20_%20Programmable%20Treasury%20%26%20Liquid%20Factoring%20Engine%20($2.2M%20Seed%20Round).pdf)
+- **Founder PDF Deck:** [Download Founder Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20Founder%20Pitch%20Deck%202026%20_%20Programmable%20Treasury%20%26%20Liquid%20Factoring%20Engine%20($1.2M%20Seed%20Round).pdf)
 - **Base VC Deck:** [View Base Presentation](./index.html)
 
 ---
@@ -345,33 +345,33 @@ style: |
 ### Clear Execution Milestones Driving 3x–4x Enterprise Valuation Step-Up
 
 ```
-[ SEED: $2.2M @ $14.7M VALUATION ] ═══> [ 12-18 MO INFLECTION ] ═══> [ SERIES A: $40M-$60M ]
-• 15.0% Equity Stake            • $250M+ Run-Rate Volume        • Target Raise: $8M-$12M
-• Deployed Working Alphas       • $3.5M+ ARR Run-Rate           • 3x-4x Valuation Step-Up
+[ SEED: $1.2M @ $8.0M VALUATION ] ═══> [ 12-18 MO INFLECTION ] ═══> [ SERIES A: $25M-$40M ]
+• 15.0% Equity Stake            • $250M+ Run-Rate Volume        • Target Raise: $6M-$10M
+• Deployed Working Alphas       • $3.5M+ ARR Run-Rate           • 3x-5x Valuation Step-Up
 • 5 Anchor Enterprise Pilots    • Self-Serve Liquidity Pools    • Multi-Corridor Dominance
 ```
 
 - **Phase 1: Months 1–6 (Operational Proof):** Deploy 5 Enterprise Anchor Buyer pilots; complete SOC2 Type 1 audit & MSB state compliance (BSA/AML, KYB/KYC, OFAC screening); onboard 25 suppliers.
 - **Phase 2: Months 6–12 (Volume & Velocity):** Cross $50M cumulative volume across 5 Enterprise Anchors; integrate 3rd-party institutional liquidity pools.
-- **Phase 3: Months 12–18 (Series A Inflection):** Hit $250M annualized run-rate ($3.5M+ ARR); launch API partner gateway; execute Series A at **$40M–$60M valuation (3x–4x Step-Up)**.
+- **Phase 3: Months 12–18 (Series A Inflection):** Hit $250M annualized run-rate ($3.5M+ ARR); launch API partner gateway; execute Series A at **$25M–$40M valuation (3x–5x Step-Up)**.
 
 ---
 
 <!-- Slide 15: Leadership & The Seed Ask -->
-# The Ask: $2.2M Seed Round (15% Equity)
-### Valuation round at $14.7 M to Scale Payment Routing & Enterprise Pilots
+# The Ask: $1.2M Seed Round (15% Equity)
+### Valuation round at $8.0 M to Scale Payment Routing & Enterprise Pilots
 
 ### Round Structure & Terms
-- **Target Raise:** **$2,200,000**
+- **Target Raise:** **$1,200,000**
 - **Equity Offered:** **15.0%**
-- **Valuation:** **Valuation round at $14.7 M** ($14,666,667 Post-Money)
-- **Structure:** Priced Seed Round / SAFE with $14.7M Post-Money Cap
+- **Valuation:** **Valuation round at $8.0 M** ($8,000,000 Post-Money)
+- **Structure:** Priced Seed Round / SAFE with $8.0M Post-Money Cap
 
-### Capital Allocation ($2.2M)
-- **45% ($990.0k):** Platform & Ledger Engineering
-- **25% ($550.0k):** Enterprise Pilots & Anchor GTM
-- **20% ($440.0k):** Compliance, SOC2 & MSB (BSA/AML, KYB/KYC, OFAC)
-- **10% ($220.0k):** Operations & Working Capital
+### Capital Allocation ($1.2M)
+- **45% ($540.0k):** Platform & Ledger Engineering
+- **25% ($300.0k):** Enterprise Pilots & Anchor GTM
+- **20% ($240.0k):** Compliance, SOC2 & MSB (BSA/AML, KYB/KYC, OFAC)
+- **10% ($120.0k):** Operations & Working Capital
 
 ### Leadership Team
 - **Tørence Juhe** — Founder & Chief Architect / CEO
@@ -381,5 +381,5 @@ style: |
   - AI Models & Risk Engine, Crypto & Distributed Systems, Cryptographic ledger invariants, smart contract verification, and multi-chain settlement protocols.
 
 **Contact:** Tørence Juhe • CEO • [connexis@connexis.fi](mailto:connexis@connexis.fi) • [https://connextium.xyz](https://connextium.xyz)
-**PDF Deck:** [Download Connextium.xyz VC Pitch Deck PDF](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20(15_%20Equity).pdf)
+**PDF Deck:** [Download Connextium.xyz VC Pitch Deck PDF](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$1.2M%20Seed%20Round%20(15%25%20Equity).pdf)
 
