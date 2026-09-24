@@ -28,12 +28,12 @@ style: |
 *Unifying corporate double-entry accounting truth, 24/7 stablecoin cash sweeps, and multi-rail routing — with Supply Chain Finance & Receivables Factoring as our high-yield application across viable segments.*
 
 - **Core Engine:** Global Trade Treasury (GTT) & Interledger (ILP) Router
-- **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual T-Accounts
+- **Treasury Core:** Programmable ADA Vaults, Stablecoin Cash Sweeps & Dual Accounting Truth
 - **Business App: SCF:** Supply Chain Finance & Dynamic Factoring (Verity / CDSC)
 - **Founders:** Tørence Juhe & Dr. Haroël Lee (Ph.D.)
-- **The Ask:** **$1.25M Seed for 15% Equity (Valuation round at $8.4 M)**
+- **The Ask:** **$2.2M Seed for 15% Equity (Valuation round at $14.7 M)**
 - **Portal:** [https://connextium.xyz](https://connextium.xyz)
-- **Static PDF Deck:** [Download Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20(15%25%20Equity).pdf)
+- **Static PDF Deck:** [Download Pitch Deck PDF (15 Slides)](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20(15%25%20Equity).pdf)
 
 ---
 
@@ -248,20 +248,24 @@ style: |
 
 <!-- Slide 9: Flagship Business Case: Supply Chain Finance -->
 # Case Study: Supply Chain Finance & Receivables Factoring
-### Deploying Stablecoin Treasury Operations to Unlock Trapped Capital via Early Liquidity Payouts
+### Unlocking Broader Public Market Liquidity for Invoice Assets vs. Closed Private Networks
 
 ```
-[ Net-60 Invoice ] ➔ [ Verity AI Scoring ] ➔ [ Dynamic Discount (1.5%) ] ➔ [ Early Liquidity Payout ]
+[ Net-60 Invoice ] ➔ [ Verity AI Scoring ] ➔ [ Tokenized Claim ] ➔ [ Public Liquidity Pool ] ➔ [ Instant USDC Payout ]
 ```
+
+### Factoring Market Core Differentiator
+- **Incumbents (Modern Treasury, SAP Taulia):** Optimize receivables strictly within **closed, private enterprise networks** — limiting factoring liquidity to internal corporate balance sheets or single-bank syndicates.
+- **Connextium Differentiator:** **Unlocks broader public market liquidity for invoice assets** — creating a publicly accessible market for invoice factoring where institutional capital, credit funds, and decentralized liquidity pools compete to finance early supplier payouts.
 
 - **For Enterprise Anchor Buyers:**
-  - Deploy idle treasury cash on the platform to earn **8% to 18% annualized APR**.
-  - Strengthen fragile supplier tiers without adding balance sheet debt.
-  - Automated ERP journal reconciliation with zero manual intervention.
-- **For SME Suppliers & Factoring:**
-  - Receive early liquidity payouts in USDC or fiat instead of waiting 60–90 days.
-  - Transparent, fractional dynamic discounts vs. predatory 15–30% factoring rates.
-  - Eliminate cash flow uncertainty and accelerate inventory turnover.
+  - Deploy idle treasury cash or tap external liquidity pools to earn **8% to 18% annualized APR**.
+  - Strengthen fragile supplier tiers without adding balance sheet debt or constraining internal working capital.
+  - Automated ERP journal reconciliation across dual T-accounts with zero manual intervention.
+- **For SME Suppliers & Factoring Market:**
+  - Receive instant 24/7 liquidity payouts in USDC or fiat instead of waiting 60–90 days.
+  - Access open-market competitive dynamic rates (1.5%–3.0%) vs. predatory 15%–30% traditional factoring rates.
+  - Gain access to a deep, publicly accessible liquidity market with zero single-buyer dependency.
 
 ---
 
@@ -337,36 +341,36 @@ style: |
 
 <!-- Slide 14: Value Growing Plan (Series A) -->
 # Value Growing Plan: Roadmap to Series A
-### Clear Execution Milestones Driving 5x–7x Enterprise Valuation Step-Up
+### Clear Execution Milestones Driving 3x–4x Enterprise Valuation Step-Up
 
 ```
-[ SEED: $1.25M @ $8.4M VALUATION ] ═══> [ 12-18 MO INFLECTION ] ═══> [ SERIES A: $40M-$60M ]
+[ SEED: $2.2M @ $14.7M VALUATION ] ═══> [ 12-18 MO INFLECTION ] ═══> [ SERIES A: $40M-$60M ]
 • 15.0% Equity Stake            • $250M+ Run-Rate Volume        • Target Raise: $8M-$12M
-• Deployed Working Alphas       • $3.5M+ ARR Run-Rate           • 5x-7x Valuation Step-Up
+• Deployed Working Alphas       • $3.5M+ ARR Run-Rate           • 3x-4x Valuation Step-Up
 • 5 Anchor Enterprise Pilots    • Self-Serve Liquidity Pools    • Multi-Corridor Dominance
 ```
 
 - **Phase 1: Months 1–6 (Operational Proof):** Deploy 5 Enterprise Anchor Buyer pilots; complete SOC2 Type 1 audit & MSB state compliance (BSA/AML, KYB/KYC, OFAC screening); onboard 25 suppliers.
 - **Phase 2: Months 6–12 (Volume & Velocity):** Cross $50M cumulative volume across 5 Enterprise Anchors; integrate 3rd-party institutional liquidity pools.
-- **Phase 3: Months 12–18 (Series A Inflection):** Hit $250M annualized run-rate ($3.5M+ ARR); launch API partner gateway; execute Series A at **$40M–$60M valuation (5x–7x Step-Up)**.
+- **Phase 3: Months 12–18 (Series A Inflection):** Hit $250M annualized run-rate ($3.5M+ ARR); launch API partner gateway; execute Series A at **$40M–$60M valuation (3x–4x Step-Up)**.
 
 ---
 
 <!-- Slide 15: Leadership & The Seed Ask -->
-# The Ask: $1.25M Seed Round (15% Equity)
-### Valuation round at $8.4 M to Scale Payment Routing & Enterprise Pilots
+# The Ask: $2.2M Seed Round (15% Equity)
+### Valuation round at $14.7 M to Scale Payment Routing & Enterprise Pilots
 
 ### Round Structure & Terms
-- **Target Raise:** **$1,250,000**
+- **Target Raise:** **$2,200,000**
 - **Equity Offered:** **15.0%**
-- **Valuation:** **Valuation round at $8.4 M** ($8,400,000 Post-Money)
-- **Structure:** Priced Seed Round / SAFE with $8.4M Post-Money Cap
+- **Valuation:** **Valuation round at $14.7 M** ($14,666,667 Post-Money)
+- **Structure:** Priced Seed Round / SAFE with $14.7M Post-Money Cap
 
-### Capital Allocation ($1.25M)
-- **45% ($562.5k):** Platform & Ledger Engineering
-- **25% ($312.5k):** Enterprise Pilots & Anchor GTM
-- **20% ($250.0k):** Compliance, SOC2 & MSB (BSA/AML, KYB/KYC, OFAC)
-- **10% ($125.0k):** Operations & Working Capital
+### Capital Allocation ($2.2M)
+- **45% ($990.0k):** Platform & Ledger Engineering
+- **25% ($550.0k):** Enterprise Pilots & Anchor GTM
+- **20% ($440.0k):** Compliance, SOC2 & MSB (BSA/AML, KYB/KYC, OFAC)
+- **10% ($220.0k):** Operations & Working Capital
 
 ### Leadership Team
 - **Tørence Juhe** — Founder & Chief Architect / CEO
@@ -376,5 +380,5 @@ style: |
   - AI Models & Risk Engine, Crypto & Distributed Systems, Cryptographic ledger invariants, smart contract verification, and multi-chain settlement protocols.
 
 **Contact:** Tørence Juhe • CEO • [connexis@connexis.fi](mailto:connexis@connexis.fi) • [https://connextium.xyz](https://connextium.xyz)
-**PDF Deck:** [Download Connextium.xyz VC Pitch Deck PDF](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20(15%25%20Equity).pdf)
+**PDF Deck:** [Download Connextium.xyz VC Pitch Deck PDF](./Connextium.xyz%20—%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20(15%25%20Equity).pdf)
 

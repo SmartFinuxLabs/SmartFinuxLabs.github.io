@@ -56,7 +56,7 @@ treasury coordination, and cross-border value movement.
 
 ## Funding Stage
 
-- Seed Round ($1.25M Target Raise for 15% Equity, Valuation round at $8.4 M) | Next Stage: Series A ($8M–$12M @ $40M–$60M Valuation)
+- Seed Round ($2.2M Target Raise for 15% Equity, Valuation round at $14.7 M) | Next Stage: Series A ($8M–$12M @ $40M–$60M Valuation)
 - **VC Pitch Deck:** [docs/pitch/pitch-deck.md](file:///Users/jhee/Workplaces/Projects/ConnextiumBootCamp/WeekofCircle/SmartFinuxLabs.github.io/docs/pitch/pitch-deck.md) (Interactive Presentation: `docs/pitch/index.html`)
 
 ## Product Stage

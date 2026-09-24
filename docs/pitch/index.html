@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connextium.xyz — VC Pitch Deck | $1.25M Seed Round (15% Equity)</title>
+    <title>Connextium.xyz — VC Pitch Deck | $2.2M Seed Round (15% Equity)</title>
     <meta name="description"
-        content="Official VC Pitch Deck for Connextium.xyz — $1.25M Seed Round (15% Equity, Valuation round at $8.4 M) | Programmable Treasury Accounting, Stablecoin Cash Flow Management & Settlement Platform.">
+        content="Official VC Pitch Deck for Connextium.xyz — $2.2M Seed Round (15% Equity, Valuation round at $14.7 M) | Programmable Treasury Accounting, Stablecoin Cash Flow Management & Settlement Platform.">
 
     <!-- Modern Typography & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -979,7 +979,7 @@
             border-color: #e11d48;
         }
 
-        /* Print / PDF Styles */
+        /* Print / PDF Styles - Exact Desktop Presentation Deck View Reproduction */
         @media print {
             * {
                 -webkit-print-color-adjust: exact !important;
@@ -987,41 +987,137 @@
             }
 
             @page {
-                size: landscape;
+                size: 1920px 1080px;
                 margin: 0;
             }
 
+            html,
             body {
-                background: white !important;
+                width: 1920px !important;
+                height: auto !important;
+                background: #f8fafc !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                -webkit-font-smoothing: antialiased;
             }
 
             .top-navbar,
             .notes-panel,
             .nav-controls,
-            .img-modal {
+            .img-modal,
+            #image-modal,
+            .diagram-zoom-badge {
                 display: none !important;
             }
 
             .deck-container {
-                width: 100% !important;
+                width: 1920px !important;
+                max-width: 1920px !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 gap: 0 !important;
+                display: block !important;
             }
 
             .slide {
-                page-break-after: always;
-                page-break-inside: avoid;
-                break-after: page;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                break-after: page !important;
+                break-inside: avoid !important;
                 box-shadow: none !important;
                 border: none !important;
-                aspect-ratio: 16 / 9;
-                width: 100vw !important;
-                height: 100vh !important;
+                border-radius: 0 !important;
+                position: relative !important;
+                width: 1920px !important;
+                height: 1080px !important;
+                min-height: 1080px !important;
+                max-height: 1080px !important;
+                aspect-ratio: 16 / 9 !important;
                 margin: 0 !important;
-                padding: 28px !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+                background: var(--white) !important;
+            }
+
+            .slide-inner {
+                position: absolute !important;
+                inset: 0 !important;
+                padding: 3.5% 4.5% 3% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                box-sizing: border-box !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .slide-header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: flex-start !important;
+                border-bottom: 1px solid var(--line-subtle) !important;
+                padding-bottom: 12px !important;
+                margin-bottom: 16px !important;
+            }
+
+            .slide-body {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                gap: 14px !important;
+            }
+
+            .slide-footer {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                border-top: 1px solid var(--line-subtle) !important;
+                padding-top: 12px !important;
+                margin-top: 16px !important;
+                font-size: 0.88rem !important;
+                color: var(--muted-light) !important;
+                font-family: var(--font-mono) !important;
+            }
+
+            .grid-2 {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            .grid-3 {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            .grid-4 {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 14px !important;
+            }
+
+            .diagram-feature-grid {
+                display: grid !important;
+                grid-template-columns: 1.15fr 0.85fr !important;
+                gap: 18px !important;
+                align-items: stretch !important;
+                height: 100% !important;
+            }
+
+            .flow-diagram {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 10px !important;
+            }
+
+            .valuation-callout {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
             }
 
             .hero-title-main,
@@ -1047,7 +1143,7 @@
                     <i class="fa-solid fa-arrow-left"></i>
                     <span>Portal Hub</span>
                 </a>
-                <span class="nav-badge-pitch">$1.25M Seed (15% Equity)</span>
+                <span class="nav-badge-pitch">$2.2M Seed (15% Equity)</span>
                 <div class="nav-title-group">
                     <div class="nav-deck-title">Connextium.xyz</div>
                     <div class="nav-deck-subtitle">Treasury Accounting & Settlement Platform</div>
@@ -1070,7 +1166,7 @@
                     <option value="slide-12">12. Traction: Live Working Alphas</option>
                     <option value="slide-13">13. Business & Revenue Model</option>
                     <option value="slide-14">14. Value Growing Plan (Series A)</option>
-                    <option value="slide-15">15. The Ask: $1.25M (15% Equity)</option>
+                    <option value="slide-15">15. The Ask: $2.2M (15% Equity)</option>
                 </select>
 
                 <div class="slide-counter" id="slide-indicator">Slide 1 / 15</div>
@@ -1097,7 +1193,7 @@
                     <span>MD</span>
                 </a>
 
-                <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $1.25M Seed Round (15% Equity).pdf" class="nav-btn nav-btn-action"
+                <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $2.2M Seed Round (15% Equity).pdf" class="nav-btn nav-btn-action"
                     target="_blank" title="Static PDF Pitch Deck (15 Slides)">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>PDF</span>
@@ -1157,7 +1253,7 @@
                         <div class="deck-card highlight-card">
                             <div class="deck-card-title">
                                 <i class="fa-solid fa-book-journal-whills" style="color: #059669;"></i>
-                                <span>Dual T-Account Truth</span>
+                                <span>Dual Accounting Truth</span>
                             </div>
                             <div class="deck-card-text">
                                 GAAP/IFRS synchronized double-entry accounting bridging ERP general ledgers with
@@ -1180,7 +1276,7 @@
 
                 <div class="slide-footer">
                     <div><strong>Founders:</strong> Tørence Juhe & Dr. Haroël Lee (Ph.D.)</div>
-                    <div><strong>The Ask:</strong> $1.25M Seed for 15% Equity (Valuation round at $8.4 M)</div>
+                    <div><strong>The Ask:</strong> $2.2M Seed for 15% Equity (Valuation round at $14.7 M)</div>
                     <div><strong>Live Portal:</strong> <a href="https://connextium.xyz"
                             target="_blank">connextium.xyz</a></div>
                 </div>
@@ -1937,13 +2033,33 @@
                             <span>Flagship Business Application</span>
                         </div>
                         <div class="slide-title">Case Study: Supply Chain Finance & Receivables Factoring</div>
-                        <div class="slide-subtitle">Deploying stablecoin treasury operations to unlock trapped working
-                            capital via early liquidity payouts</div>
+                        <div class="slide-subtitle">Unlocking broader public market liquidity for invoice assets vs. closed private enterprise networks</div>
                     </div>
                     <div class="slide-number-badge">09 / 15</div>
                 </div>
 
                 <div class="slide-body">
+                    <!-- Factoring Market Differentiation Banner -->
+                    <div style="margin-bottom: 8px; padding: 10px 14px; background: #f0fdf4; border: 1px solid rgba(13, 190, 133, 0.45); border-radius: 8px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 14px; align-items: center;">
+                        <div style="border-right: 1px solid rgba(13, 190, 133, 0.3); padding-right: 12px;">
+                            <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: #b45309; font-family: var(--font-mono); display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-lock"></i> Incumbents (Modern Treasury / SAP Taulia)
+                            </div>
+                            <div style="font-size: 0.81rem; line-height: 1.35; color: var(--ink-secondary); margin-top: 2px;">
+                                Optimize receivables strictly within <strong>closed private enterprise networks</strong> — limiting factoring liquidity to internal corporate balance sheets or single-bank syndicates.
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--primary-dark); font-family: var(--font-mono); display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-unlock-keyhole"></i> Connextium Differentiator: Open Public Liquidity
+                            </div>
+                            <div style="font-size: 0.81rem; line-height: 1.35; color: var(--ink); margin-top: 2px;">
+                                <strong>Unlocks broader public market liquidity for invoice assets</strong> — creating a publicly accessible market for invoice factoring where institutional capital & liquidity pools compete to fund payouts.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flow Diagram -->
                     <div class="flow-diagram">
                         <div class="flow-node">
                             <i class="fa-solid fa-file-invoice"
@@ -1957,61 +2073,58 @@
                         </div>
                         <div class="flow-arrow">➔</div>
                         <div class="flow-node active-node">
-                            <i class="fa-solid fa-percent"
+                            <i class="fa-solid fa-layer-group"
                                 style="color: #0DBE85; display:block; margin-bottom: 2px;"></i>
-                            Dynamic Discount (1.5%)
+                            Tokenized Invoice Claim
                         </div>
                         <div class="flow-arrow">➔</div>
                         <div class="flow-node active-node">
-                            <i class="fa-solid fa-vault" style="color: #0891b2; display:block; margin-bottom: 2px;"></i>
-                            USDC Vault Payout
+                            <i class="fa-solid fa-globe" style="color: #0891b2; display:block; margin-bottom: 2px;"></i>
+                            Public Liquidity Pool
                         </div>
                         <div class="flow-arrow">➔</div>
                         <div class="flow-node">
                             <i class="fa-solid fa-hand-holding-dollar"
                                 style="color: #059669; display:block; margin-bottom: 2px;"></i>
-                            Early Liquidity Paid
+                            Instant USDC Payout
                         </div>
                     </div>
 
-                    <div class="grid-2" style="margin-top: 10px;">
-                        <div class="deck-card highlight-card">
-                            <div class="deck-card-title" style="color: var(--primary-dark);">
+                    <div class="grid-2" style="margin-top: 8px;">
+                        <div class="deck-card highlight-card" style="padding: 12px 14px;">
+                            <div class="deck-card-title" style="color: var(--primary-dark); font-size: 0.92rem; margin-bottom: 4px;">
                                 <i class="fa-solid fa-building"></i>
                                 <span>For Enterprise Anchor Buyers</span>
                             </div>
-                            <div class="deck-card-text">
-                                • Deploy idle treasury cash on the platform to earn <strong>8% to 18% annualized
-                                    APR</strong>.<br>
-                                • Strengthen fragile supplier tiers without adding balance sheet debt.<br>
-                                • Automated ERP journal reconciliation with zero manual intervention.
+                            <div class="deck-card-text" style="font-size: 0.8rem; line-height: 1.38;">
+                                • Deploy idle treasury cash or tap external liquidity pools to earn <strong>8% to 18% annualized APR</strong>.<br>
+                                • Strengthen fragile supplier tiers without adding balance sheet debt or tying up internal working capital.<br>
+                                • Automated ERP journal reconciliation across dual T-accounts with zero manual intervention.
                             </div>
                         </div>
 
-                        <div class="deck-card highlight-card">
-                            <div class="deck-card-title" style="color: #0891b2;">
+                        <div class="deck-card highlight-card" style="padding: 12px 14px;">
+                            <div class="deck-card-title" style="color: #0891b2; font-size: 0.92rem; margin-bottom: 4px;">
                                 <i class="fa-solid fa-truck-fast"></i>
-                                <span>For SME Suppliers & Factoring</span>
+                                <span>For SME Suppliers & Factoring Market</span>
                             </div>
-                            <div class="deck-card-text">
-                                • Receive early liquidity payouts in USDC or fiat instead of waiting 60–90 days.<br>
-                                • Transparent, fractional dynamic discounts vs. predatory 15–30% factoring rates.<br>
-                                • Eliminate cash flow uncertainty and accelerate inventory turnover.
+                            <div class="deck-card-text" style="font-size: 0.8rem; line-height: 1.38;">
+                                • Receive instant 24/7 liquidity payouts in USDC or fiat instead of waiting 60–90 days.<br>
+                                • Access open-market competitive dynamic rates (1.5%–3.0%) vs. predatory 15%–30% factoring fees.<br>
+                                • Gain access to a deep, publicly accessible liquidity market with zero single-buyer dependency.
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-footer">
-                    <div>Flagship Application: Dynamic Discounting & Factoring</div>
+                    <div>Core Moat: Public Accessible Market for Invoice Factoring & Liquidity vs Closed Private Networks</div>
                     <div>Connextium.xyz Pitch Deck</div>
                 </div>
             </div>
             <div class="notes-panel" id="notes-slide-9">
-                <div class="notes-title">Investor Notes • SCF Unit Economics</div>
-                By providing the rails for dynamic discounting, Connextium transforms corporate accounts payable from a
-                cost center into a high-margin yield engine for buyers, while injecting instant liquidity into
-                suppliers.
+                <div class="notes-title">Investor Notes • Factoring Market Differentiation & Public Liquidity Moat</div>
+                While incumbents like Modern Treasury and SAP Taulia optimize receivables within private enterprise networks, the core differentiator is unlocking broader public market liquidity for invoice assets, creating a publicly accessible market for invoice factoring and liquidity. Connextium standardizes invoice receivables with zero-sum ADA ledger invariants, allowing institutional treasuries, credit funds, and decentralized capital pools to seamlessly provide liquidity alongside corporate buyers.
             </div>
         </section>
 
@@ -2487,7 +2600,7 @@
                             <div class="deck-card-text">
                                 • Hit <strong>$250M+ annualized run-rate</strong> ($3.5M+ ARR).<br>
                                 • Launch self-serve Liquidity & API Partner Gateway.<br>
-                                • <strong>Series A Target:</strong> $8M–$12M at <strong>$40M–$60M valuation (5x–7x
+                                • <strong>Series A Target:</strong> $8M–$12M at <strong>$40M–$60M valuation (3x–4x
                                     Step-Up)</strong>.
                             </div>
                         </div>
@@ -2501,9 +2614,9 @@
                             </div>
                             <div
                                 style="font-size: 1.1rem; font-weight: 900; color: var(--ink); font-family: var(--font-display);">
-                                $1.25M for 15.0% Equity <span
+                                $2.2M for 15.0% Equity <span
                                     style="font-size: 0.85rem; font-weight: 600; color: var(--muted);">(Valuation round
-                                    at $8.4 M)</span>
+                                    at $14.7 M)</span>
                             </div>
                         </div>
                         <div style="text-align: right;">
@@ -2514,7 +2627,7 @@
                             <div
                                 style="font-size: 1.1rem; font-weight: 900; color: var(--purple); font-family: var(--font-display);">
                                 $40M – $60M Valuation <span
-                                    style="font-size: 0.85rem; font-weight: 700; color: #059669;">(5x–7x Upside)</span>
+                                    style="font-size: 0.85rem; font-weight: 700; color: #059669;">(3x–4x Upside)</span>
                             </div>
                         </div>
                     </div>
@@ -2527,12 +2640,12 @@
             </div>
             <div class="notes-panel" id="notes-slide-14">
                 <div class="notes-title">Investor Notes • Value Growth Strategy & Compliance</div>
-                Our Seed round of $1.25M for 15% equity (Valuation round at $8.4 M) is sized to achieve key enterprise milestones: SOC2 Type 1 certification and complete MSB compliance (BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening/monitoring) required to command a top-tier Series A institutional valuation ($40M–$60M).
+                Our Seed round of $2.2M for 15% equity (Valuation round at $14.7 M) is sized to achieve key enterprise milestones: SOC2 Type 1 certification and complete MSB compliance (BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening/monitoring) required to command a top-tier Series A institutional valuation ($40M–$60M).
             </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- SLIDE 15: Team & The $1.25M Ask (15% Equity) -->
+        <!-- SLIDE 15: Team & The $2.2M Ask (15% Equity) -->
         <!-- ========================================== -->
         <section class="slide" id="slide-15">
             <div class="slide-inner hero-cover">
@@ -2542,8 +2655,8 @@
                             <i class="fa-solid fa-bullseye" style="color: var(--primary);"></i>
                             <span>The Investment Opportunity</span>
                         </div>
-                        <div class="slide-title">The Ask: $1.25M Seed Round (15% Equity)</div>
-                        <div class="slide-subtitle">Valuation round at $8.4 M to scale payment routing & enterprise
+                        <div class="slide-title">The Ask: $2.2M Seed Round (15% Equity)</div>
+                        <div class="slide-subtitle">Valuation round at $14.7 M to scale payment routing & enterprise
                             pilots</div>
                     </div>
                     <div class="slide-number-badge">15 / 15</div>
@@ -2563,7 +2676,7 @@
                                     style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--line-subtle); padding-bottom: 4px;">
                                     <span>Target Investment:</span>
                                     <strong
-                                        style="font-family: var(--font-mono); color: var(--primary-dark); font-size: 1rem;">$1,250,000</strong>
+                                        style="font-family: var(--font-mono); color: var(--primary-dark); font-size: 1rem;">$2,200,000</strong>
                                 </div>
                                 <div
                                     style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--line-subtle); padding-bottom: 4px;">
@@ -2574,8 +2687,8 @@
                                 <div style="display: flex; justify-content: space-between;">
                                     <span>Post-Money Valuation:</span>
                                     <strong
-                                        style="font-family: var(--font-mono); color: var(--ink); font-size: 1rem;">$8,400,000
-                                        ($8.4 M)</strong>
+                                        style="font-family: var(--font-mono); color: var(--ink); font-size: 1rem;">$14,666,667
+                                        ($14.7 M)</strong>
                                 </div>
                             </div>
                         </div>
@@ -2584,25 +2697,25 @@
                         <div class="deck-card" style="padding: 16px;">
                             <div class="deck-card-title" style="color: var(--teal);">
                                 <i class="fa-solid fa-chart-pie"></i>
-                                <span>Use of Funds ($1.25M)</span>
+                                <span>Use of Funds ($2.2M)</span>
                             </div>
                             <div class="deck-card-text"
                                 style="display: flex; flex-direction: column; gap: 4px; font-size: 0.84rem; margin-top: 6px;">
                                 <div style="display: flex; justify-content: space-between;">
                                     <span><strong>45%</strong> Platform & Ledger Engineering</span>
-                                    <span style="font-family: var(--font-mono); font-weight: 700;">$562.5k</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$990.0k</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between;">
                                     <span><strong>25%</strong> Enterprise Pilots & GTM</span>
-                                    <span style="font-family: var(--font-mono); font-weight: 700;">$312.5k</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$550.0k</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between;">
                                     <span><strong>20%</strong> Compliance, SOC2 & MSB (BSA/AML, KYB/KYC)</span>
-                                    <span style="font-family: var(--font-mono); font-weight: 700;">$250.0k</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$440.0k</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between;">
                                     <span><strong>10%</strong> Operations & Working Capital</span>
-                                    <span style="font-family: var(--font-mono); font-weight: 700;">$125.0k</span>
+                                    <span style="font-family: var(--font-mono); font-weight: 700;">$220.0k</span>
                                 </div>
                             </div>
                         </div>
@@ -2669,14 +2782,14 @@
                 </div>
 
                 <div class="slide-footer">
-                    <div>Portal: <a href="https://connextium.xyz" target="_blank">connextium.xyz</a> • Connextium © 2026 • <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$1.25M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $1.25M Seed Round (15% Equity).pdf" target="_blank" style="color: var(--primary-dark); font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> PDF Deck (15 Slides)</a>
+                    <div>Portal: <a href="https://connextium.xyz" target="_blank">connextium.xyz</a> • Connextium © 2026 • <a href="Connextium.xyz%20%E2%80%94%20VC%20Pitch%20Deck%20_%20$2.2M%20Seed%20Round%20%2815%25%20Equity%29.pdf" download="Connextium.xyz — VC Pitch Deck _ $2.2M Seed Round (15% Equity).pdf" target="_blank" style="color: var(--primary-dark); font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> PDF Deck (15 Slides)</a>
                     </div>
                     <div>Confidential Investor Presentation</div>
                 </div>
             </div>
             <div class="notes-panel" id="notes-slide-15">
                 <div class="notes-title">Investor Notes • The Seed Terms & Compliance Moat</div>
-                We are raising $1.25M for 15% equity in a valuation round at $8.4 M (Post-Money). The 20% compliance allocation ($250k) establishes our institutional moat: SOC2 Type 1 audit, BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening and transaction monitoring.
+                We are raising $2.2M for 15% equity in a valuation round at $14.7 M (Post-Money). The 20% compliance allocation ($440k) establishes our institutional moat: SOC2 Type 1 audit, BSA/AML compliance programs, automated KYB/KYC counterparty verification, and continuous OFAC sanctions screening and transaction monitoring.
             </div>
         </section>
 
