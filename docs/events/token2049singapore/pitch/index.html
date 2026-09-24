@@ -1205,10 +1205,10 @@
             line-height: 1.25;
         }
 
-        /* Print / PDF Styles for Clean 16:9 Desktop Presentation PDF Export */
+        /* Print / PDF Styles for Exact 1:1 16:9 Desktop Presentation Export */
         @media print {
             @page {
-                size: 1920px 1080px;
+                size: 1440px 810px;
                 margin: 0;
             }
 
@@ -1220,7 +1220,9 @@
                 print-color-adjust: exact !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                width: 1920px !important;
+                width: 1440px !important;
+                height: 810px !important;
+                font-size: 16px !important;
             }
 
             .top-navbar,
@@ -1229,8 +1231,8 @@
             }
 
             .deck-container {
-                width: 1920px !important;
-                max-width: 1920px !important;
+                width: 1440px !important;
+                max-width: 1440px !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 display: block !important;
@@ -1242,10 +1244,10 @@
                 break-after: page !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                width: 1920px !important;
-                height: 1080px !important;
-                min-height: 1080px !important;
-                max-height: 1080px !important;
+                width: 1440px !important;
+                height: 810px !important;
+                min-height: 810px !important;
+                max-height: 810px !important;
                 border-radius: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
@@ -1254,6 +1256,7 @@
                 overflow: hidden !important;
                 box-sizing: border-box !important;
                 position: relative !important;
+                background: #090e17 !important;
             }
 
             .slide-inner {
@@ -1261,7 +1264,7 @@
                 inset: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
-                padding: 36px 54px 28px !important;
+                padding: 24px 36px 18px !important;
                 box-sizing: border-box !important;
                 display: flex !important;
                 flex-direction: column !important;
@@ -1271,25 +1274,25 @@
             .grid-2 {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 20px !important;
+                gap: 16px !important;
             }
 
             .grid-3 {
                 display: grid !important;
                 grid-template-columns: repeat(3, 1fr) !important;
-                gap: 20px !important;
+                gap: 16px !important;
             }
 
             .grid-4 {
                 display: grid !important;
                 grid-template-columns: repeat(4, 1fr) !important;
-                gap: 18px !important;
+                gap: 14px !important;
             }
 
             .slide2-grid {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr 1fr !important;
-                gap: 20px !important;
+                gap: 16px !important;
                 height: 100% !important;
                 flex: 1 1 0 !important;
                 min-height: 0 !important;
@@ -1299,14 +1302,14 @@
             .hero-split-grid {
                 display: grid !important;
                 grid-template-columns: 1.15fr 0.85fr !important;
-                gap: 28px !important;
+                gap: 20px !important;
                 align-items: center !important;
             }
 
             .slide4-split-grid {
                 display: grid !important;
                 grid-template-columns: 1.1fr 0.9fr !important;
-                gap: 20px !important;
+                gap: 14px !important;
                 align-items: stretch !important;
             }
 
@@ -1314,15 +1317,22 @@
             .slide10-split-grid {
                 display: grid !important;
                 grid-template-columns: 0.82fr 1.18fr !important;
-                gap: 26px !important;
+                gap: 20px !important;
                 align-items: center !important;
             }
 
             .slide15-split-grid {
                 display: grid !important;
                 grid-template-columns: 1.24fr 0.76fr !important;
-                gap: 16px !important;
+                gap: 12px !important;
                 align-items: stretch !important;
+            }
+
+            .hero-title-main span {
+                background: none !important;
+                -webkit-background-clip: unset !important;
+                -webkit-text-fill-color: var(--primary) !important;
+                color: var(--primary) !important;
             }
         }
     </style>
