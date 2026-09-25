@@ -755,14 +755,49 @@
 
             .singapore-roof-card,
             .singapore-garden-card {
-                min-height: 220px !important;
+                width: 100% !important;
+                min-height: auto !important;
                 height: auto !important;
+                border-radius: 14px !important;
+                padding: 10px !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                box-shadow: 0 18px 48px rgba(0, 0, 0, 0.8) !important;
+            }
+
+            .singapore-roof-card {
+                border: 1px solid rgba(56, 189, 248, 0.45) !important;
+                background: radial-gradient(circle at center, rgba(56, 189, 248, 0.12), rgba(6, 9, 14, 0.98)) !important;
+            }
+
+            .singapore-garden-card {
+                border: 1px solid rgba(192, 132, 252, 0.45) !important;
+                background: radial-gradient(circle at center, rgba(192, 132, 252, 0.12), rgba(6, 9, 14, 0.98)) !important;
             }
 
             .roof-pitch-img,
             .garden-img {
-                height: 180px !important;
+                width: 100% !important;
+                height: auto !important;
+                max-height: 260px !important;
+                object-fit: cover !important;
+                border-radius: 8px !important;
+                display: block !important;
                 flex: none !important;
+            }
+
+            .roof-pitch-overlay,
+            .garden-overlay {
+                position: static !important;
+                width: 100% !important;
+                margin-top: 8px !important;
+                padding: 8px 12px !important;
+                background: rgba(0, 0, 0, 0.7) !important;
+                border-radius: 6px !important;
+                box-sizing: border-box !important;
             }
 
             .event-image-card {
@@ -1958,11 +1993,10 @@
                         </div>
 
                         <!-- Right: Singapore Roof Pitch Image Card -->
-                        <div class="singapore-roof-card" style="min-height: 280px;">
+                        <div class="singapore-roof-card">
                             <img src="assets/SingaporeToken2049RoofPitch.avif"
-                                alt="Singapore Token 2049 Rooftop Pitch - Marina Bay Sands" class="roof-pitch-img"
-                                style="height: 175px;" />
-                            <div class="roof-pitch-overlay" style="padding: 10px 14px;">
+                                alt="Singapore Token 2049 Rooftop Pitch - Marina Bay Sands" class="roof-pitch-img" />
+                            <div class="roof-pitch-overlay">
                                 <div class="roof-pitch-header">
                                     <span class="roof-pitch-tag" style="font-size: 0.75rem;">Singapore & Asian Trade
                                         Hub</span>
@@ -3067,11 +3101,10 @@
                         </div>
 
                         <!-- Right: Singapore Gardens by the Bay Visual -->
-                        <div class="singapore-garden-card" style="min-height: 290px;">
+                        <div class="singapore-garden-card">
                             <img src="assets/SingaporeToken2049Garden.webp"
-                                alt="Gardens by the Bay - Singapore TOKEN2049" class="garden-img"
-                                style="height: 190px;" />
-                            <div class="garden-overlay" style="padding: 10px 14px;">
+                                alt="Gardens by the Bay - Singapore TOKEN2049" class="garden-img" />
+                            <div class="garden-overlay">
                                 <div class="garden-header">
                                     <span class="garden-tag" style="font-size: 0.75rem;">TOKEN2049 Singapore</span>
                                     <span class="garden-badge" style="font-size: 0.72rem;">Gardens by the Bay</span>
