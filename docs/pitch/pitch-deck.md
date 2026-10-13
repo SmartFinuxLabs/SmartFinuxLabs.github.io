@@ -332,9 +332,9 @@ style: |
 </div>
 
 ### 3-Year Financial Projections
-- **Year 1 (Pilot Phase):** $50 Million Settled Volume • 5 Enterprise Anchors • **$750,000 Net Revenue**
-- **Year 2 (Corridor Scale):** $350 Million Settled Volume • 60 Enterprise Anchors • **$3,800,000 Net Revenue**
-- **Year 3 (Network Scale):** $1.8 Billion Settled Volume • 220 Enterprise Anchors • **$18,500,000 Net Revenue**
+- **Year 1 (Pilot Phase):** $50 Million Settled Volume • 3 Enterprise Anchors • **$750,000 Net Revenue**
+- **Year 2 (Corridor Scale):** $350 Million Settled Volume • 8 Enterprise Anchors • **$3,800,000 Net Revenue**
+- **Year 3 (Network Scale):** $1.8 Billion Settled Volume • 20 Enterprise Anchors • **$18,500,000 Net Revenue**
 *(Gross Margin: > 82% across SaaS subscriptions and routing infrastructure)*
 
 ---
@@ -347,11 +347,11 @@ style: |
 [ SEED: $1.25M @ $8.4M VALUATION ] ═══> [ 12-18 MO INFLECTION ] ═══> [ SERIES A: $25M-$40M ]
 • 15.0% Equity Stake            • $250M+ Run-Rate Volume        • Target Raise: $6M-$10M
 • Deployed Working Alphas       • $3.5M+ ARR Run-Rate           • 3x-5x Valuation Step-Up
-• 5 Anchor Enterprise Pilots    • Self-Serve Liquidity Pools    • Multi-Corridor Dominance
+• 3 Anchor Enterprise Pilots    • Self-Serve Liquidity Pools    • Multi-Corridor Dominance
 ```
 
-- **Phase 1: Months 1–6 (Operational Proof):** Deploy 5 Enterprise Anchor Buyer pilots; complete SOC2 Type 1 audit & MSB state compliance (BSA/AML, KYB/KYC, OFAC screening); onboard 25 suppliers.
-- **Phase 2: Months 6–12 (Volume & Velocity):** Cross $50M cumulative volume across 5 Enterprise Anchors; integrate 3rd-party institutional liquidity pools.
+- **Phase 1: Months 1–6 (Operational Proof):** Deploy 3 Enterprise Anchor Buyer pilots; complete SOC2 Type 1 audit & MSB state compliance (BSA/AML, KYB/KYC, OFAC screening); onboard 25 suppliers.
+- **Phase 2: Months 6–12 (Volume & Velocity):** Cross $50M cumulative volume across 3 Enterprise Anchors; integrate 3rd-party institutional liquidity pools.
 - **Phase 3: Months 12–18 (Series A Inflection):** Hit $250M annualized run-rate ($3.5M+ ARR); launch API partner gateway; execute Series A at **$25M–$40M valuation (3x–5x Step-Up)**.
 
 ---
