@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canadian Capital Markets & Tokenization Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #090d16;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 24px;
+    }
+
+    .deck-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1140px;
+    }
+
+    .slide-viewport {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .slide-container {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    .slide-container.active {
+      display: flex;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1140px;
+      margin-top: 18px;
+      padding: 0 6px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .counter-display {
+      color: #94a3b8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .dots-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .slide-dot.active {
+      background: #38bdf8;
+      transform: scale(1.3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="deck-wrapper">
+    <div class="slide-viewport" id="viewport">
+
+      <!-- SLIDE 1: TITLE SLIDE (Dark Ground) -->
+      <div class="slide-container active" id="slide1"
+        style="padding:64px 80px; background:#0f172a; justify-content:center;">
+        <p
+          style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; color:#38bdf8; text-transform:uppercase; letter-spacing:2px; margin:0 0 20px 0;">
+          Canadian Market Architecture · Strategic Briefing
+        </p>
+        <h1
+          style="font-family:'Plus Jakarta Sans',sans-serif; font-size:50px; font-weight:800; color:#ffffff; line-height:1.15; margin:0 0 22px 0; max-width:880px;">
+          Tokenizing Canadian Capital Markets
+        </h1>
+        <p style="font-size:20px; color:#94a3b8; line-height:1.5; max-width:720px; margin:0 0 38px 0;">
+          Institutional Precedents, Direct Issuer Infrastructure, and Modern Settlement Rails.
+        </p>
+        <div style="display:flex; align-items:center; gap:28px;">
+          <div style="width:52px; height:4px; background:#2563eb; border-radius:2px;"></div>
+          <p style="font-size:14px; color:#cbd5e1; font-weight:500; margin:0;">
+            Strategic Architecture for Brickken Partnership
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: CAPITAL MARKET CENTERS (Light Ground - 3 Card Grid) -->
+      <div class="slide-container" id="slide2"
+        style="padding:54px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <p
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 8px 0;">
+            Regional Ecosystem
+          </p>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:35px; font-weight:800; color:#0f172a; margin:0;">
+            3 Core Capital Market Centers
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:26px; width:100%; align-items:stretch; flex-grow:1; margin-top:28px;">
+          <!-- Toronto -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-building-columns" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:21px; font-weight:700; color:#0f172a; margin:0;">
+                Toronto (ON)</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Primary Financial Capital</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              TSX &amp; OSC hub. Home to Canada's Big Six domestic banks, major pension funds, and institutional asset managers.
+            </p>
+          </div>
+
+          <!-- Vancouver -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-cubes" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:21px; font-weight:700; color:#0f172a; margin:0;">
+                Vancouver (BC)</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Venture &amp; Technology Hub</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              BCSC oversight. Global epicenter for early-stage mining finance, clean resource syndication, and digital asset tech.
+            </p>
+          </div>
+
+          <!-- Montreal -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-network-wired" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:21px; font-weight:700; color:#0f172a; margin:0;">
+                Montreal (QC)</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Institutional Capital &amp; Innovation
+            </p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              AMF oversight. Base for global pensions (CDPQ, PSP Investments) and world-class AI &amp; fintech research.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: INSTITUTIONAL TRACK RECORD (Light Ground - 3 Step Flow) -->
+      <div class="slide-container" id="slide3"
+        style="padding:54px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <p
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 8px 0;">
+            Institutional Track Record
+          </p>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:35px; font-weight:800; color:#0f172a; margin:0;">
+            Pioneering Regulated Digital Assets
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:26px; width:100%; align-items:stretch; flex-grow:1; margin-top:28px;">
+          <!-- 1. Crypto ETFs -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-chart-line" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                World-First Crypto ETFs</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Years Ahead of US SEC</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              Pioneered physical Bitcoin &amp; Ether ETFs on the TSX (Purpose, 3iQ), establishing early institutional custody precedents.
+            </p>
+          </div>
+
+          <!-- 2. Licensed Custody -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-vault" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Licensed Trust Custody</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Institutional Trust Rails</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              Regulated entities (e.g., Tetra Trust) provide qualified custody, unlocking participation for Canadian wealth &amp; pension desks.
+            </p>
+          </div>
+
+          <!-- 3. CSA Oversight -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-scale-balanced" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Strict CSA Oversight</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Pre-Registration Undertakings</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              Enforced Pre-Registration Undertakings (PRUs), mandating statutory bankruptcy remoteness and investor safeguards.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: THE 4 STRATEGIC PILLARS ACROSS 2 SECTORS -->
+      <div class="slide-container" id="slide4"
+        style="padding:48px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <p
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 6px 0;">
+            Architectural Blueprint
+          </p>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:33px; font-weight:800; color:#0f172a; margin:0;">
+            4 Pillars Across Two Capital Sectors
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:24px; width:100%; align-items:stretch; flex-grow:1; margin-top:20px;">
+          <!-- Sector 1: Private Capital Markets -->
+          <div
+            style="flex:1 1 0; background:#f8fafc; border:2px solid #e2e8f0; border-radius:14px; padding:24px; display:flex; flex-direction:column; gap:16px;">
+            <div
+              style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #cbd5e1; padding-bottom:12px;">
+              <span
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:1px; background:#e0e7ff; padding:4px 10px; border-radius:6px;">
+                Sector 01: Private Capital Markets
+              </span>
+              <span style="font-size:13px; font-weight:600; color:#64748b;">Assets &amp; Distribution</span>
+            </div>
+
+            <!-- Pillar 1 -->
+            <div
+              style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; display:flex; gap:14px; align-items:flex-start;">
+              <div
+                style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-gem" style="font-size:16px; color:#2563eb;"></i>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span
+                    style="background:#2563eb; color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">PILLAR 01</span>
+                  <h4
+                    style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; font-weight:700; color:#0f172a; margin:0;">
+                    Mining &amp; Clean Resource Royalties</h4>
+                </div>
+                <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+                  Resource syndication, Flow-Through Shares (FTS), and Net Smelter Return (NSR) royalty streaming.
+                </p>
+              </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div
+              style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; display:flex; gap:14px; align-items:flex-start;">
+              <div
+                style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-stamp" style="font-size:16px; color:#2563eb;"></i>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span
+                    style="background:#2563eb; color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">PILLAR 02</span>
+                  <h4
+                    style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; font-weight:700; color:#0f172a; margin:0;">
+                    Direct-to-Issuer &amp; Institutional Rails</h4>
+                </div>
+                <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+                  NI 45-106 direct issuer portal, CIRO dealer syndicates, and automated digital transfer agency.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sector 2: Public Precedents & Infrastructure -->
+          <div
+            style="flex:1 1 0; background:#f8fafc; border:2px solid #e2e8f0; border-radius:14px; padding:24px; display:flex; flex-direction:column; gap:16px;">
+            <div
+              style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #cbd5e1; padding-bottom:12px;">
+              <span
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:800; color:#0f172a; text-transform:uppercase; letter-spacing:1px; background:#dbeafe; padding:4px 10px; border-radius:6px;">
+                Sector 02: Public Precedents &amp; Rails
+              </span>
+              <span style="font-size:13px; font-weight:600; color:#64748b;">Structure &amp; Settlement</span>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div
+              style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; display:flex; gap:14px; align-items:flex-start;">
+              <div
+                style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-certificate" style="font-size:16px; color:#2563eb;"></i>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+                  <span
+                    style="background:#2563eb; color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">PILLAR 03</span>
+                  <span
+                    style="background:#f0fdf4; color:#15803d; border:1px solid #86efac; font-family:'Plus Jakarta Sans',sans-serif; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; letter-spacing:0.5px; text-transform:uppercase;">Live Non-Chain</span>
+                  <h4
+                    style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; font-weight:700; color:#0f172a; margin:0;">
+                    Canadian Depositary Receipts (CDR)</h4>
+                </div>
+                <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+                  Live bank instrument on Cboe Canada. Proven custodial &amp; FX-hedged architecture ready for on-chain RWAs.
+                </p>
+              </div>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div
+              style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; display:flex; gap:14px; align-items:flex-start;">
+              <div
+                style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="fa-solid fa-money-bill-transfer" style="font-size:16px; color:#2563eb;"></i>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span
+                    style="background:#2563eb; color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">PILLAR 04</span>
+                  <h4
+                    style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; font-weight:700; color:#0f172a; margin:0;">
+                    Payment &amp; Stablecoin Rails</h4>
+                </div>
+                <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+                  Modernizing legacy wire/EFT rails via Payments Canada RTR, Open Banking, and white-label fiat abstraction.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:8px; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+          <p style="color:#ffffff; font-size:13px; font-weight:600; margin:0;">
+            <i class="fa-solid fa-link" style="color:#38bdf8; margin-right:8px;"></i>
+            Integrated Approach: Sector 01 originates private assets; Sector 02 delivers fractional structure &amp; fiat settlement.
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: PILLAR 01 - MINING & CLEAN RESOURCE ROYALTIES -->
+      <div class="slide-container" id="slide5"
+        style="padding:54px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <span
+              style="background:linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 12px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(37,99,235,0.25);">
+              PILLAR 01
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Sector 01 · Natural Resources &amp; Cleantech
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:35px; font-weight:800; color:#0f172a; margin:0;">
+            Mining &amp; Clean Resource Royalties
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:26px; width:100%; align-items:stretch; flex-grow:1; margin-top:28px;">
+          <!-- 1. Junior Mining Hubs -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-mountain" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Vancouver &amp; Calgary</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Resource Finance Epicenter</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              TSXV hosts ~50% of the world's public mining companies. Tokenization replaces paper-heavy, illiquid private syndication.
+            </p>
+          </div>
+
+          <!-- 2. Flow-Through Shares (FTS) -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-file-invoice-dollar" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Flow-Through Shares</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Canadian Tax Incentives</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              Unique regime transferring exploration tax deductions to investors. Smart contracts automate qualifying spend &amp; hold periods.
+            </p>
+          </div>
+
+          <!-- 3. NSR & Tokenized Streaming -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-water" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Royalty Streaming</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Net Smelter Returns (NSR)</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              NSR and cleantech cash flows tokenized via Brickken, opening fractional resource yields to accredited investors globally.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: PILLAR 02 - DIRECT-TO-ISSUER & INSTITUTIONAL RAILS -->
+      <div class="slide-container" id="slide6"
+        style="padding:48px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+            <span
+              style="background:linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 12px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(37,99,235,0.25);">
+              PILLAR 02
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Sector 01 · Private Market Distribution Channels
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:33px; font-weight:800; color:#0f172a; margin:0;">
+            Direct-to-Issuer &amp; Institutional Distribution Rails
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:22px; width:100%; align-items:stretch; flex-grow:1; margin-top:20px;">
+          <!-- 1. Direct Issuer Exemption -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 22px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:38px; height:38px; background:#dbeafe; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-user-shield" style="font-size:18px; color:#2563eb;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:700; color:#0f172a; margin:0;">
+              Direct-to-Issuer Model</h3>
+            <p style="font-size:12px; font-weight:700; color:#2563eb; text-transform:uppercase; margin:0;">NI 45-106
+              Direct Placements</p>
+            <p style="font-size:14px; color:#475569; line-height:1.5; margin:0;">
+              Direct accredited investor raises without broker-dealers. Brickken self-distribution portals eliminate 2–4% syndicate fees.
+            </p>
+          </div>
+
+          <!-- 2. CIRO Institutional Syndicates -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 22px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:38px; height:38px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-landmark-flag" style="font-size:18px; color:#4f46e5;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:700; color:#0f172a; margin:0;">
+              CIRO Broker Desks</h3>
+            <p style="font-size:12px; font-weight:700; color:#4f46e5; text-transform:uppercase; margin:0;">Institutional
+              Private Placements</p>
+            <p style="font-size:14px; color:#475569; line-height:1.5; margin:0;">
+              Institutional deals flow through CIRO dealer networks. Brickken provides automated back-office syndication rails.
+            </p>
+          </div>
+
+          <!-- 3. Digital Transfer Agency & Custody -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 22px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:38px; height:38px; background:#f0fdf4; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-address-book" style="font-size:18px; color:#16a34a;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; font-weight:700; color:#0f172a; margin:0;">
+              Digital Registrar Rails</h3>
+            <p style="font-size:12px; font-weight:700; color:#16a34a; text-transform:uppercase; margin:0;">Transfer
+              Agents &amp; Trust Cos</p>
+            <p style="font-size:14px; color:#475569; line-height:1.5; margin:0;">
+              Statutory registers (Computershare, TSX Trust) paired with Brickken as the digital sub-ledger, eliminating paper binders.
+            </p>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:10px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+          <p style="color:#ffffff; font-size:13px; font-weight:600; margin:0;">
+            <i class="fa-solid fa-circle-check" style="color:#38bdf8; margin-right:8px;"></i>
+            Market Perspective: Direct software for private GPs plus integration with Canada's established institutional dealer networks.
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: PILLAR 03 - CANADIAN DEPOSITARY RECEIPT (CDR) COMMERCIALIZED BANK MODEL -->
+      <div class="slide-container" id="slide7"
+        style="padding:32px 56px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <span
+              style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:3px 10px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(2,132,199,0.25);">
+              PILLAR 03
+            </span>
+            <span
+              style="background:#f0fdf4; color:#166534; border:1px solid #86efac; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:3px 10px; border-radius:6px; letter-spacing:0.8px; text-transform:uppercase; display:inline-flex; align-items:center; gap:6px;">
+              <span style="width:7px; height:7px; background:#16a34a; border-radius:50%; display:inline-block;"></span>
+              Live Non-Chain Model
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:700; color:#0284c7; text-transform:uppercase; letter-spacing:1px; margin:0;">
+              Sector 02 · Commercialized Bank Precedent
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:30px; font-weight:800; color:#0f172a; margin:0;">
+            The Canadian Depositary Receipt (CDR) Model
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:18px; width:100%; align-items:stretch; flex-grow:1; margin-top:14px;">
+          <!-- 1. Fractional CAD Access -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 18px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+            <div
+              style="width:34px; height:34px; background:#dbeafe; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-pie-chart" style="font-size:16px; color:#2563eb;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Commercialized by Banks</h3>
+            <p style="font-size:11px; font-weight:800; color:#15803d; text-transform:uppercase; margin:0; background:#f0fdf4; border:1px solid #bbf7d0; padding:2px 7px; border-radius:4px; display:inline-block; width:fit-content;">Active Live Non-Chain Instrument</p>
+            <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+              Live banking product (CIBC / Cboe Canada) trading fractional US equities (NVDA, AMZN) directly in CAD.
+            </p>
+          </div>
+
+          <!-- 2. Built-in FX Hedging -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 18px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+            <div
+              style="width:34px; height:34px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-shield-halved" style="font-size:16px; color:#4f46e5;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Built-in Currency Hedge</h3>
+            <p style="font-size:11px; font-weight:700; color:#4f46e5; text-transform:uppercase; margin:0;">Automated FX Risk Neutralization</p>
+            <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+              Dynamic bank-engineered currency hedging embedded in the receipt ratio, neutralizing cross-border FX exposure.
+            </p>
+          </div>
+
+          <!-- 3. Legal Custodial Wrapper -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 18px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+            <div
+              style="width:34px; height:34px; background:#f0fdf4; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid fa-building-shield" style="font-size:16px; color:#16a34a;"></i>
+            </div>
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Traditional Custodial Wrapper</h3>
+            <p style="font-size:11px; font-weight:700; color:#16a34a; text-transform:uppercase; margin:0;">Off-Chain Depository Clearing</p>
+            <p style="font-size:13px; color:#475569; line-height:1.45; margin:0;">
+              Underlying held 1:1 by licensed custodians (CIBC Mellon) and cleared via CDS. Proven model to tokenize private markets.
+            </p>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:8px; padding:11px 18px; display:flex; align-items:center; justify-content:space-between; margin-top:12px;">
+          <p style="color:#ffffff; font-size:12.5px; font-weight:600; margin:0; line-height:1.4;">
+            <i class="fa-solid fa-building-columns" style="color:#38bdf8; margin-right:8px;"></i>
+            <b>Live Non-Chain Precedent:</b> Bank CDRs on Cboe validate investor demand for fractional, FX-hedged custodial assets—the exact model ready to translate into private on-chain RWAs.
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: THE "ON-CHAIN CDR" FOR PRIVATE ASSETS -->
+      <div class="slide-container" id="slide8"
+        style="padding:48px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap;">
+            <span
+              style="background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 12px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(2,132,199,0.25);">
+              PILLAR 03
+            </span>
+            <span
+              style="background:#f0fdf4; color:#166534; border:1px solid #86efac; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 10px; border-radius:6px; letter-spacing:0.8px; text-transform:uppercase; display:inline-flex; align-items:center; gap:5px;">
+              <span style="width:7px; height:7px; background:#16a34a; border-radius:50%; display:inline-block;"></span>
+              Live Non-Chain Precedent
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#0284c7; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Sector 02 · Translating Live Precedents to Private RWAs
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:33px; font-weight:800; color:#0f172a; margin:0;">
+            Adapting the CDR Architecture for Tokenized RWAs
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:24px; width:100%; align-items:stretch; flex-grow:1; margin-top:18px;">
+          <!-- Public Market CDR Column -->
+          <div
+            style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:22px; flex:1 1 0; display:flex; flex-direction:column; gap:12px;">
+            <div
+              style="display:flex; align-items:center; gap:8px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; flex-wrap:wrap;">
+              <span
+                style="background:#64748b; color:#ffffff; font-size:10px; font-weight:700; padding:3px 7px; border-radius:4px;">PUBLIC
+                EQUITIES</span>
+              <span
+                style="background:#f0fdf4; color:#166534; border:1px solid #86efac; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; text-transform:uppercase;">LIVE NON-CHAIN</span>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; color:#0f172a; margin:0;">
+                Traditional CDR (Cboe Canada)</h4>
+            </div>
+            <ul
+              style="font-size:13px; color:#475569; line-height:1.6; padding-left:18px; margin:0; display:flex; flex-direction:column; gap:8px;">
+              <li><strong>Underlying:</strong> US Blue-Chip Equities (NVDA, AMZN).</li>
+              <li><strong>Custodian:</strong> Canadian licensed trust (CIBC Mellon).</li>
+              <li><strong>Clearing:</strong> CDS depository &amp; exchange brokerages.</li>
+              <li><strong>FX Management:</strong> Daily bank-managed currency adjustments.</li>
+            </ul>
+          </div>
+
+          <!-- Transition Icon -->
+          <div style="display:flex; align-items:center; justify-content:center;">
+            <div
+              style="width:40px; height:40px; background:#eff6ff; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid #bfdbfe;">
+              <i class="fa-solid fa-arrow-right" style="color:#2563eb; font-size:16px;"></i>
+            </div>
+          </div>
+
+          <!-- On-Chain Tokenized CDR Column -->
+          <div
+            style="background:#f0fdf4; border:2px solid #86efac; border-radius:12px; padding:22px; flex:1 1 0; display:flex; flex-direction:column; gap:12px;">
+            <div
+              style="display:flex; align-items:center; gap:10px; border-bottom:1px solid #bbf7d0; padding-bottom:10px;">
+              <span
+                style="background:#16a34a; color:#ffffff; font-size:11px; font-weight:700; padding:3px 8px; border-radius:4px;">PRIVATE
+                RWAS</span>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+                On-Chain Private Receipt (Brickken)</h4>
+            </div>
+            <ul
+              style="font-size:13px; color:#166534; line-height:1.6; padding-left:18px; margin:0; display:flex; flex-direction:column; gap:8px;">
+              <li><strong>Underlying:</strong> Private Funds, Real Estate LPs, Mining Royalties.</li>
+              <li><strong>Custodian/Trust:</strong> Licensed digital trust (Tetra) + GP Register.</li>
+              <li><strong>Clearing:</strong> Permissioned smart contracts with compliance whitelist gates.</li>
+              <li><strong>Settlement:</strong> Programmatic CAD stablecoin distribution &amp; hold rules.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:10px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+          <p style="color:#ffffff; font-size:13px; font-weight:600; margin:0;">
+            <i class="fa-solid fa-diagram-project" style="color:#38bdf8; margin-right:8px;"></i>
+            The Opportunity: Package private Canadian assets under the proven CDR model, tokenized via Brickken for 24/7 liquidity and instant cap table transparency.
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 9: PILLAR 04A - PAYMENT & STABLE COIN: INFRASTRUCTURE MODERNIZATION -->
+      <div class="slide-container" id="slide9"
+        style="padding:54px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <span
+              style="background:linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 12px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(13,148,136,0.25);">
+              PILLAR 04
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#0d9488; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Sector 02 · Payment Rails Modernization
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:35px; font-weight:800; color:#0f172a; margin:0;">
+            Bridging Legacy Rails to Real-Time Settlement
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:26px; width:100%; align-items:stretch; flex-grow:1; margin-top:28px;">
+          <!-- 1. The Legacy Bottleneck -->
+          <div
+            style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#fee2e2; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-clock-rotate-left" style="font-size:20px; color:#dc2626;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#991b1b; margin:0;">
+                Payment Rail Bottleneck</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#dc2626; margin:0;">Legacy Wires &amp; Batch EFTs</p>
+            <p style="font-size:15px; color:#7f1d1d; line-height:1.5; margin:0;">
+              Canadian institutional fund transfers rely on manual wires and batch EFTs with multi-day settlement delays.
+            </p>
+          </div>
+
+          <!-- 2. Consumer-Driven Banking -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#e0e7ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-key" style="font-size:20px; color:#2563eb;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#0f172a; margin:0;">
+                Open Banking Framework</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#2563eb; margin:0;">Consumer-Driven Finance</p>
+            <p style="font-size:15px; color:#334155; line-height:1.5; margin:0;">
+              Federal framework enabling API-driven banking data, streamlining investor KYC and accreditation verification.
+            </p>
+          </div>
+
+          <!-- 3. Real-Time Rail (RTR) -->
+          <div
+            style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:32px 28px; flex:1 1 0; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div
+                style="width:42px; height:42px; background:#dcfce7; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-bolt" style="font-size:20px; color:#16a34a;"></i>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:20px; font-weight:700; color:#14532d; margin:0;">
+                Real-Time Rail (RTR)</h3>
+            </div>
+            <p style="font-size:14px; font-weight:600; color:#16a34a; margin:0;">Payments Canada Modernization</p>
+            <p style="font-size:15px; color:#166534; line-height:1.5; margin:0;">
+              National 24/7/365 irrevocable real-time settlement, delivering the fiat rail required for atomic DvP.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 10: PILLAR 04B - PAYMENT & STABLE COIN: ABSTRACTION ARCHITECTURE -->
+      <div class="slide-container" id="slide10"
+        style="padding:48px 80px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+            <span
+              style="background:linear-gradient(135deg, #0d9488 0%, #0f766e 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:4px 12px; border-radius:6px; letter-spacing:1px; text-transform:uppercase; box-shadow:0 2px 6px rgba(13,148,136,0.25);">
+              PILLAR 04
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; color:#0d9488; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Sector 02 · Settlement Architecture &amp; Token Abstraction
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:33px; font-weight:800; color:#0f172a; margin:0;">
+            White-Label Fiat &amp; Token Abstraction
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:20px; width:100%; align-items:stretch; flex-grow:1; margin-top:20px;">
+          <!-- Stage 1 -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <span
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:800; color:#2563eb;">01</span>
+            </div>
+            <h4
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Familiar Investor Portal</h4>
+            <p style="font-size:13px; color:#475569; line-height:1.5; margin:0;">
+              Onboard via bank EFT, Interac, or CAD wire. Balances display in $CAD with zero visible Web3 wallet friction.
+            </p>
+          </div>
+
+          <!-- Stage 2 -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <span
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:800; color:#2563eb;">02</span>
+            </div>
+            <h4
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Escrow &amp; Compliant Settlement</h4>
+            <p style="font-size:13px; color:#475569; line-height:1.5; margin:0;">
+              CAD held in trust at Schedule I/II banks. Regulated stablecoins or tokenized deposits settle upon clearance.
+            </p>
+          </div>
+
+          <!-- Stage 3 -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:24px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:10px;">
+            <div
+              style="width:36px; height:36px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+              <span
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:800; color:#2563eb;">03</span>
+            </div>
+            <h4
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0;">
+              Smart Contract Settlement Engine</h4>
+            <p style="font-size:13px; color:#475569; line-height:1.5; margin:0;">
+              Smart contracts verify compliance claims, mint unitholder tokens, and update the statutory GP register.
+            </p>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:10px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+          <p style="color:#ffffff; font-size:13px; font-weight:600; margin:0;">
+            <i class="fa-solid fa-code-compare" style="color:#38bdf8; margin-right:8px;"></i>
+            Regulatory Advantage: Full abstraction removes Canadian Crypto Trading Platform (CTP) burdens while keeping private placement status.
+          </p>
+        </div>
+      </div>
+
+      <!-- SLIDE 11: BRIDGING BRICKKEN INTO CANADA / MARKET POSITIONING -->
+      <div class="slide-container" id="slide11"
+        style="padding:42px 70px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+            <span
+              style="background:linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:3px 10px; border-radius:6px; letter-spacing:1px; text-transform:uppercase;">
+              MARKET POSITIONING
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Strategic Value Proposition
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:32px; font-weight:800; color:#0f172a; margin:0;">
+            Bridging Brickken into the Canadian Market
+          </h2>
+        </div>
+
+        <div
+          style="display:flex; flex-direction:column; gap:18px; justify-content:center; flex-grow:1; margin-top:16px;">
+          <!-- Central Slogan Banner -->
+          <div
+            style="background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius:14px; padding:24px 32px; text-align:center; box-shadow:0 4px 20px rgba(15,23,42,0.12); border:1px solid #334155; display:flex; justify-content:center; align-items:center;">
+            <h3
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:27px; font-weight:800; color:#ffffff; margin:0; letter-spacing:-0.3px;">
+              Brickken Canada <span style="color:#38bdf8;">=</span> Platform of Agentic Asset, Agentic Capital
+            </h3>
+          </div>
+
+          <!-- 3 Breakdown Boxes of the Slogan -->
+          <div style="display:flex; gap:18px; width:100%;">
+            <!-- Box 1 -->
+            <div
+              style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div
+                  style="width:34px; height:34px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-bridge" style="font-size:16px; color:#2563eb;"></i>
+                </div>
+                <span
+                  style="background:#dbeafe; color:#1d4ed8; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">LOCAL GATEWAY</span>
+              </div>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15.5px; font-weight:700; color:#0f172a; margin:0;">
+                Brickken Canada</h4>
+              <p style="font-size:12.5px; color:#475569; line-height:1.45; margin:0;">
+                Direct issuer exemptions, CIRO dealer syndication, and CAD fiat rails.
+              </p>
+            </div>
+
+            <!-- Box 2 -->
+            <div
+              style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div
+                  style="width:34px; height:34px; background:#f0fdf4; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-cubes-stacked" style="font-size:16px; color:#16a34a;"></i>
+                </div>
+                <span
+                  style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">INFRASTRUCTURE</span>
+              </div>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15.5px; font-weight:700; color:#0f172a; margin:0;">
+                The Platform</h4>
+              <p style="font-size:12.5px; color:#475569; line-height:1.45; margin:0;">
+                Full-lifecycle tokenization: primary issuance, digital register, and custody synchronization.
+              </p>
+            </div>
+
+            <!-- Box 3 -->
+            <div
+              style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px; flex:1 1 0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div
+                  style="width:34px; height:34px; background:#f5f3ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-microchip" style="font-size:16px; color:#7c3aed;"></i>
+                </div>
+                <span
+                  style="background:#ede9fe; color:#6d28d9; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">AGENTIC AUTOMATION</span>
+              </div>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:15.5px; font-weight:700; color:#0f172a; margin:0;">
+                Agentic Asset &amp; Capital</h4>
+              <p style="font-size:12.5px; color:#475569; line-height:1.45; margin:0;">
+                Autonomous smart workflows: programmatic yields, automated compliance, and fund flow settlement.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom Summary Box -->
+          <div
+            style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px 18px; display:flex; align-items:center; gap:16px;">
+            <div
+              style="width:36px; height:36px; background:#dcfce7; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <i class="fa-solid fa-handshake" style="font-size:18px; color:#16a34a;"></i>
+            </div>
+            <div>
+              <h4
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; color:#14532d; margin:0 0 2px 0;">
+                The Local Partnership Equation
+              </h4>
+              <p style="font-size:12.5px; color:#166534; line-height:1.4; margin:0;">
+                Brickken delivers tokenization stacks &amp; issuer software. Our venture drives Canadian asset origination, legal structure, and CAD settlement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 12: PROPOSED IMMEDIATE ACTION TASKS (Light Mode) -->
+      <div class="slide-container" id="slide12"
+        style="padding:38px 64px; background:#ffffff; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+            <span
+              style="background:linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color:#ffffff; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:800; padding:3px 10px; border-radius:6px; letter-spacing:1px; text-transform:uppercase;">
+              ACTION PLAN
+            </span>
+            <p
+              style="font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:1.5px; margin:0;">
+              Token2049 Follow-Through &amp; Execution
+            </p>
+          </div>
+          <h2
+            style="font-family:'Plus Jakarta Sans',sans-serif; font-size:32px; font-weight:800; color:#0f172a; margin:0;">
+            Proposed Immediate Action Tasks
+          </h2>
+        </div>
+
+        <div style="display:flex; gap:18px; width:100%; align-items:stretch; flex-grow:1; margin-top:16px;">
+          <!-- Task 1: MK Global Kapital Bond Issuance Proposal -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; flex:1 1 0; display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                <div
+                  style="width:36px; height:36px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-file-invoice-dollar" style="font-size:16px; color:#2563eb;"></i>
+                </div>
+                <span
+                  style="background:#dbeafe; color:#1d4ed8; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">TASK 01</span>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0 0 4px 0;">
+                Bond Issuance Proposal</h3>
+              <p style="font-size:11px; font-weight:700; color:#2563eb; text-transform:uppercase; margin:0 0 10px 0;">
+                MK Global Kapital Follow-Up</p>
+              <ul style="font-size:13px; color:#475569; line-height:1.5; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:8px;">
+                <li><strong>Brickken Solution:</strong> Structure bond tokenization proposal using Brickken stacks.</li>
+                <li><strong>Fund Flow Design:</strong> Model accounting flows for escrow reconciliation &amp; coupon payouts.</li>
+              </ul>
+            </div>
+            <div
+              style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#1d4ed8; font-weight:600;">
+              <i class="fa-solid fa-file-signature" style="margin-right:6px;"></i> Proposal &amp; Fund Flow Blueprint
+            </div>
+          </div>
+
+          <!-- Task 2: AI Summit Vancouver Corporate Sourcing (Nov 2–3) -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; flex:1 1 0; display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                <div
+                  style="width:36px; height:36px; background:#faf5ff; border:1px solid #e9d5ff; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-robot" style="font-size:16px; color:#9333ea;"></i>
+                </div>
+                <span
+                  style="background:#f3e8ff; color:#7e22ce; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">TASK 02</span>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0 0 4px 0;">
+                AI Summit Vancouver</h3>
+              <p style="font-size:11px; font-weight:700; color:#7e22ce; text-transform:uppercase; margin:0 0 10px 0;">
+                Agentic Finance Pitch · Nov 2–3</p>
+              <ul style="font-size:13px; color:#475569; line-height:1.5; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:8px;">
+                <li><strong>Agentic Finance Pitch:</strong> Pitch digital finance management with Brickken stacks &amp; Agentic AI workflows (application subject to approval).</li>
+                <li><strong>Executive Sourcing:</strong> Connect with corporate executives &amp; institutions at <a href="https://globalsummit.ca/" target="_blank" style="color:#2563eb; text-decoration:none;">globalsummit.ca</a>.</li>
+              </ul>
+            </div>
+            <div
+              style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#7e22ce; font-weight:600;">
+              <i class="fa-solid fa-bullhorn" style="margin-right:6px;"></i> Pitch Application (Subject to Approval) · Nov 2–3
+            </div>
+          </div>
+
+          <!-- Task 3: Singapore FinTech & GFTN Strategic Expansion (Nov 18–20) -->
+          <div
+            style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; flex:1 1 0; display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                <div
+                  style="width:36px; height:36px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-solid fa-building-columns" style="font-size:16px; color:#16a34a;"></i>
+                </div>
+                <span
+                  style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.8px;">TASK 03</span>
+              </div>
+              <h3
+                style="font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; color:#0f172a; margin:0 0 4px 0;">
+                Singapore FinTech &amp; GFTN</h3>
+              <p style="font-size:11px; font-weight:700; color:#15803d; text-transform:uppercase; margin:0 0 10px 0;">
+                Capital Bridges · Nov 18–20</p>
+              <ul style="font-size:13px; color:#475569; line-height:1.5; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:8px;">
+                <li><strong>GFTN Connection:</strong> Deepen Token2049 GFTN relationship for Singapore institutional access.</li>
+                <li><strong>SFF 2026:</strong> Attend Singapore FinTech Festival (MAS &amp; GFTN) to expand Asian capital channels.</li>
+              </ul>
+            </div>
+            <div
+              style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#15803d; font-weight:600;">
+              <i class="fa-solid fa-calendar-check" style="margin-right:6px;"></i> Singapore EXPO · Nov 18–20, 2026
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="background:#0f172a; border-radius:10px; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+          <p style="color:#ffffff; font-size:12.5px; margin:0;">
+            <i class="fa-solid fa-location-dot" style="color:#38bdf8; margin-right:6px;"></i> Near-Term Execution: Vancouver Deal Origination &amp; Singapore Capital Bridges
+          </p>
+          <p style="color:#94a3b8; font-size:12.5px; margin:0;">
+            Token2049 Follow-Through · Fall 2026
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONTROLS BAR -->
+    <div class="controls-bar">
+      <div class="nav-buttons">
+        <button class="btn-nav" id="prevBtn" onclick="prevSlide()">
+          <i class="fa-solid fa-arrow-left"></i> Previous
+        </button>
+        <button class="btn-nav" id="nextBtn" onclick="nextSlide()">
+          Next <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="dots-container" id="dotsContainer"></div>
+
+      <div class="counter-display" id="slideCounter">
+        1 / 12
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    function renderDots() {
+      const dotsContainer = document.getElementById('dotsContainer');
+      dotsContainer.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = `slide-dot ${i === currentSlide ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateSlide() {
+      for (let i = 1; i <= totalSlides; i++) {
+        const el = document.getElementById(`slide${i}`);
+        if (el) {
+          el.classList.remove('active');
+        }
+      }
+      const activeEl = document.getElementById(`slide${currentSlide}`);
+      if (activeEl) {
+        activeEl.classList.add('active');
+      }
+
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+      document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+
+      renderDots();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    renderDots();
+    updateSlide();
+  </script>
+</body>
+
+</html>
