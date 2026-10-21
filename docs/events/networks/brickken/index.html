@@ -132,6 +132,201 @@
       background: #38bdf8;
       transform: scale(1.3);
     }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 860px) {
+      body {
+        padding: 12px 8px 80px;
+        min-height: 100vh;
+        justify-content: flex-start;
+      }
+
+      .deck-wrapper {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .slide-viewport {
+        aspect-ratio: auto !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        border-radius: 14px;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .slide-container {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        border-radius: 14px;
+        overflow: visible !important;
+        padding: 24px 18px !important;
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        justify-content: flex-start !important;
+        gap: 14px !important;
+      }
+
+      .slide-container.active {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      /* Slide 1 Cover Adjustments */
+      #slide1 {
+        min-height: 440px !important;
+        justify-content: center !important;
+        padding: 40px 20px !important;
+      }
+
+      #slide1 h1 {
+        font-size: 28px !important;
+        line-height: 1.25 !important;
+        margin-bottom: 14px !important;
+      }
+
+      #slide1 p {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 20px !important;
+      }
+
+      /* General Headings */
+      .slide-container h2 {
+        font-size: 22px !important;
+        line-height: 1.25 !important;
+      }
+
+      /* Multi-Column Card Containers Stack Vertically */
+      .slide-container > div[style*="align-items:stretch"],
+      .slide-container > div[style*="align-items: stretch"],
+      .slide-container > div[style*="display:flex"][style*="flex-grow:1"],
+      .slide-container > div[style*="display: flex"][style*="flex-grow: 1"],
+      #slide11 div[style*="display:flex"][style*="width:100%"],
+      #slide11 div[style*="display: flex"][style*="width: 100%"] {
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-top: 14px !important;
+        width: 100% !important;
+      }
+
+      /* All Column Cards Expand to Full Width */
+      .slide-container div[style*="flex:1 1 0"],
+      .slide-container div[style*="flex: 1 1 0"],
+      .slide-container div[style*="flex:1"],
+      .slide-container div[style*="flex: 1"] {
+        flex: none !important;
+        width: 100% !important;
+        padding: 18px 16px !important;
+        gap: 8px !important;
+        border-radius: 10px;
+      }
+
+      /* Slide 4 Nested Pillar Cards */
+      #slide4 div[style*="flex:1 1 0"] > div[style*="background:#ffffff"] {
+        padding: 14px !important;
+      }
+
+      /* Slide 8 Transition Indicator */
+      #slide8 .fa-arrow-right {
+        transform: rotate(90deg);
+      }
+
+      #slide8 div[style*="justify-content:center"] {
+        margin: 4px 0;
+      }
+
+      /* Slide 11 Slogan Banner Scale */
+      #slide11 h3 {
+        font-size: 18px !important;
+        line-height: 1.35 !important;
+      }
+
+      #slide11 div[style*="linear-gradient"] {
+        padding: 16px 14px !important;
+      }
+
+      /* Dark Bottom Summary Bars */
+      .slide-container div[style*="background:#0f172a"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        padding: 12px 14px !important;
+      }
+
+      .slide-container div[style*="background:#0f172a"] p {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+      }
+
+      /* Mobile Sticky Controls Bar */
+      .controls-bar {
+        position: sticky;
+        bottom: 12px;
+        z-index: 999;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 12px;
+        padding: 10px 14px;
+        margin-top: 14px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      }
+
+      .btn-nav {
+        padding: 9px 15px;
+        font-size: 13px;
+        min-height: 42px;
+      }
+
+      .dots-container {
+        gap: 5px;
+      }
+
+      .slide-dot {
+        width: 6px;
+        height: 6px;
+      }
+
+      .counter-display {
+        font-size: 13px;
+        font-weight: 700;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px 6px 74px;
+      }
+
+      .dots-container {
+        display: none;
+      }
+
+      .controls-bar {
+        padding: 8px 12px;
+      }
+
+      .btn-nav {
+        padding: 8px 14px;
+        font-size: 12.5px;
+      }
+
+      .counter-display {
+        font-size: 12.5px;
+      }
+
+      #slide1 h1 {
+        font-size: 24px !important;
+      }
+
+      .slide-container h2 {
+        font-size: 20px !important;
+      }
+    }
   </style>
 </head>
 
@@ -1080,7 +1275,7 @@
                 MK Global Kapital Follow-Up</p>
               <ul style="font-size:13px; color:#475569; line-height:1.5; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:8px;">
                 <li><strong>Brickken Solution:</strong> Structure bond tokenization proposal using Brickken stacks.</li>
-                <li><strong>Fund Flow Design:</strong> Model accounting flows for escrow reconciliation &amp; coupon payouts.</li>
+                <li><strong>Fund Flow Design:</strong> Model accounting flows for escrow reconciliation &amp; payouts.</li>
               </ul>
             </div>
             <div
@@ -1240,6 +1435,45 @@
         prevSlide();
       }
     });
+
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const viewport = document.getElementById('viewport');
+
+    viewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      // Ensure horizontal swipe is dominant and exceeds 45px threshold
+      if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        if (diffX < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+
+    // Scroll to top when changing slides on mobile viewports
+    function onSlideChangeScroll() {
+      if (window.innerWidth <= 860) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    const originalUpdateSlide = updateSlide;
+    updateSlide = function() {
+      originalUpdateSlide();
+      onSlideChangeScroll();
+    };
 
     renderDots();
     updateSlide();
