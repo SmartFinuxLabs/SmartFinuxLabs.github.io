@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain &amp; Procurement | Smart Finux Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfb;
+            color: #1c1c1c;
+        }
+
+        .glass-nav {
+            background: rgba(252, 252, 251, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <nav class="fixed top-0 w-full z-50 glass-nav border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center text-white font-bold">S
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-stone-800 uppercase">Supply Chain &amp;
+                        Procurement</span>
+                </div>
+                <div class="hidden md:flex space-x-6 text-sm font-medium text-stone-600 items-center">
+                    <a href="#case-reports" class="hover:text-emerald-600 transition">Case Reports</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-12">
+
+        <header class="max-w-4xl mx-auto px-6 text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 leading-tight">
+                Supply Chain &amp; <span class="text-emerald-600">Procurement</span>
+            </h1>
+            <p class="text-lg text-stone-600 mb-8 leading-relaxed">
+                Case reports exploring inventory planning and supplier sourcing decisions across the supply chain,
+                from material requirements planning through supplier cost scoring.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div
+                    class="flex items-center space-x-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Inventory Planning</span>
+                </div>
+                <div
+                    class="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Supplier Sourcing</span>
+                </div>
+                <div
+                    class="flex items-center space-x-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Cost Assessment</span>
+                </div>
+            </div>
+        </header>
+
+        <section id="case-reports" class="max-w-6xl mx-auto px-6 py-16 border-t border-stone-100">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4">Case Reports</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Dive into real-world scenarios covering demand planning and supplier selection decisions.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <a href="MRP_Inventory_Case_Report.html"
+                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition">
+                    <div
+                        class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        📦
+                    </div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-3">MRP Inventory Planning for Part 982</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        A five-week analysis of demand, incoming supply, projected inventory, and the purchasing
+                        decisions needed to avoid shortages.
+                    </p>
+                    <span
+                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700">
+                        <span>Read case report</span>
+                        <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </span>
+                </a>
+
+                <a href="Supplier_Cost_Assessment_Case_Report.html"
+                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition">
+                    <div
+                        class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
+                        🏭
+                    </div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-3">Supplier Scoring Based on Cost Assessment</h3>
+                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                        ABC Electronics · Capacitor sourcing decision comparing three quotations using annual
+                        material, inventory, safety-stock, and ordering costs.
+                    </p>
+                    <span
+                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700">
+                        <span>Read case report</span>
+                        <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>
