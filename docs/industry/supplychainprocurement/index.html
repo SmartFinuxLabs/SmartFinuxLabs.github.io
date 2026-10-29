@@ -20,6 +20,12 @@
             backdrop-filter: blur(8px);
         }
     </style>
+    <script>
+        // Ensure trailing slash so relative assets always resolve within the current directory
+        if (!location.pathname.endsWith('/') && !location.pathname.includes('.')) {
+            location.replace(location.pathname + '/' + location.search + location.hash);
+        }
+    </script>
 </head>
 
 <body class="antialiased">
@@ -35,6 +41,7 @@
                 </div>
                 <div class="hidden md:flex space-x-6 text-sm font-medium text-stone-600 items-center">
                     <a href="#case-reports" class="hover:text-emerald-600 transition">Case Reports</a>
+                    <a href="#pdf-report" class="hover:text-emerald-600 transition">PDF Document</a>
                 </div>
             </div>
         </div>
@@ -47,8 +54,8 @@
                 Supply Chain &amp; <span class="text-emerald-600">Procurement</span>
             </h1>
             <p class="text-lg text-stone-600 mb-8 leading-relaxed">
-                Case reports exploring inventory planning and supplier sourcing decisions across the supply chain,
-                from material requirements planning through supplier cost scoring.
+                Case reports exploring inventory planning, supplier sourcing, and make-or-buy decisions across the supply chain,
+                from material requirements planning through supplier cost scoring and cost avoidance analysis.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
                 <div
@@ -63,6 +70,10 @@
                     class="flex items-center space-x-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">
                     <span>●</span> <span>Cost Assessment</span>
                 </div>
+                <div
+                    class="flex items-center space-x-2 px-4 py-2 bg-rose-50 text-rose-700 rounded-full text-sm font-medium">
+                    <span>●</span> <span>Make-or-Buy Analysis</span>
+                </div>
             </div>
         </header>
 
@@ -70,24 +81,32 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-stone-900 mb-4">Case Reports</h2>
                 <p class="text-stone-600 max-w-2xl mx-auto">
-                    Dive into real-world scenarios covering demand planning and supplier selection decisions.
+                    Dive into real-world scenarios covering demand planning, supplier selection, and outsourcing decisions.
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Case 1: MRP Inventory -->
                 <a href="MRP_Inventory_Case_Report.html"
-                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition">
-                    <div
-                        class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
-                        📦
+                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl">
+                                📦
+                            </div>
+                            <span class="px-2.5 py-1 bg-stone-100 text-stone-600 text-xs font-semibold rounded-md uppercase tracking-wider">
+                                HTML Report
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3">MRP Inventory Planning for Part 982</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                            A five-week analysis of demand, incoming supply, projected inventory, and the purchasing
+                            decisions needed to avoid shortages.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-900 mb-3">MRP Inventory Planning for Part 982</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
-                        A five-week analysis of demand, incoming supply, projected inventory, and the purchasing
-                        decisions needed to avoid shortages.
-                    </p>
                     <span
-                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700">
+                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 mt-2">
                         <span>Read case report</span>
                         <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -97,19 +116,27 @@
                     </span>
                 </a>
 
+                <!-- Case 2: Supplier Cost Assessment -->
                 <a href="Supplier_Cost_Assessment_Case_Report.html"
-                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition">
-                    <div
-                        class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-6 text-2xl">
-                        🏭
+                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div
+                                class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl">
+                                🏭
+                            </div>
+                            <span class="px-2.5 py-1 bg-stone-100 text-stone-600 text-xs font-semibold rounded-md uppercase tracking-wider">
+                                HTML Report
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3">Supplier Scoring Based on Cost Assessment</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                            ABC Electronics · Capacitor sourcing decision comparing three quotations using annual
+                            material, inventory, safety-stock, and ordering costs.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-stone-900 mb-3">Supplier Scoring Based on Cost Assessment</h3>
-                    <p class="text-stone-600 text-sm leading-relaxed mb-6">
-                        ABC Electronics · Capacitor sourcing decision comparing three quotations using annual
-                        material, inventory, safety-stock, and ordering costs.
-                    </p>
                     <span
-                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700">
+                        class="inline-flex items-center space-x-2 text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 mt-2">
                         <span>Read case report</span>
                         <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -118,6 +145,80 @@
                         </svg>
                     </span>
                 </a>
+
+                <!-- Case 3: Cost Avoidance Analysis (PDF) -->
+                <a href="Cost_Avoidance_Analysis_Report.pdf" target="_blank"
+                    class="group block bg-white p-8 rounded-2xl border border-stone-200 shadow-sm hover:border-rose-500 hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div
+                                class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center text-2xl">
+                                📑
+                            </div>
+                            <span class="px-2.5 py-1 bg-rose-100 text-rose-700 text-xs font-bold rounded-md uppercase tracking-wider">
+                                PDF Document
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900 mb-3">Cost Avoidance Analysis Report</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed mb-6">
+                            Make or buy assessment evaluating $50,000 in-house manufacturing costs against a $45,000 supplier proposal, analyzing avoidable overhead, net savings, and break-even pricing.
+                        </p>
+                    </div>
+                    <span
+                        class="inline-flex items-center space-x-2 text-rose-600 font-semibold text-sm group-hover:text-rose-700 mt-2">
+                        <span>Open PDF report</span>
+                        <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Embedded PDF Document Section -->
+        <section id="pdf-report" class="max-w-6xl mx-auto px-6 py-12 border-t border-stone-100">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2.5 py-1 bg-rose-100 text-rose-700 rounded text-xs font-bold uppercase tracking-wider">Document Preview</span>
+                        <span class="text-xs text-stone-500 font-medium">2-Page PDF Analysis · October 2026</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-stone-900">Cost Avoidance Analysis Report Preview</h2>
+                    <p class="text-stone-600 text-sm">Make or buy assessment and break-even pricing thresholds (10,000 units forecast volume).</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="Cost_Avoidance_Analysis_Report.pdf" target="_blank"
+                        class="inline-flex items-center space-x-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                        <span>Open Full PDF</span>
+                    </a>
+                    <a href="Cost_Avoidance_Analysis_Report.pdf" download
+                        class="inline-flex items-center space-x-2 px-4 py-2.5 bg-white border border-stone-300 text-stone-700 rounded-xl text-sm font-semibold hover:bg-stone-50 transition shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        <span>Download PDF</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+                <div class="bg-stone-50 px-6 py-3 border-b border-stone-200 flex items-center justify-between text-xs text-stone-600">
+                    <span class="font-medium">File: Cost_Avoidance_Analysis_Report.pdf</span>
+                    <span class="text-stone-400">PDF Document</span>
+                </div>
+                <iframe src="Cost_Avoidance_Analysis_Report.pdf" class="w-full h-[780px] border-0" title="Cost Avoidance Analysis Report PDF Preview">
+                    <div class="p-8 text-center text-stone-600">
+                        <p class="mb-4">Your browser does not support inline PDF viewing.</p>
+                        <a href="Cost_Avoidance_Analysis_Report.pdf" class="inline-flex items-center space-x-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold">
+                            <span>Open PDF Report</span>
+                        </a>
+                    </div>
+                </iframe>
             </div>
         </section>
     </main>
