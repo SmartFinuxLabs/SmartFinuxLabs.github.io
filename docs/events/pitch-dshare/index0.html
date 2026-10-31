@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-SHARE — Prime Edition | Global Equity. Stablecoin Access. (15 Slides)</title>
+    <meta name="description" content="Official D-SHARE Prime Edition Pitch Deck — 15 Slides | Tokenized Depository Receipts for USDC and HSBC RedCoin Holders. Global equity access for stablecoin adoption.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --canvas: #F7F4EC;
+            --ink: #183440;
+            --teal: #176C6B;
+            --muted: #53676D;
+            --gold: #AC8743;
+            --line: #CFD7D1;
+            --line-light: #E4EAE6;
+            --blue: #537DA1;
+            --blue-bg: #EEF3F7;
+            --purple: #83739D;
+            --purple-bg: #F0EDF5;
+            --green: #41826F;
+            --green-bg: #EDF5F1;
+            --white: #FFFFFF;
+            --font-main: 'Arial', 'Liberation Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --slide-width: 1120px;
+            --slide-height: 630px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 72px;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--ink);
+            background: #EAE6DD;
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 80px;
+        }
+
+        /* Top Sticky Navbar */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(247, 244, 236, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 2px 10px rgba(24, 52, 64, 0.05);
+            padding: 10px 24px;
+        }
+
+        .top-navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .back-hub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: var(--white);
+            border: 1px solid var(--line);
+            transition: all 0.2s ease;
+        }
+
+        .back-hub-link:hover {
+            background: #f0ede3;
+            color: var(--teal);
+        }
+
+        .nav-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-title .badge {
+            background: var(--teal);
+            color: var(--white);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--white) url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23183440' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center/14px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 6px 32px 6px 12px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .slide-counter {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--muted);
+            min-width: 75px;
+            text-align: center;
+        }
+
+        .nav-btn {
+            background: var(--white);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-btn:hover {
+            background: #f0ede3;
+            color: var(--teal);
+            border-color: var(--teal);
+        }
+
+        .nav-btn.primary {
+            background: var(--teal);
+            color: var(--white);
+            border-color: var(--teal);
+        }
+
+        .nav-btn.primary:hover {
+            background: #125554;
+        }
+
+        /* Slide Container Setup */
+        .presentation-deck {
+            max-width: var(--slide-width);
+            margin: 28px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+            padding: 0 16px;
+        }
+
+        .slide-card {
+            background: var(--canvas);
+            width: 100%;
+            min-height: var(--slide-height);
+            border-radius: 8px;
+            box-shadow: 0 6px 24px rgba(24, 52, 64, 0.08), 0 1px 3px rgba(24, 52, 64, 0.04);
+            border: 1px solid var(--line);
+            position: relative;
+            padding: 44px 56px 40px 56px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* Slide Headers */
+        .slide-header {
+            margin-bottom: 24px;
+        }
+
+        .slide-kicker {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--teal);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        .slide-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.22;
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.05rem;
+            color: var(--muted);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* Slide Footers */
+        .slide-footer {
+            margin-top: 24px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .footer-left {
+            font-weight: 700;
+            color: var(--teal);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .footer-footnote {
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
+            font-size: 0.74rem;
+            color: var(--muted);
+        }
+
+        .footer-right {
+            font-weight: 700;
+            color: var(--ink);
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+        }
+
+        /* Slide 1 Cover Specifics */
+        .slide-cover {
+            padding: 0;
+            background: #F7F4EC url('images/slide1-cover-bg.jpg') no-repeat right center;
+            background-size: cover;
+            min-height: var(--slide-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cover-content {
+            padding: 56px 64px 44px 64px;
+            max-width: 620px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cover-top-kicker {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--teal);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .cover-title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+
+        .cover-main-title {
+            font-size: 3.4rem;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .concept-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gold);
+            border: 1.5px solid var(--gold);
+            padding: 3px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(172, 135, 67, 0.06);
+        }
+
+        .cover-headline {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+            margin-bottom: 14px;
+        }
+
+        .cover-description {
+            font-size: 1.15rem;
+            color: var(--muted);
+            line-height: 1.45;
+            margin-bottom: 20px;
+        }
+
+        .cover-acronym {
+            font-size: 0.92rem;
+            color: var(--ink);
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 24px;
+            padding-left: 12px;
+            border-left: 2px solid var(--gold);
+        }
+
+        .cover-raising {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 10px;
+        }
+
+        .cover-edition {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .cover-rails {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.02em;
+        }
+
+        /* Tables */
+        .dshare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dshare-table th {
+            background: var(--teal);
+            color: var(--white);
+            font-weight: 700;
+            padding: 9px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.88rem;
+        }
+
+        .dshare-table th.right,
+        .dshare-table td.right {
+            text-align: right;
+        }
+
+        .dshare-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+        }
+
+        .dshare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dshare-table tr.total-row td {
+            font-weight: 700;
+            background: #EDE8DC;
+            border-top: 2px solid var(--line);
+        }
+
+        /* Two-Column & Multi-Column Layouts */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .two-col-45-55 {
+            display: grid;
+            grid-template-columns: 45fr 55fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .two-col-55-45 {
+            display: grid;
+            grid-template-columns: 55fr 45fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .cards-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dshare-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 18px 22px;
+        }
+
+        .dshare-card.canvas-card {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .card-kicker {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--teal);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .card-kicker.gold {
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .metric-big {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .metric-big.teal {
+            color: var(--teal);
+        }
+
+        .metric-big.gold {
+            color: var(--gold);
+        }
+
+        .metric-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* Diagram Components (Slides 6, 7, 9) */
+        .diagram-legend {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 18px;
+            justify-content: flex-end;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-chip {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .legend-chip.blue { background: var(--blue); }
+        .legend-chip.purple { background: var(--purple); }
+        .legend-chip.green { background: var(--green); }
+
+        .diagram-container {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: var(--white);
+            padding: 22px 24px;
+        }
+
+        .participants-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .participant-card {
+            text-align: center;
+            padding: 12px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: #FAFCFA;
+        }
+
+        .participant-card.blue {
+            border-color: var(--blue);
+            background: var(--blue-bg);
+            color: var(--ink);
+        }
+
+        .participant-card.purple {
+            border-color: var(--purple);
+            background: var(--purple-bg);
+            color: var(--ink);
+        }
+
+        .participant-icon {
+            font-size: 1.25rem;
+            margin-bottom: 6px;
+        }
+
+        .participant-card.blue .participant-icon { color: var(--blue); }
+        .participant-card.purple .participant-icon { color: var(--purple); }
+
+        .participant-name {
+            font-size: 0.84rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--ink);
+        }
+
+        /* Flow Sequence Steps */
+        .sequence-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .seq-step {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .seq-step.blue {
+            background: var(--blue-bg);
+            border-color: var(--blue);
+            color: #1e3d59;
+        }
+
+        .seq-step.purple {
+            background: var(--purple-bg);
+            border-color: var(--purple);
+            color: #4a3861;
+        }
+
+        .seq-step.green {
+            background: var(--green-bg);
+            border-color: var(--green);
+            color: #1a4d3e;
+        }
+
+        .seq-arrow {
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .seq-step.step-1-2 { margin-left: 0; width: 50%; }
+        .seq-step.step-2-3 { margin-left: 25%; width: 50%; }
+        .seq-step.step-3-4 { margin-left: 50%; width: 50%; }
+        .seq-step.step-4-1 { margin-left: 0; width: 100%; }
+
+        .diagram-bottom-note {
+            margin-top: 18px;
+            background: #EDE8DC;
+            border-left: 3px solid var(--teal);
+            padding: 8px 14px;
+            font-size: 0.82rem;
+            color: var(--ink);
+            font-weight: 600;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Chart Components */
+        .chart-box {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+
+        .chart-title {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .chart-bars-wrap {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 180px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--line);
+            gap: 16px;
+        }
+
+        .bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .bar-val {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .bar-rect {
+            width: 100%;
+            max-width: 58px;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .bar-rect.teal { background: var(--teal); }
+        .bar-rect.blue { background: var(--blue); }
+
+        .bar-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* Clustered Columns (Slide 10) */
+        .clustered-group {
+            display: flex;
+            gap: 6px;
+            align-items: flex-end;
+            height: 100%;
+            justify-content: center;
+        }
+
+        /* Horizontal Bar Chart (Slide 15) */
+        .hbar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .hbar-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hbar-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .hbar-track {
+            background: #EDE8DC;
+            border-radius: 4px;
+            height: 22px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .hbar-fill {
+            background: var(--teal);
+            height: 100%;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* Print / Presentation Utilities */
+        @media print {
+            body {
+                background: var(--canvas) !important;
+                padding: 0 !important;
+            }
+            .top-navbar {
+                display: none !important;
+            }
+            .presentation-deck {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                gap: 0 !important;
+            }
+            .slide-card {
+                page-break-after: always;
+                break-after: page;
+                min-height: 100vh !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .two-col, .two-col-45-55, .two-col-55-45, .three-col {
+                grid-template-columns: 1fr;
+            }
+            .participants-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .slide-card {
+                padding: 24px;
+            }
+            .cover-content {
+                padding: 32px 24px;
+            }
+            .cover-main-title {
+                font-size: 2.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="top-navbar">
+        <div class="top-navbar-inner">
+            <div class="nav-left">
+                <a href="../../../index.html" class="back-hub-link" title="Return to Portal Hub">
+                    <i class="fa-solid fa-arrow-left"></i> Hub
+                </a>
+                <div class="nav-title">
+                    D-SHARE
+                    <span class="badge">Prime Edition</span>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <select id="slideSelect" class="slide-select" aria-label="Jump to slide">
+                    <option value="slide-1">1. D-SHARE Cover</option>
+                    <option value="slide-2">2. High Share Prices & Global Access</option>
+                    <option value="slide-3">3. Stablecoin Global Equity Adoption</option>
+                    <option value="slide-4">4. Market System Architecture</option>
+                    <option value="slide-5">5. Create the Product</option>
+                    <option value="slide-6">6. Issue Receipts Backed by Shares</option>
+                    <option value="slide-7">7. Investor Buys D-SHARE Receipts</option>
+                    <option value="slide-8">8. Holding Value Rise Scenario</option>
+                    <option value="slide-9">9. DLT Architecture for Receipt Lifecycle</option>
+                    <option value="slide-10">10. Sponsor-Led Revenue Model</option>
+                    <option value="slide-11">11. Distribution Through Partners</option>
+                    <option value="slide-12">12. Launch Plan & Measurable Gates</option>
+                    <option value="slide-13">13. 24-Month Planning Cash Case</option>
+                    <option value="slide-14">14. 24-Month Itemized Fixed Budget</option>
+                    <option value="slide-15">15. Capital Allocation & Readiness</option>
+                </select>
+
+                <div class="slide-counter" id="slideCounter">1 / 15</div>
+
+                <button class="nav-btn" id="prevBtn" title="Previous Slide (Left Arrow)"><i class="fa-solid fa-chevron-up"></i></button>
+                <button class="nav-btn" id="nextBtn" title="Next Slide (Right Arrow)"><i class="fa-solid fa-chevron-down"></i></button>
+                <a href="D-SHARE-Prime-Edition-15-Slides.pdf" target="_blank" class="nav-btn" title="View Source PDF"><i class="fa-solid fa-file-pdf"></i></a>
+                <a href="D-SHARE-Prime-Edition-15-Slides.pptx" download class="nav-btn" title="Download PPTX"><i class="fa-solid fa-file-powerpoint"></i></a>
+                <button class="nav-btn" onclick="window.print()" title="Print / Save PDF"><i class="fa-solid fa-print"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="presentation-deck">
+
+        <!-- ==================== SLIDE 1: COVER ==================== -->
+        <section class="slide-card slide-cover" id="slide-1" data-index="1">
+            <div class="cover-content">
+                <div>
+                    <div class="cover-top-kicker">CONNEXTIUM.XYZ / FINUX LABS</div>
+                    <div class="cover-title-row">
+                        <div class="cover-main-title">D-SHARE</div>
+                        <div class="concept-badge">Concept</div>
+                    </div>
+                    <div class="cover-headline">
+                        Global equity.<br>Stablecoin access.
+                    </div>
+                    <div class="cover-description">
+                        Tokenized depository receipts.<br>For USDC and HSBC RedCoin holders.
+                    </div>
+                    <div class="cover-acronym">
+                        Depository Securities Homing Access<br>to Receipted Equity
+                    </div>
+                </div>
+
+                <div>
+                    <div class="cover-raising">Raising US$3 million</div>
+                    <div class="cover-edition">Prime edition</div>
+                    <div class="cover-rails">USDC / USD &nbsp;&nbsp;&nbsp;&nbsp; HSBC RedCoin / HKD</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 2: HIGH SHARE PRICES ==================== -->
+        <section class="slide-card" id="slide-2" data-index="2">
+            <div class="slide-header">
+                <h1 class="slide-title">High share prices and uneven global access</h1>
+                <p class="slide-subtitle">Six US-listed examples above US$1,000. Indicative quote snapshot, 30 October 2026.</p>
+            </div>
+
+            <div class="two-col-55-45">
+                <table class="dshare-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Ticker</th>
+                            <th class="right">US$ / share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>NVR</td><td>NVR</td><td class="right">5,958.56</td></tr>
+                        <tr><td>AutoZone</td><td>AZO</td><td class="right">3,169.82</td></tr>
+                        <tr><td>Eli Lilly</td><td>LLY</td><td class="right">1,417.54</td></tr>
+                        <tr><td>W.W. Grainger</td><td>GWW</td><td class="right">1,359.17</td></tr>
+                        <tr><td>BlackRock</td><td>BLK</td><td class="right">1,147.54</td></tr>
+                        <tr><td>Costco</td><td>COST</td><td class="right">1,012.28</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="cards-column">
+                    <div class="dshare-card">
+                        <div class="metric-big teal" style="font-size: 1.55rem; line-height: 1.35;">
+                            A US$300 budget cannot buy one whole share in these examples
+                        </div>
+                    </div>
+                    <div class="dshare-card">
+                        <div class="card-kicker gold">Local access varies</div>
+                        <div class="card-desc" style="color: var(--ink); font-weight: 500; font-size: 1rem;">
+                            Eligible accounts, overseas funding rules and local product coverage can limit global investors.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Fractional brokerage already helps some investors. Broker, customer and product eligibility govern access.</div>
+                <div class="footer-right">02</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 3: STABLECOIN ADOPTION ==================== -->
+        <section class="slide-card" id="slide-3" data-index="3">
+            <div class="slide-header">
+                <div class="slide-kicker">Leading payments engineering to capital markets</div>
+                <h2 class="slide-title">Global equity access for stablecoin adoption</h2>
+            </div>
+
+            <div class="two-col" style="margin-bottom: 24px;">
+                <div class="dshare-card" style="padding: 26px;">
+                    <div class="metric-big">35% to 42%</div>
+                    <div class="card-desc" style="font-size: 0.96rem; color: var(--ink); margin-bottom: 8px;">
+                        Digital merchant payments among adults in low- and middle-income countries, 2021 to 2024
+                    </div>
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--muted);">
+                        World Bank Global Findex 2025
+                    </div>
+                </div>
+
+                <div class="dshare-card" style="padding: 26px;">
+                    <div class="metric-big">+9.8%</div>
+                    <div class="card-desc" style="font-size: 0.96rem; color: var(--ink); margin-bottom: 8px;">
+                        Latin America crypto economic activity, 12 months to June 2026 versus the previous 12 months
+                    </div>
+                    <div style="font-size: 0.82rem; font-weight: 700; color: var(--muted);">
+                        Chainalysis 2026 adoption report
+                    </div>
+                </div>
+            </div>
+
+            <div class="dshare-card" style="background: #EDE8DC; border-color: var(--line); padding: 18px 24px; text-align: center;">
+                <div style="font-size: 1.12rem; font-weight: 700; color: var(--ink);">
+                    Market adoption of stablecoin to invest in global equity through accountable financial structure.
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Payments and crypto indicators support the thesis. Local DeFi use and D-SHARE demand need direct validation.</div>
+                <div class="footer-right">03</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 4: SYSTEM ARCHITECTURE ==================== -->
+        <section class="slide-card" id="slide-4" data-index="4">
+            <div class="slide-header">
+                <h2 class="slide-title">D-SHARE</h2>
+                <p class="slide-subtitle">One token records one receipt unit. Custody and programme documents establish backing and enforce holder rights.</p>
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center; padding: 10px 0;">
+                <img src="images/market-system-architecture.png" alt="D-SHARE Market System Architecture" style="max-width: 100%; max-height: 420px; object-fit: contain; border-radius: 6px; border: 1px solid var(--line);">
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote"></div>
+                <div class="footer-right">04</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 5: 1. CREATE THE PRODUCT ==================== -->
+        <section class="slide-card" id="slide-5" data-index="5">
+            <div class="slide-header">
+                <h2 class="slide-title">1. Create the product</h2>
+                <p class="slide-subtitle">Fictional GlobalTech series GT-01. One token records one programme receipt unit.</p>
+            </div>
+
+            <div class="three-col" style="margin-bottom: 24px;">
+                <div class="dshare-card" style="text-align: center; padding: 24px 16px;">
+                    <div class="metric-big">US$1,200</div>
+                    <div class="metric-label">Underlying share price</div>
+                </div>
+                <div class="dshare-card" style="text-align: center; padding: 24px 16px;">
+                    <div class="metric-big">0.01</div>
+                    <div class="metric-label">Share per receipt</div>
+                </div>
+                <div class="dshare-card" style="text-align: center; padding: 24px 16px;">
+                    <div class="metric-big">US$12</div>
+                    <div class="metric-label">Indicative receipt value</div>
+                </div>
+            </div>
+
+            <div class="dshare-card" style="background: #EDE8DC; border-color: var(--line); padding: 14px 20px; text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--teal);">
+                    100 receipts represent one underlying share
+                </div>
+            </div>
+
+            <div class="dshare-card">
+                <div class="card-kicker">Programme design</div>
+                <div class="card-desc" style="color: var(--ink); font-size: 0.98rem;">
+                    The sponsor sets the ratio and holder rights. Custody evidence supports issuance. Brokers distribute to eligible investors.
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Illustrative value = share price × receipt ratio. Market quotes, fees, taxes and FX can change the actual price.</div>
+                <div class="footer-right">05</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 6: 2. ISSUE RECEIPTS BACKED BY SHARES ==================== -->
+        <section class="slide-card" id="slide-6" data-index="6">
+            <div class="slide-header">
+                <h2 class="slide-title">2. Issue receipts backed by shares</h2>
+                <p class="slide-subtitle">Illustrative: 1,000 shares / 0.01 share per receipt = 100,000 receipt tokens.</p>
+            </div>
+
+            <div class="diagram-legend">
+                <div class="legend-item"><span class="legend-chip blue"></span> Blue = securities</div>
+                <div class="legend-item"><span class="legend-chip purple"></span> Purple = instructions and confirmations</div>
+                <div class="legend-item"><span class="legend-chip green"></span> Green = stablecoin cash</div>
+            </div>
+
+            <div class="diagram-container">
+                <div class="participants-row">
+                    <div class="participant-card blue">
+                        <div class="participant-icon"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="participant-name">Authorized<br>participant</div>
+                    </div>
+                    <div class="participant-card blue">
+                        <div class="participant-icon"><i class="fa-solid fa-vault"></i></div>
+                        <div class="participant-name">Underlying<br>custodian</div>
+                    </div>
+                    <div class="participant-card purple">
+                        <div class="participant-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="participant-name">Issuer /<br>registrar</div>
+                    </div>
+                    <div class="participant-card purple">
+                        <div class="participant-icon"><i class="fa-solid fa-network-wired"></i></div>
+                        <div class="participant-name">Permissioned<br>DLT register</div>
+                    </div>
+                </div>
+
+                <div class="sequence-steps">
+                    <div class="seq-step blue step-1-2">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        1. 1,000 foreign shares
+                    </div>
+                    <div class="seq-step purple step-2-3">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        2. Settled backing proof
+                    </div>
+                    <div class="seq-step purple step-3-4">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        3. Signed mint approval
+                    </div>
+                    <div class="seq-step blue step-4-1">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                        4. 100,000 receipt tokens to the AP’s eligible account
+                    </div>
+                </div>
+
+                <div class="diagram-bottom-note">
+                    Redemption: lock and cancel receipt units, burn tokens, then release the backing.
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote"></div>
+                <div class="footer-right">06</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 7: 3. INVESTOR BUYS D-SHARE RECEIPTS ==================== -->
+        <section class="slide-card" id="slide-7" data-index="7">
+            <div class="slide-header">
+                <h2 class="slide-title">3. An investor buys D-SHARE receipts</h2>
+                <p class="slide-subtitle">25 receipt units at US$12 = US$300, with a 0.25-share economic interest.</p>
+            </div>
+
+            <div class="diagram-legend">
+                <div class="legend-item"><span class="legend-chip blue"></span> Blue = securities</div>
+                <div class="legend-item"><span class="legend-chip purple"></span> Purple = instructions and confirmations</div>
+                <div class="legend-item"><span class="legend-chip green"></span> Green = cash or stablecoins</div>
+            </div>
+
+            <div class="diagram-container">
+                <div class="participants-row">
+                    <div class="participant-card">
+                        <div class="participant-icon" style="color: var(--ink);"><i class="fa-solid fa-user"></i></div>
+                        <div class="participant-name">Eligible<br>investor</div>
+                    </div>
+                    <div class="participant-card">
+                        <div class="participant-icon" style="color: var(--teal);"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="participant-name">Broker /<br>liquidity partner</div>
+                    </div>
+                    <div class="participant-card green" style="border-color: var(--green); background: var(--green-bg);">
+                        <div class="participant-icon" style="color: var(--green);"><i class="fa-solid fa-coins"></i></div>
+                        <div class="participant-name">Cash / FX<br>operator</div>
+                    </div>
+                    <div class="participant-card purple">
+                        <div class="participant-icon"><i class="fa-solid fa-file-contract"></i></div>
+                        <div class="participant-name">Receipt<br>register</div>
+                    </div>
+                </div>
+
+                <div class="sequence-steps">
+                    <div class="seq-step purple step-1-2">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        1. Buy 25 units at US$12
+                    </div>
+                    <div class="seq-step green step-2-3">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        2. 300 USDC or 2,340 RedCoin
+                    </div>
+                    <div class="seq-step green step-2-3" style="flex-direction: row-reverse; text-align: right;">
+                        <span class="seq-arrow" style="margin-right: 0; margin-left: 10px;"><i class="fa-solid fa-arrow-left"></i></span>
+                        3. Final cash + FX evidence
+                    </div>
+                    <div class="seq-step blue step-2-3" style="margin-left: 25%; width: 75%;">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                        4. Transfer 25 receipt units
+                    </div>
+                    <div class="seq-step blue step-4-1">
+                        <span class="seq-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                        5. Confirm holding: 25 units = 0.25 share interest
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">US$300 before fees. Assumes USDC/USD 1, RedCoin/HKD 1 and 7.80 HKD/USD. Rail access remains proposed.</div>
+                <div class="footer-right">07</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 8: 4. HOLDING VALUE RISES ==================== -->
+        <section class="slide-card" id="slide-8" data-index="8">
+            <div class="slide-header">
+                <h2 class="slide-title">4. The holding value rises in this example</h2>
+                <p class="slide-subtitle">Hypothetical positive scenario. Share price increases 10%, while 25 receipt units remain unchanged.</p>
+            </div>
+
+            <div class="two-col">
+                <div>
+                    <div class="dshare-card" style="margin-bottom: 16px;">
+                        <div class="card-title" style="font-size: 1.25rem;">US$1,200 to US$1,320 per share</div>
+                        <div style="font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;">25 × 0.01 × US$1,320 = US$330</div>
+                        <div class="metric-big teal" style="font-size: 1.45rem;">US$30 unrealized gain (+10%)</div>
+                    </div>
+
+                    <table class="dshare-table">
+                        <thead>
+                            <tr>
+                                <th>HKD reporting illustration</th>
+                                <th class="right">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Initial at 7.80 HKD/USD</td><td class="right">2,340.00</td></tr>
+                            <tr><td>Later at 7.82 HKD/USD</td><td class="right">2,580.60</td></tr>
+                            <tr class="total-row"><td>Change in HKD value</td><td class="right">+10.28%</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem; color: var(--muted); margin-top: 8px;">FX adds HK$6.60 versus an unchanged 7.80 rate.</div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-title">Holding value in USD</div>
+                    <div class="chart-bars-wrap">
+                        <div class="bar-col">
+                            <span class="bar-val">US$300</span>
+                            <div class="bar-rect teal" style="height: 125px;"></div>
+                            <span class="bar-label">At purchase</span>
+                        </div>
+                        <div class="bar-col">
+                            <span class="bar-val">US$330</span>
+                            <div class="bar-rect teal" style="height: 140px;"></div>
+                            <span class="bar-label">After +10%</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--muted); margin-top: 6px;">
+                        <span>US$0</span><span>US$100</span><span>US$200</span><span>US$300</span><span>US$400</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Before fees and tax. A sale realizes cash proceeds. Equity and FX changes can also reduce value.</div>
+                <div class="footer-right">08</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 9: DLT ARCHITECTURE ==================== -->
+        <section class="slide-card" id="slide-9" data-index="9">
+            <div class="slide-header">
+                <h2 class="slide-title">DLT architecture for the receipt lifecycle</h2>
+                <p class="slide-subtitle">USDC and RedCoin adapters are proposed. Register rights and rail access remain launch gates.</p>
+            </div>
+
+            <div class="diagram-container">
+                <div class="participants-row" style="margin-bottom: 20px;">
+                    <div class="participant-card">
+                        <div class="participant-icon" style="color: var(--ink);"><i class="fa-solid fa-users"></i></div>
+                        <div class="participant-name">Investors /<br>brokers</div>
+                    </div>
+                    <div class="participant-card">
+                        <div class="participant-icon" style="color: var(--teal);"><i class="fa-solid fa-network-wired"></i></div>
+                        <div class="participant-name">APs / liquidity<br>providers</div>
+                    </div>
+                    <div class="participant-card purple">
+                        <div class="participant-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="participant-name">Issuer /<br>registrar</div>
+                    </div>
+                    <div class="participant-card green" style="border-color: var(--green); background: var(--green-bg);">
+                        <div class="participant-icon" style="color: var(--green);"><i class="fa-solid fa-handshake"></i></div>
+                        <div class="participant-name">Custody, cash<br>and FX partners</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <div style="border: 2px solid var(--teal); background: #FAFDFB; border-radius: 6px; padding: 14px 20px; text-align: center;">
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--teal); margin-bottom: 4px;">
+                            D-SHARE receipt and cash orchestration
+                        </div>
+                        <div style="font-size: 0.86rem; color: var(--muted); font-weight: 600;">
+                            Eligibility and rights &nbsp;&nbsp;•&nbsp;&nbsp; Receipt approvals &nbsp;&nbsp;•&nbsp;&nbsp; Cash-asset / FX controls
+                        </div>
+                    </div>
+
+                    <div style="border: 2px solid var(--blue); background: var(--blue-bg); border-radius: 6px; padding: 14px 20px; text-align: center;">
+                        <div style="font-size: 1.02rem; font-weight: 700; color: var(--blue); margin-bottom: 4px;">
+                            Permissioned receipt register
+                        </div>
+                        <div style="font-size: 0.86rem; color: var(--ink); font-weight: 500;">
+                            Receipt units, transfer locks and validated events
+                        </div>
+                    </div>
+
+                    <div style="border: 1px solid var(--line); background: #EDE8DC; border-radius: 6px; padding: 12px 20px; text-align: center;">
+                        <div style="font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 3px;">
+                            Private records
+                        </div>
+                        <div style="font-size: 0.84rem; color: var(--muted); font-weight: 500;">
+                            Identity, quotes, accounting
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Custodians hold shares. Cash partners transfer funds. Verified finality gates receipt release.</div>
+                <div class="footer-right">09</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 10: SPONSOR-LED REVENUE MODEL ==================== -->
+        <section class="slide-card" id="slide-10" data-index="10">
+            <div class="slide-header">
+                <h2 class="slide-title">A sponsor-led revenue model</h2>
+                <p class="slide-subtitle">Proposed recurring servicing fees, plus a setup fee for each new sponsor.</p>
+            </div>
+
+            <div class="two-col">
+                <div class="cards-column">
+                    <div class="dshare-card">
+                        <div class="card-kicker">Sponsor customer</div>
+                        <div class="metric-big teal" style="font-size: 1.55rem; margin-bottom: 4px;">US$150,000 setup</div>
+                        <div class="card-desc">per new sponsor</div>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div style="font-size: 1.25rem; font-weight: 700; color: var(--teal); margin-bottom: 4px;">
+                            0.30% annual servicing fee
+                        </div>
+                        <div style="font-size: 0.95rem; color: var(--muted); font-weight: 600;">
+                            0.15% variable service costs
+                        </div>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div class="card-kicker gold">Competitive focus</div>
+                        <div class="card-desc" style="color: var(--ink); font-weight: 600;">
+                            Receipt operations with approved cash adapters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-title">Annual US$ millions by Average programme assets</div>
+                    <div style="display: flex; justify-content: center; gap: 18px; font-size: 0.78rem; font-weight: 700; margin-bottom: 12px;">
+                        <span style="color: var(--teal);"><i class="fa-solid fa-square"></i> Gross fees (0.30%)</span>
+                        <span style="color: var(--blue);"><i class="fa-solid fa-square"></i> Contribution (0.15%)</span>
+                    </div>
+                    <div class="chart-bars-wrap" style="height: 160px;">
+                        <div class="bar-col">
+                            <div class="clustered-group">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">0.30</span>
+                                    <div class="bar-rect teal" style="height: 25px; width: 28px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">0.15</span>
+                                    <div class="bar-rect blue" style="height: 13px; width: 28px;"></div>
+                                </div>
+                            </div>
+                            <span class="bar-label">US$100M</span>
+                        </div>
+
+                        <div class="bar-col">
+                            <div class="clustered-group">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">1.50</span>
+                                    <div class="bar-rect teal" style="height: 80px; width: 28px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">0.75</span>
+                                    <div class="bar-rect blue" style="height: 40px; width: 28px;"></div>
+                                </div>
+                            </div>
+                            <span class="bar-label">US$500M</span>
+                        </div>
+
+                        <div class="bar-col">
+                            <div class="clustered-group">
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">3.00</span>
+                                    <div class="bar-rect teal" style="height: 140px; width: 28px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
+                                    <span style="font-size: 0.72rem; font-weight: 700;">1.50</span>
+                                    <div class="bar-rect blue" style="height: 70px; width: 28px;"></div>
+                                </div>
+                            </div>
+                            <span class="bar-label">US$1,000M</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Contribution is before fixed costs and excludes setup fees. Pricing and partner terms require commercial validation.</div>
+                <div class="footer-right">10</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 11: DISTRIBUTION THROUGH PARTNERS ==================== -->
+        <section class="slide-card" id="slide-11" data-index="11">
+            <div class="slide-header">
+                <h2 class="slide-title">Distribution through accountable partners</h2>
+                <p class="slide-subtitle">Planning sensitivity. Each series averages US$20M of serviced assets over a full measurement period.</p>
+            </div>
+
+            <div class="two-col">
+                <div class="cards-column">
+                    <div class="dshare-card">
+                        <div class="card-kicker">USDC first</div>
+                        <div class="card-desc" style="color: var(--ink); font-weight: 600;">
+                            One approved native network and eligible broker accounts
+                        </div>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div class="card-kicker gold">RedCoin access gated</div>
+                        <div class="card-desc" style="color: var(--ink); font-weight: 600;">
+                            Seek HSBC access with agreed FX terms
+                        </div>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div class="card-kicker">Target partner group</div>
+                        <div class="card-desc" style="color: var(--ink); font-weight: 700; font-size: 1.05rem;">
+                            1 sponsor, 2 brokers, 2 LPs
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-title">Average assets (US$ millions)</div>
+                    <div class="chart-bars-wrap" style="height: 170px;">
+                        <div class="bar-col">
+                            <span class="bar-val">20</span>
+                            <div class="bar-rect teal" style="height: 35px;"></div>
+                            <span class="bar-label">1 series</span>
+                        </div>
+                        <div class="bar-col">
+                            <span class="bar-val">60</span>
+                            <div class="bar-rect teal" style="height: 85px;"></div>
+                            <span class="bar-label">3 series</span>
+                        </div>
+                        <div class="bar-col">
+                            <span class="bar-val">100</span>
+                            <div class="bar-rect teal" style="height: 135px;"></div>
+                            <span class="bar-label">5 series</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--muted); margin-top: 6px;">
+                        <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span><span>120</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Targets are uncontracted. A launch-year ramp can produce lower average assets than its ending balance.</div>
+                <div class="footer-right">11</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 12: LAUNCH PLAN ==================== -->
+        <section class="slide-card" id="slide-12" data-index="12">
+            <div class="slide-header">
+                <h2 class="slide-title">A launch plan with measurable gates</h2>
+                <p class="slide-subtitle">Pre-launch product development. Milestones begin at funding close.</p>
+            </div>
+
+            <div class="two-col-45-55">
+                <div class="cards-column">
+                    <div class="dshare-card">
+                        <div class="card-kicker">Current foundation</div>
+                        <ul style="padding-left: 18px; font-size: 0.9rem; color: var(--ink); line-height: 1.5; margin-top: 6px;">
+                            <li>Receipt concept and lifecycle models</li>
+                            <li>Trade and ledger test harness</li>
+                            <li>Target cash-rail architecture</li>
+                        </ul>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div class="card-kicker gold">Controls before launch</div>
+                        <ul style="padding-left: 18px; font-size: 0.9rem; color: var(--ink); line-height: 1.5; margin-top: 6px;">
+                            <li>Programme rights and permissions</li>
+                            <li>Custody proof and reconciliation</li>
+                            <li>Cash finality, audits and recovery</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cards-column">
+                    <div class="dshare-card" style="border-left: 4px solid var(--teal);">
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px;">
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink);">Sponsor and programme terms</div>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--teal); background: rgba(23, 108, 107, 0.1); padding: 2px 8px; border-radius: 4px;">Months 0-6</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--muted);">Jurisdiction, rights and priced cash routes</div>
+                    </div>
+
+                    <div class="dshare-card" style="border-left: 4px solid var(--teal);">
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px;">
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink);">USDC route and receipt certification</div>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--teal); background: rgba(23, 108, 107, 0.1); padding: 2px 8px; border-radius: 4px;">Months 7-12</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--muted);">Custody, security and operating acceptance</div>
+                    </div>
+
+                    <div class="dshare-card" style="border-left: 4px solid var(--teal);">
+                        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px;">
+                            <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink);">Launch and eligible distribution</div>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--teal); background: rgba(23, 108, 107, 0.1); padding: 2px 8px; border-radius: 4px;">Months 13-24</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--muted);">5 series, 2 brokers, 2 LPs as a planning target</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Partner acceptance governs rollout. RedCoin access, capital and liquidity arrangements remain separate launch decisions.</div>
+                <div class="footer-right">12</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 13: 24-MONTH PLANNING CASH CASE ==================== -->
+        <section class="slide-card" id="slide-13" data-index="13">
+            <div class="slide-header">
+                <h2 class="slide-title">The 24-month planning cash case</h2>
+                <p class="slide-subtitle">US$3M funding, with customer revenue and variable service costs modeled in Year 2.</p>
+            </div>
+
+            <div class="two-col-45-55">
+                <table class="dshare-table">
+                    <thead>
+                        <tr>
+                            <th>Cash bridge</th>
+                            <th class="right">US$M</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Opening funding</td><td class="right">3.00</td></tr>
+                        <tr><td>Add customer revenue</td><td class="right">0.45</td></tr>
+                        <tr><td>Less fixed operating spend</td><td class="right">-2.70</td></tr>
+                        <tr><td>Less variable service costs</td><td class="right">-0.15</td></tr>
+                        <tr class="total-row"><td>Closing cash at Month 24</td><td class="right">0.60</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="cards-column">
+                    <div class="dshare-card">
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--teal); margin-bottom: 4px;">
+                            Year 2 revenue: US$450,000
+                        </div>
+                        <div style="font-size: 0.88rem; color: var(--ink);">
+                            US$100M × 0.30% = US$300k + one US$150k sponsor setup
+                        </div>
+                    </div>
+
+                    <div class="dshare-card">
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 4px;">
+                            Year 2 costs: US$1,650,000
+                        </div>
+                        <div style="font-size: 0.88rem; color: var(--muted);">
+                            US$1.50M fixed + US$150k variable (Variable = US$100M × 0.15%)
+                        </div>
+                    </div>
+
+                    <div class="dshare-card" style="background: #EDE8DC;">
+                        <div style="font-size: 0.9rem; font-weight: 700; color: var(--ink);">
+                            US$0.60M closing cash includes the US$0.30M unspent contingency
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">Planning assumptions. Fixed budget: slide 14. Tax, required capital, cash timing and partner minimums remain unmodeled.</div>
+                <div class="footer-right">13</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 14: ITEMIZED FIXED BUDGET ==================== -->
+        <section class="slide-card" id="slide-14" data-index="14">
+            <div class="slide-header">
+                <h2 class="slide-title">The itemized 24-month fixed budget</h2>
+                <p class="slide-subtitle">Proposed operating allowances in US$ thousands, subject to priced scope.</p>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="dshare-table" style="font-size: 0.85rem;">
+                    <thead>
+                        <tr>
+                            <th>Fixed operating line</th>
+                            <th class="right">Year 1</th>
+                            <th class="right">Year 2</th>
+                            <th class="right">24M total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Engineering delivery capacity</td><td class="right">300</td><td class="right">300</td><td class="right">600</td></tr>
+                        <tr><td>Product and integration lead</td><td class="right">150</td><td class="right">150</td><td class="right">300</td></tr>
+                        <tr><td>Security audit and testing</td><td class="right">60</td><td class="right">120</td><td class="right">180</td></tr>
+                        <tr><td>Cloud, data and development tools</td><td class="right">45</td><td class="right">75</td><td class="right">120</td></tr>
+                        <tr><td>Securities counsel / programme docs</td><td class="right">240</td><td class="right">120</td><td class="right">360</td></tr>
+                        <tr><td>Compliance and licensing readiness</td><td class="right">90</td><td class="right">150</td><td class="right">240</td></tr>
+                        <tr><td>Operations and reconciliation capacity</td><td class="right">90</td><td class="right">150</td><td class="right">240</td></tr>
+                        <tr><td>Partner certification and testing</td><td class="right">60</td><td class="right">150</td><td class="right">210</td></tr>
+                        <tr><td>Partner development / account support</td><td class="right">120</td><td class="right">180</td><td class="right">300</td></tr>
+                        <tr><td>Market launch and investor education</td><td class="right">45</td><td class="right">105</td><td class="right">150</td></tr>
+                        <tr class="total-row"><td>Total fixed spending</td><td class="right">1,200</td><td class="right">1,500</td><td class="right">2,700</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote">US$2.70M fixed + US$0.30M reserve = US$3M. Variable service costs and backing inventory are separate.</div>
+                <div class="footer-right">14</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 15: US$3M PRODUCTION PROGRAMME ==================== -->
+        <section class="slide-card" id="slide-15" data-index="15">
+            <div class="slide-header">
+                <h2 class="slide-title">US$3 million for the first production programme</h2>
+                <p class="slide-subtitle">Expansion capital for delivery and programme readiness over 24 months.</p>
+            </div>
+
+            <div class="two-col">
+                <div class="hbar-list">
+                    <div class="hbar-row">
+                        <div class="hbar-meta">
+                            <span>Product and security (40%)</span>
+                            <span>US$1.20M</span>
+                        </div>
+                        <div class="hbar-track"><div class="hbar-fill" style="width: 40%;"></div></div>
+                    </div>
+                    <div class="hbar-row">
+                        <div class="hbar-meta">
+                            <span>Programme structuring (20%)</span>
+                            <span>US$0.60M</span>
+                        </div>
+                        <div class="hbar-track"><div class="hbar-fill" style="width: 20%;"></div></div>
+                    </div>
+                    <div class="hbar-row">
+                        <div class="hbar-meta">
+                            <span>Partner operations (15%)</span>
+                            <span>US$0.45M</span>
+                        </div>
+                        <div class="hbar-track"><div class="hbar-fill" style="width: 15%;"></div></div>
+                    </div>
+                    <div class="hbar-row">
+                        <div class="hbar-meta">
+                            <span>Distribution (15%)</span>
+                            <span>US$0.45M</span>
+                        </div>
+                        <div class="hbar-track"><div class="hbar-fill" style="width: 15%;"></div></div>
+                    </div>
+                    <div class="hbar-row">
+                        <div class="hbar-meta">
+                            <span>Contingency (10%)</span>
+                            <span>US$0.30M</span>
+                        </div>
+                        <div class="hbar-track"><div class="hbar-fill" style="width: 10%;"></div></div>
+                    </div>
+                </div>
+
+                <div class="cards-column">
+                    <div class="dshare-card" style="text-align: center; padding: 22px;">
+                        <div class="metric-big teal">24 months</div>
+                        <div class="metric-big" style="font-size: 1.7rem; margin-bottom: 2px;">US$125,000</div>
+                        <div class="metric-label" style="font-size: 0.9rem;">average monthly funding envelope, including reserve</div>
+                        <div style="font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-top: 6px;">
+                            US$112,500 fixed + US$12,500 reserve equivalent
+                        </div>
+                    </div>
+
+                    <div class="dshare-card" style="background: #EDE8DC; border-color: var(--line); text-align: center; padding: 18px;">
+                        <div style="font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">
+                            Seeking investors and an anchor programme sponsor
+                        </div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: var(--teal);">
+                            Connextium.xyz / Finux Labs &nbsp;&nbsp;•&nbsp;&nbsp; <a href="https://connextium.xyz" target="_blank" style="color: var(--teal); text-decoration: underline;">connextium.xyz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <div class="footer-left">D-SHARE / PRIME</div>
+                <div class="footer-footnote"></div>
+                <div class="footer-right">15</div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Interactive Navigation & Slide Tracking
+        const slides = document.querySelectorAll('.slide-card');
+        const slideSelect = document.getElementById('slideSelect');
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlideIndex = 0;
+
+        function updateCurrentSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            currentSlideIndex = index;
+            slideCounter.textContent = `${index + 1} / ${slides.length}`;
+            slideSelect.selectedIndex = index;
+        }
+
+        slideSelect.addEventListener('change', (e) => {
+            const targetId = e.target.value;
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                slides[currentSlideIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlideIndex < slides.length - 1) {
+                slides[currentSlideIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentSlideIndex < slides.length - 1) {
+                    slides[currentSlideIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSlideIndex > 0) {
+                    slides[currentSlideIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        // Intersection Observer to update active counter while scrolling
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = parseInt(entry.target.getAttribute('data-index')) - 1;
+                    updateCurrentSlide(idx);
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => observer.observe(slide));
+    </script>
+</body>
+</html>
