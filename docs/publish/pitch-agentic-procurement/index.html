@@ -1,0 +1,2523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finux Labs — Agentic Negotiator, Procurement Accelerator (15 Slides)</title>
+    <meta name="description" content="Finux Labs Pitch Deck — 15 Slides | Agentic Negotiator, Procurement Accelerator. Supplier cost assessment and pricing negotiation. C$550,000 pre-seed.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            /* Stage & Canvas */
+            --stage-bg: #0A0D18;
+            --canvas: #F7F8FF;
+            --canvas-card: #FFFFFF;
+            
+            /* Light Slide Ink & Typography */
+            --ink: #10142B;
+            --ink-sec: #2D3748;
+            --muted: #5A6578;
+            --muted-light: #8A96A8;
+            
+            /* Vibrant Brand & Accents */
+            --primary-purple: #6C5CE7;
+            --primary-purple-hover: #5646D8;
+            --lavender: #A29BFE;
+            --lavender-light: #F0EFFF;
+            --lavender-border: #D5D1FA;
+            --mint: #4ECCA3;
+            --mint-glow: #2ED573;
+            --mint-light: #E8F9F3;
+            --mint-border: #A3E9D2;
+            --sky: #45AAF2;
+            --cyan: #48DBFB;
+            --orange: #FFA502;
+            --lilac: #A55EEA;
+            
+            /* Lines & Borders */
+            --line: #DCE1EE;
+            --line-light: #EBEFF8;
+            --white: #FFFFFF;
+            
+            /* Dark Slide Theme Tokens (Slides 1, 8, 11, 15) */
+            --dark-bg: #10142B;
+            --dark-card: #161B37;
+            --dark-card-alt: #1D2348;
+            --dark-border: #262E52;
+            --dark-text: #FFFFFF;
+            --dark-muted: #A8B2C8;
+            --dark-sub: #7A8699;
+            --dark-teal: #132E35;
+            --dark-teal-border: #1E5E58;
+
+            --shadow-sm: 0 2px 8px rgba(16, 20, 43, 0.05);
+            --shadow-md: 0 4px 18px rgba(16, 20, 43, 0.08);
+            --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.35);
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --deck-max-width: 1120px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 68px;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--ink);
+            background: var(--stage-bg);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 60px;
+        }
+
+        /* Top Sticky Navbar */
+        .deck-navbar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: rgba(16, 20, 43, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: var(--shadow-dark);
+            padding: 8px 18px;
+        }
+
+        .navbar-content {
+            max-width: var(--deck-max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .brand-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand-downloads {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .hub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 4px;
+            background: #181E3B;
+            border: 1px solid #2B3566;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .hub-link:hover {
+            background: #252D56;
+            color: var(--mint);
+            border-color: var(--mint);
+        }
+
+        .deck-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            background: var(--primary-purple);
+            color: var(--white);
+            padding: 3px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .deck-title-text {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .nav-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: #181E3B;
+            border: 1px solid #2B3566;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .nav-pill-btn:hover {
+            background: #252D56;
+            color: var(--mint);
+            border-color: var(--mint);
+        }
+
+        .slide-dropdown {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #181E3B url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8B2C8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 8px center/12px;
+            border: 1px solid #2B3566;
+            color: #FFFFFF;
+            font-size: 0.80rem;
+            font-weight: 600;
+            padding: 5px 26px 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: none;
+            max-width: 230px;
+            transition: border-color 0.15s ease;
+        }
+
+        .slide-dropdown:focus {
+            border-color: var(--primary-purple);
+        }
+
+        .slide-counter {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--dark-muted);
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .nav-icon-btn {
+            background: #181E3B;
+            border: 1px solid #2B3566;
+            color: #FFFFFF;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.82rem;
+            transition: all 0.15s ease;
+        }
+
+        .nav-icon-btn:hover {
+            background: #252D56;
+            color: var(--mint);
+            border-color: var(--mint);
+        }
+
+        /* Presentation Container */
+        .presentation-deck {
+            width: 100%;
+            max-width: var(--deck-max-width);
+            margin: 24px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            padding: 0 16px;
+        }
+
+        /* Slide Canvas (Base Light Slide) */
+        .slide-canvas {
+            background: var(--canvas);
+            width: 100%;
+            box-sizing: border-box;
+            aspect-ratio: 16 / 9;
+            min-height: 560px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            position: relative;
+            padding: 36px 48px 24px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* Slide Header */
+        .slide-head {
+            margin-bottom: 18px;
+            width: 100%;
+        }
+
+        .slide-head .kicker {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .slide-head .title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.18;
+            margin-bottom: 5px;
+            letter-spacing: -0.015em;
+        }
+
+        .slide-head .subtitle {
+            font-size: 1.02rem;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* Slide Content Area */
+        .content-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            min-height: 0;
+        }
+
+        /* Slide Footer */
+        .slide-foot {
+            margin-top: 16px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        .foot-brand {
+            font-weight: 700;
+            color: var(--primary-purple);
+            letter-spacing: 0.05em;
+            font-size: 0.80rem;
+        }
+
+        .foot-note {
+            font-size: 0.74rem;
+            color: var(--muted);
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.3;
+        }
+
+        .foot-num {
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 0.82rem;
+            text-align: right;
+        }
+
+        /* ==================== DARK SLIDES (1, 8, 11, 15) ==================== */
+        .slide-dark {
+            background: var(--dark-bg);
+            border-color: var(--dark-border);
+            color: var(--dark-text);
+        }
+
+        .slide-dark .title {
+            color: #FFFFFF;
+        }
+
+        .slide-dark .subtitle {
+            color: var(--dark-muted);
+        }
+
+        .slide-dark .slide-foot {
+            border-top-color: #202747;
+            color: var(--dark-sub);
+        }
+
+        .slide-dark .foot-brand {
+            color: var(--dark-muted);
+        }
+
+        .slide-dark .foot-note {
+            color: var(--dark-sub);
+        }
+
+        .slide-dark .foot-num {
+            color: var(--dark-sub);
+        }
+
+        /* Tables */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .deck-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .deck-table th {
+            background: var(--primary-purple);
+            color: var(--white);
+            font-weight: 700;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+        }
+
+        .deck-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--line-light);
+            color: var(--ink);
+            line-height: 1.35;
+            vertical-align: top;
+        }
+
+        .deck-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .deck-table tr:hover td {
+            background: #F4F6FD;
+        }
+
+        .deck-table tr.total-row td {
+            font-weight: 800;
+            background: var(--mint-light);
+            border-top: 1.5px solid var(--mint);
+            color: var(--ink);
+        }
+
+        /* Dark Tables (Slide 11 & Slide 15) */
+        .slide-dark .deck-table {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+        }
+
+        .slide-dark .deck-table th {
+            background: var(--primary-purple);
+            color: #FFFFFF;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .slide-dark .deck-table td {
+            border-bottom: 1px solid var(--dark-border);
+            color: #FFFFFF;
+            background: var(--dark-card);
+        }
+
+        .slide-dark .deck-table tr:hover td {
+            background: var(--dark-card-alt);
+        }
+
+        .slide-dark .deck-table tr.total-row td {
+            background: var(--dark-teal);
+            border-top: 1.5px solid var(--dark-teal-border);
+            color: var(--mint);
+        }
+
+        /* Reusable Column Layouts */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .two-column-split {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 36px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Slide 1 Cover */
+        .slide-cover-canvas {
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            background: #10142B url('assets/slide_1_img_1.png') no-repeat right center / cover;
+        }
+
+        .cover-container {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        .cover-left {
+            padding: 48px 50px 36px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 2;
+            max-width: 58%;
+        }
+
+        .cover-brand-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        .cover-headline {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+
+        .cover-subheadline {
+            font-size: 1.18rem;
+            font-weight: 500;
+            color: var(--dark-muted);
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+
+        .cover-meta {
+            margin-top: auto;
+        }
+
+        .cover-raise-tag {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--mint);
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .cover-date-tag {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--dark-sub);
+        }
+
+        .cover-right-bg {
+            height: 100%;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Slide 2 Specifics */
+        .slide2-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .slide2-labels-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .actor-label {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .rounds-label {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            text-align: center;
+        }
+
+        .slide2-illustration {
+            max-width: 100%;
+            max-height: 310px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .slide-highlight-bottom {
+            font-size: 1.22rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-top: 6px;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Slide 3 Specifics */
+        .big-callout-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.2;
+            letter-spacing: -0.015em;
+            margin-bottom: 24px;
+        }
+
+        .stakeholder-tags {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .steps-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .step-item-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary-purple);
+            border-radius: 4px;
+            padding: 10px 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-item-card h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .step-item-card p {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* Slide 4 Process Grid */
+        .process-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .process-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--primary-purple);
+            border-radius: 4px;
+            padding: 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-num-badge {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            line-height: 1;
+        }
+
+        .process-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .process-card p {
+            font-size: 0.86rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* Slide 5 & 7 Product Mockup Slides */
+        .app-screenshot-frame {
+            width: 100%;
+            max-height: 340px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+        }
+
+        .app-screenshot-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .feature-bullets-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .feature-bullets-list li {
+            position: relative;
+            padding-left: 18px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+
+        .feature-bullets-list li::before {
+            content: "▪";
+            position: absolute;
+            left: 0;
+            color: var(--primary-purple);
+            font-size: 1.1rem;
+            top: -1px;
+        }
+
+        .pill-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-purple);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.86rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 4px;
+            width: fit-content;
+            transition: all 0.15s ease;
+        }
+
+        .pill-action-link:hover {
+            background: var(--primary-purple-hover);
+            box-shadow: 0 2px 8px rgba(108, 92, 231, 0.35);
+        }
+
+        .iris-highlight-box {
+            background: var(--lavender-light);
+            border: 1px solid var(--lavender-border);
+            border-radius: 4px;
+            padding: 12px 14px;
+            color: var(--primary-purple);
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 14px;
+        }
+
+        /* Slide 6 Stacked Bar Chart */
+        .chart-container-split {
+            display: grid;
+            grid-template-columns: 1.35fr 0.65fr;
+            gap: 32px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .bids-chart-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 20px 22px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .chart-row-item {
+            display: grid;
+            grid-template-columns: 90px 1fr 65px;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chart-row-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .chart-row-total {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        .stacked-bar-track {
+            height: 32px;
+            background: #EBEFF8;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            width: 100%;
+            position: relative;
+        }
+
+        .bar-seg {
+            height: 100%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        /* Updated Stacked Bar Colors from new PDF */
+        .bar-material { background: #6C5CE7; }
+        .bar-transport { background: #48DBFB; }
+        .bar-ordering { background: #45AAF2; }
+        .bar-cycle { background: #FFA502; }
+        .bar-safety { background: #A55EEA; }
+
+        .chart-legend-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            padding-top: 10px;
+            border-top: 1px solid var(--line-light);
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--muted);
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .chart-stats-callouts {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .stat-badge-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-val {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .stat-val.iris-color {
+            color: var(--primary-purple);
+        }
+
+        .stat-lbl {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* ==================== SLIDE 8 FLOWCHART (DARK THEME WITH AVATARS) ==================== */
+        .negotiation-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            margin: auto 0;
+        }
+
+        .flow-top-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+        }
+
+        .flow-agent-box {
+            background: var(--dark-card);
+            border: 1px solid #2B3566;
+            border-radius: 6px;
+            padding: 30px 20px 18px 20px;
+            box-shadow: var(--shadow-dark);
+            position: relative;
+            text-align: center;
+        }
+
+        .flow-avatar-wrapper {
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 56px;
+        }
+
+        .flow-avatar-top {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+        }
+
+        .flow-agent-box h3 {
+            font-size: 1.22rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .flow-agent-box p {
+            font-size: 0.88rem;
+            color: var(--dark-muted);
+            line-height: 1.35;
+        }
+
+        .flow-exchange-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 0 10px;
+            text-align: center;
+        }
+
+        .exchange-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #B8B0FF;
+        }
+
+        .exchange-arrow-graphic {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #B8B0FF;
+            font-size: 1.2rem;
+        }
+
+        .exchange-sub {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--dark-sub);
+        }
+
+        .flow-arrow-down {
+            color: var(--mint);
+            font-size: 1.35rem;
+            display: flex;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .flow-initial-agreement {
+            background: var(--dark-teal);
+            border: 1px solid var(--dark-teal-border);
+            border-radius: 6px;
+            padding: 12px 28px;
+            text-align: center;
+            width: 55%;
+        }
+
+        .flow-initial-agreement h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 2px;
+        }
+
+        .flow-initial-agreement p {
+            font-size: 0.88rem;
+            color: var(--dark-muted);
+        }
+
+        .flow-human-review-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .flow-human-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .flow-avatar-human {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .flow-human-pill {
+            background: var(--primary-purple);
+            color: #FFFFFF;
+            border-radius: 6px;
+            padding: 12px 36px;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(108, 92, 231, 0.35);
+            min-width: 320px;
+        }
+
+        .flow-human-pill h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            margin: 0;
+            color: #FFFFFF;
+        }
+
+        .flow-human-sub {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        /* Slide 9 Specifics */
+        .large-stat-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 5px solid var(--primary-purple);
+            border-radius: 4px;
+            padding: 22px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .giant-metric-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--ink);
+            line-height: 1;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .giant-metric-number.mint-variant {
+            color: var(--mint);
+        }
+
+        .stat-desc-lead {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.35;
+            margin-bottom: 12px;
+        }
+
+        .sub-breakdown-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            padding-top: 10px;
+            border-top: 1px solid var(--line-light);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .pill-chip {
+            background: var(--lavender-light);
+            color: var(--primary-purple);
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        /* Slide 11 Pilot / Sub Split (Dark Slide) */
+        .pricing-cards-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+
+        .pricing-box {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-top: 4px solid var(--mint);
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: var(--shadow-dark);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .pricing-box.lavender-accent {
+            border-top-color: var(--lavender);
+        }
+
+        .pricing-price-val {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: var(--mint);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .pricing-price-val.lavender-color {
+            color: var(--lavender);
+        }
+
+        .pricing-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .pricing-details {
+            font-size: 0.88rem;
+            color: var(--dark-muted);
+            line-height: 1.4;
+        }
+
+        .banner-highlight-bar {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        /* Slide 13 Architecture 6-Box Grid */
+        .arch-grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .arch-box {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 18px 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .arch-box.highlight-purple {
+            background: var(--primary-purple);
+            color: var(--white);
+            border-color: var(--primary-purple);
+        }
+
+        .arch-box.highlight-purple h4 {
+            color: var(--white);
+        }
+
+        .arch-box.highlight-purple p {
+            color: #E2E0FF;
+        }
+
+        .arch-box h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 4px;
+            line-height: 1.25;
+        }
+
+        .arch-box p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* Slide 14 Timeline */
+        .timeline-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .timeline-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--primary-purple);
+            border-radius: 4px;
+            padding: 12px 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .timeline-card h4 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary-purple);
+            margin-bottom: 3px;
+        }
+
+        .timeline-card p {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        /* ==================== SLIDE 15 (DARK THEME & USE OF FUNDS) ==================== */
+        .slide15-split {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 32px;
+            align-items: start;
+            width: 100%;
+        }
+
+        .slide-dark .large-stat-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-left: 5px solid var(--mint);
+        }
+
+        .slide-dark .large-stat-card .stat-desc-lead {
+            color: #FFFFFF;
+        }
+
+        .slide-dark .large-stat-card .stat-desc-lead span {
+            color: var(--dark-muted);
+        }
+
+        .dark-highlight-box {
+            background: rgba(162, 155, 254, 0.12);
+            border: 1px solid rgba(162, 155, 254, 0.35);
+            border-radius: 4px;
+            padding: 12px 14px;
+            color: #B8B0FF;
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            margin-top: 14px;
+        }
+
+        .slide15-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            table-layout: auto;
+        }
+
+        .slide15-table th,
+        .slide15-table td {
+            padding: 10px 14px;
+        }
+
+        .slide15-table th:last-child,
+        .slide15-table td:last-child {
+            text-align: right;
+            white-space: nowrap;
+            width: 110px;
+            padding-right: 16px;
+        }
+
+        /* ==================== RESPONSIVE MEDIA QUERIES ==================== */
+        @media (max-width: 880px) {
+            .deck-navbar {
+                padding: 8px 12px;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .nav-brand {
+                width: 100%;
+                justify-content: space-between;
+                gap: 8px;
+            }
+
+            .deck-title-text {
+                display: none;
+            }
+
+            .nav-actions {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .slide-dropdown {
+                flex: 1 1 0;
+                width: 0;
+                min-width: 0;
+            }
+
+            .presentation-deck {
+                margin: 14px auto;
+                padding: 0 10px;
+                gap: 18px;
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+
+            .slide-canvas {
+                aspect-ratio: auto;
+                min-height: auto;
+                padding: 24px 18px 16px 18px;
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .cover-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .cover-left {
+                padding: 24px 18px;
+            }
+
+            .cover-right-bg {
+                height: 220px;
+                width: 100%;
+                border-radius: 4px;
+                margin-top: 14px;
+            }
+
+            .content-body,
+            .two-column,
+            .two-column-split,
+            .slide15-split,
+            .chart-container-split {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                box-sizing: border-box !important;
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+
+            .slide15-table th,
+            .slide15-table td {
+                padding: 8px 12px;
+            }
+
+            .slide15-table th:last-child,
+            .slide15-table td:last-child {
+                width: 90px;
+                padding-right: 12px;
+            }
+
+            .process-cards-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .pricing-cards-split {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .arch-grid-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .flow-top-row {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+
+            .flow-exchange-center {
+                padding: 6px 0;
+            }
+
+            .flow-initial-agreement {
+                width: 100%;
+            }
+
+            .flow-human-pill {
+                min-width: 0;
+                padding: 10px 18px;
+            }
+
+            .slide2-labels-bar {
+                padding: 0;
+            }
+
+            .slide2-illustration {
+                max-height: 220px;
+            }
+
+            .bids-chart-card {
+                padding: 14px;
+            }
+
+            .chart-row-item {
+                grid-template-columns: 75px 1fr 55px;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            html {
+                scroll-padding-top: 92px;
+            }
+
+            .deck-navbar {
+                padding: 6px 8px;
+            }
+
+            .navbar-content {
+                width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+            }
+
+            .nav-brand {
+                width: 100%;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+                box-sizing: border-box;
+            }
+
+            .brand-left {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                min-width: 0;
+            }
+
+            .brand-downloads {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
+            .hub-link {
+                padding: 4px 7px;
+                font-size: 0.72rem;
+            }
+
+            .deck-badge {
+                font-size: 0.65rem;
+                padding: 2px 5px;
+            }
+
+            .nav-pill-btn {
+                font-size: 0.68rem;
+                padding: 3px 6px;
+            }
+
+            .nav-actions {
+                width: 100%;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                box-sizing: border-box;
+            }
+
+            .slide-dropdown {
+                flex: 1 1 0;
+                width: 0;
+                min-width: 0;
+                font-size: 0.72rem;
+                padding: 4px 20px 4px 6px;
+                height: 29px;
+            }
+
+            .slide-counter {
+                min-width: 36px;
+                font-size: 0.72rem;
+            }
+
+            .nav-icon-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.72rem;
+            }
+
+            .slide-canvas {
+                padding: 16px 14px 12px 14px;
+                border-radius: 2px;
+            }
+
+            .slide-head {
+                margin-bottom: 12px;
+            }
+
+            .slide-head .title {
+                font-size: 1.35rem;
+                line-height: 1.2;
+            }
+
+            .slide-head .subtitle {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+
+            .cover-brand-title {
+                font-size: 1.6rem;
+                margin-bottom: 14px;
+            }
+
+            .cover-headline {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+
+            .cover-subheadline {
+                font-size: 0.95rem;
+                margin-bottom: 16px;
+            }
+
+            .cover-raise-tag {
+                font-size: 1.15rem;
+            }
+
+            .cover-right-bg {
+                height: 180px;
+            }
+
+            .big-callout-text {
+                font-size: 1.45rem;
+                margin-bottom: 14px;
+            }
+
+            .giant-metric-number {
+                font-size: 2.6rem;
+            }
+
+            .actor-label {
+                font-size: 1.05rem;
+            }
+
+            .rounds-label {
+                font-size: 0.92rem;
+            }
+
+            .slide-highlight-bottom {
+                font-size: 0.98rem;
+            }
+
+            .process-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .arch-grid-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .chart-row-item {
+                grid-template-columns: 65px 1fr 48px;
+                gap: 6px;
+            }
+
+            .chart-row-label {
+                font-size: 0.78rem;
+            }
+
+            .chart-row-total {
+                font-size: 0.76rem;
+            }
+
+            .stacked-bar-track {
+                height: 24px;
+            }
+
+            .chart-legend-row {
+                font-size: 0.68rem;
+                gap: 8px 12px;
+            }
+
+            .deck-table th,
+            .deck-table td {
+                padding: 7px 8px;
+                font-size: 0.78rem;
+            }
+
+            .slide15-table th:last-child,
+            .slide15-table td:last-child {
+                width: 75px;
+                padding-right: 8px;
+            }
+
+            .flow-avatar-human {
+                width: 40px;
+                height: 40px;
+            }
+
+            .flow-human-pill h3 {
+                font-size: 1.05rem;
+            }
+
+            .slide-foot {
+                margin-top: 12px;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-align: center;
+            }
+
+            .foot-note {
+                max-width: 100%;
+                font-size: 0.70rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="deck-navbar">
+        <div class="navbar-content">
+            <div class="nav-brand">
+                <div class="brand-left">
+                    <a href="../../index.html" class="hub-link" title="Return to Portal Hub">
+                        <i class="fa-solid fa-arrow-left"></i> Hub
+                    </a>
+                    <span class="deck-badge">Procurement AI</span>
+                    <span class="deck-title-text">Agentic Negotiator, Procurement Accelerator (15 Slides)</span>
+                </div>
+                <div class="brand-downloads">
+                    <a href="Finux-Labs-Procurement-AI-Pitch-15-Slides.pptx" download class="nav-pill-btn" title="Download PPTX">
+                        <i class="fa-solid fa-file-powerpoint"></i> PPTX
+                    </a>
+                    <a href="Finux-Labs-Procurement-AI-Pitch-15-Slides.pdf" download class="nav-pill-btn" title="Download PDF">
+                        <i class="fa-solid fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <select class="slide-dropdown" id="slideSelect" aria-label="Jump to slide">
+                    <option value="slide-1">01: Title / Overview</option>
+                    <option value="slide-2">02: Price Negotiation Complexity</option>
+                    <option value="slide-3">03: Coordination Costs</option>
+                    <option value="slide-4">04: Decision Assistant</option>
+                    <option value="slide-5">05: Supplier Cost Explorer</option>
+                    <option value="slide-6">06: ABC Cost Assessment</option>
+                    <option value="slide-7">07: Finance Decision Intelligence</option>
+                    <option value="slide-8">08: Dual-Agent Negotiation</option>
+                    <option value="slide-9">09: Canadian Entry Market</option>
+                    <option value="slide-10">10: Market Positioning</option>
+                    <option value="slide-11">11: Pricing & Economics</option>
+                    <option value="slide-12">12: Paid Pilot Validation</option>
+                    <option value="slide-13">13: Decision Evidence</option>
+                    <option value="slide-14">14: Founder & Execution</option>
+                    <option value="slide-15">15: 18-Month Plan</option>
+                </select>
+                <button class="nav-icon-btn" id="prevSlide" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+                <span class="slide-counter" id="slideCounter">1 / 15</span>
+                <button class="nav-icon-btn" id="nextSlide" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Deck Container -->
+    <main class="presentation-deck">
+
+        <!-- ==================== SLIDE 1 (DARK THEME) ==================== -->
+        <section class="slide-canvas slide-cover-canvas slide-dark" id="slide-1" data-index="1">
+            <div class="cover-container">
+                <div class="cover-left">
+                    <div>
+                        <div class="cover-brand-title">Finux Labs</div>
+                        <h1 class="cover-headline">Agentic Negotiator,<br>Procurement<br>Accelerator</h1>
+                        <p class="cover-subheadline">Supplier cost assessment and pricing negotiation</p>
+                    </div>
+                    <div class="cover-meta">
+                        <div class="cover-raise-tag">C$550,000 pre-seed</div>
+                        <div class="cover-date-tag">October 2026</div>
+                    </div>
+                </div>
+                <div class="cover-right-bg" style="background-image: url('assets/slide_1_img_1.png');"></div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 2 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-2" data-index="2">
+            <div class="slide-head">
+                <h2 class="title">The complexity of price negotiation</h2>
+                <div class="subtitle">Price, volume, freight and delivery terms can trigger repeated offers and counteroffers</div>
+            </div>
+
+            <div class="content-body">
+                <div class="slide2-container">
+                    <div class="slide2-labels-bar">
+                        <span class="actor-label"><i class="fa-solid fa-building"></i> Buyer</span>
+                        <span class="rounds-label"><i class="fa-solid fa-arrows-rotate"></i> Offers and counteroffers</span>
+                        <span class="actor-label"><i class="fa-solid fa-warehouse"></i> Supplier</span>
+                    </div>
+                    <img src="assets/slide_2_img_1.png" alt="Buyer and Supplier repeated negotiation offers and counteroffers" class="slide2-illustration">
+                    <div class="slide-highlight-bottom">
+                        Each revision can trigger another quote, cost calculation and approval.
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Finux Labs Pitch Deck · Confidential</div>
+                <div class="foot-num">02</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 3 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-3" data-index="3">
+            <div class="slide-head">
+                <h2 class="title">Repeated pricing rounds take time</h2>
+                <div class="subtitle">Initial customer hypothesis: manufacturers and distributors with 20–499 employees</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column">
+                    <div>
+                        <div class="big-callout-text">
+                            Each pricing round adds time and coordination cost
+                        </div>
+                        <div class="stakeholder-tags">
+                            <strong>Buyer:</strong> procurement manager<br>
+                            <strong>Partner:</strong> finance and operations
+                        </div>
+                    </div>
+
+                    <div class="steps-stack">
+                        <div class="step-item-card">
+                            <h4>Pricing rounds</h4>
+                            <p>Repeated offers and clarifications stretch time to agreement.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Coordination</h4>
+                            <p>Teams reconcile price, volume, freight and delivery terms.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Rework</h4>
+                            <p>Revised quotes trigger new comparisons and internal reviews.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Approval</h4>
+                            <p>Decision makers need clear terms and a traceable agreement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Finux Labs Pitch Deck · Confidential</div>
+                <div class="foot-num">03</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 4 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-4" data-index="4">
+            <div class="slide-head">
+                <h2 class="title">The procurement decision assistant</h2>
+                <div class="subtitle">Proposed workflow: agents initiate preliminary terms, then people review the agreement</div>
+            </div>
+
+            <div class="content-body">
+                <div class="process-cards-grid">
+                    <div class="process-card">
+                        <div class="step-num-badge">01</div>
+                        <h3>Set the strategy</h3>
+                        <p>Define demand, service targets, budget and sourcing constraints.</p>
+                    </div>
+                    <div class="process-card">
+                        <div class="step-num-badge">02</div>
+                        <h3>Compare the bids</h3>
+                        <p>Normalize supplier terms and calculate total annual cost.</p>
+                    </div>
+                    <div class="process-card">
+                        <div class="step-num-badge">03</div>
+                        <h3>Agents negotiate</h3>
+                        <p>Buyer and Supplier Agents exchange offers within agreed limits.</p>
+                    </div>
+                    <div class="process-card">
+                        <div class="step-num-badge">04</div>
+                        <h3>People decide</h3>
+                        <p>Review initial terms, refine details or approve the agreement.</p>
+                    </div>
+                </div>
+
+                <div class="iris-highlight-box" style="text-align: center;">
+                    Agents propose the initial agreement. People review details and approve final terms.
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Finux Labs Pitch Deck · Confidential</div>
+                <div class="foot-num">04</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 5 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-5" data-index="5">
+            <div class="slide-head">
+                <h2 class="title">Supplier Cost Explorer</h2>
+                <div class="subtitle">Working alpha for transparent supplier cost assessment</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column-split">
+                    <div class="app-screenshot-frame">
+                        <img src="assets/slide_5_img_1.jpg" alt="Supplier Cost Explorer Alpha Tool Screenshot">
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: var(--primary-purple); margin-bottom: 8px;">
+                            Alpha capabilities
+                        </div>
+                        <ul class="feature-bullets-list">
+                            <li>Buyer and supplier input editors</li>
+                            <li>Five annual cost components</li>
+                            <li>Live rankings and scenarios</li>
+                            <li>Worked formulas and CSV export</li>
+                        </ul>
+                        <a href="https://sourcing-alpha.connextium.xyz" target="_blank" rel="noopener" class="pill-action-link">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> sourcing-alpha.connextium.xyz
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">ABC Electronics illustrative case, USD. Demonstration data. Alpha status does not establish commercial traction.</div>
+                <div class="foot-num">05</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 6 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-6" data-index="6">
+            <div class="slide-head">
+                <h2 class="title">The ABC Electronics cost assessment</h2>
+                <div class="subtitle">Three supplier bids evaluated on the same demand and service assumptions</div>
+            </div>
+
+            <div class="content-body">
+                <div class="chart-container-split">
+                    <div class="bids-chart-card">
+                        <!-- Supplier 3 -->
+                        <div class="chart-row-item">
+                            <span class="chart-row-label">Supplier 3</span>
+                            <div class="stacked-bar-track" title="Supplier 3 Total: $117,884">
+                                <div class="bar-seg bar-material" style="width: 53.6%;" title="Material: $68,640"></div>
+                                <div class="bar-seg bar-transport" style="width: 35.3%;" title="Transport: $45,240"></div>
+                                <div class="bar-seg bar-ordering" style="width: 2.0%;" title="Ordering: $2,600"></div>
+                                <div class="bar-seg bar-cycle" style="width: 0.3%;" title="Cycle carrying: $436"></div>
+                                <div class="bar-seg bar-safety" style="width: 0.8%;" title="Safety stock: $969"></div>
+                            </div>
+                            <span class="chart-row-total">$117.9k</span>
+                        </div>
+
+                        <!-- Supplier 2 (Lowest) -->
+                        <div class="chart-row-item">
+                            <span class="chart-row-label" style="color: var(--primary-purple); font-weight: 800;">Supplier 2</span>
+                            <div class="stacked-bar-track" style="border: 2px solid var(--primary-purple);" title="Supplier 2 Lowest: $98,777">
+                                <div class="bar-seg bar-material" style="width: 47.8%;" title="Material: $61,152"></div>
+                                <div class="bar-seg bar-transport" style="width: 26.8%;" title="Transport: $34,320"></div>
+                                <div class="bar-seg bar-ordering" style="width: 0.7%;" title="Ordering: $936"></div>
+                                <div class="bar-seg bar-cycle" style="width: 0.8%;" title="Cycle carrying: $1,078"></div>
+                                <div class="bar-seg bar-safety" style="width: 1.0%;" title="Safety stock: $1,291"></div>
+                            </div>
+                            <span class="chart-row-total" style="color: var(--primary-purple); font-weight: 800;">$98.8k</span>
+                        </div>
+
+                        <!-- Supplier 1 -->
+                        <div class="chart-row-item">
+                            <span class="chart-row-label">Supplier 1</span>
+                            <div class="stacked-bar-track" title="Supplier 1 Total: $128,028">
+                                <div class="bar-seg bar-material" style="width: 60.9%;" title="Material: $78,000"></div>
+                                <div class="bar-seg bar-transport" style="width: 35.3%;" title="Transport: $45,240"></div>
+                                <div class="bar-seg bar-ordering" style="width: 3.0%;" title="Ordering: $3,900"></div>
+                                <div class="bar-seg bar-cycle" style="width: 0.3%;" title="Cycle carrying: $330"></div>
+                                <div class="bar-seg bar-safety" style="width: 0.4%;" title="Safety stock: $558"></div>
+                            </div>
+                            <span class="chart-row-total">$128.0k</span>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="chart-legend-row">
+                            <div class="legend-item"><span class="legend-color-box bar-material"></span> Material</div>
+                            <div class="legend-item"><span class="legend-color-box bar-transport"></span> Transport</div>
+                            <div class="legend-item"><span class="legend-color-box bar-ordering"></span> Ordering</div>
+                            <div class="legend-item"><span class="legend-color-box bar-cycle"></span> Cycle carrying</div>
+                            <div class="legend-item"><span class="legend-color-box bar-safety"></span> Safety stock</div>
+                        </div>
+                    </div>
+
+                    <!-- Callouts -->
+                    <div class="chart-stats-callouts">
+                        <div class="stat-badge-group">
+                            <div class="stat-val">US$98,777</div>
+                            <div class="stat-lbl"><strong>Supplier 2</strong><br>lowest modeled annual cost</div>
+                        </div>
+                        <div class="stat-badge-group">
+                            <div class="stat-val iris-color">US$19,108</div>
+                            <div class="stat-lbl">below Supplier 3 with more inventory and a longer mean lead time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Illustrative annual costs in USD. 52 weeks, 95% cycle service, price-only inventory value. Supplier 3 freight: $7.25/100 lb.</div>
+                <div class="foot-num">06</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 7 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-7" data-index="7">
+            <div class="slide-head">
+                <h2 class="title">Finance Decision Intelligence</h2>
+                <div class="subtitle">Working alpha for financial visibility and supplier payment planning</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column-split">
+                    <div class="app-screenshot-frame">
+                        <img src="assets/slide_7_img_1.jpg" alt="Finance Decision Intelligence (FDI) Alpha Tool Screenshot">
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: var(--primary-purple); margin-bottom: 8px;">
+                            Alpha capabilities
+                        </div>
+                        <ul class="feature-bullets-list">
+                            <li>Financial KPIs and reports</li>
+                            <li>Cash forecasts and payables</li>
+                            <li>Validated CSV imports</li>
+                        </ul>
+                        <div class="iris-highlight-box">
+                            Planned connection: sourcing scenarios in cash planning.
+                        </div>
+                        <a href="https://fdi-alpha.connextium.xyz" target="_blank" rel="noopener" class="pill-action-link">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> fdi-alpha.connextium.xyz
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Actual guest sample workspace. Displayed financial values are USD demonstration data, not Finux Labs results.</div>
+                <div class="foot-num">07</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 8 (DARK THEME WITH 4 AVATARS) ==================== -->
+        <section class="slide-canvas slide-dark" id="slide-8" data-index="8">
+            <div class="slide-head">
+                <h2 class="title">Buyer and supplier agents negotiate first</h2>
+                <div class="subtitle">Proposed capability: preliminary pricing agreement with a human decision at the end</div>
+            </div>
+
+            <div class="content-body">
+                <div class="negotiation-flowchart">
+                    <!-- Top Row: Buyer & Supplier Agents with Robot Avatars -->
+                    <div class="flow-top-row">
+                        <div class="flow-agent-box">
+                            <div class="flow-avatar-wrapper">
+                                <img src="assets/avatar_robot_buyer.png" alt="Buyer Procuring Agent Avatar" class="flow-avatar-top">
+                            </div>
+                            <h3>Buyer Procuring Agent</h3>
+                            <p>Target cost, demand, volume and service constraints</p>
+                        </div>
+                        <div class="flow-exchange-center">
+                            <div class="exchange-title">Offer / counteroffer</div>
+                            <div class="exchange-arrow-graphic">
+                                <i class="fa-solid fa-arrow-left-long"></i>
+                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </div>
+                            <div class="exchange-sub">Within authorized limits</div>
+                        </div>
+                        <div class="flow-agent-box">
+                            <div class="flow-avatar-wrapper">
+                                <img src="assets/avatar_robot_supplier.png" alt="Supplier Agent Avatar" class="flow-avatar-top">
+                            </div>
+                            <h3>Supplier Agent</h3>
+                            <p>Price bounds, capacity, freight and delivery limits</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                    <!-- Middle: Initial Agreement -->
+                    <div class="flow-initial-agreement">
+                        <h4>Initial agreement</h4>
+                        <p>Proposed pricing and terms</p>
+                    </div>
+
+                    <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                    <!-- Bottom: Human Decision Flanked by Avatars -->
+                    <div class="flow-human-review-container">
+                        <div class="flow-human-row">
+                            <img src="assets/avatar_human_male.png" alt="Human Reviewer Male Avatar" class="flow-avatar-human">
+                            <div class="flow-human-pill">
+                                <h3>Human review and decision</h3>
+                            </div>
+                            <img src="assets/avatar_human_female.png" alt="Human Reviewer Female Avatar" class="flow-avatar-human">
+                        </div>
+                        <div class="flow-human-sub">Review details, revise or approve</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Roadmap capability. Agents propose terms. Authorized people review, refine or approve the final agreement.</div>
+                <div class="foot-num">08</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 9 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-9" data-index="9">
+            <div class="slide-head">
+                <h2 class="title">A focused Canadian entry market</h2>
+                <div class="subtitle">Manufacturing and wholesale SMEs provide a starting universe, not a qualified customer list</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column">
+                    <div class="large-stat-card">
+                        <div class="giant-metric-number">85,785</div>
+                        <div class="stat-desc-lead">Canadian manufacturing and wholesale businesses with 1–499 employees</div>
+                        <div class="sub-breakdown-row">
+                            <span><strong style="color: var(--ink);">46,793</strong> manufacturing SMEs</span>
+                            <span><strong style="color: var(--ink);">38,992</strong> wholesale SMEs</span>
+                        </div>
+                    </div>
+
+                    <div class="large-stat-card" style="border-left-color: var(--mint);">
+                        <div style="font-size: 0.95rem; font-weight: 800; color: var(--primary-purple); margin-bottom: 8px;">
+                            Illustrative addressable model
+                        </div>
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 4px;">
+                            5% meet the initial profile ≈ 4,289 potential accounts
+                        </div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary-purple); margin-bottom: 8px;">
+                            C$1,500 annual subscription ≈ C$6.4m / year
+                        </div>
+                        <div style="font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line-light); padding-top: 6px;">
+                            Annual-plan subscription scenario. Usage fees remain unmodeled.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">ISED, Key Small Business Statistics 2025, December 2024 counts. Fit rate and subscription value below are planning assumptions.</div>
+                <div class="foot-num">09</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 10 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-10" data-index="10">
+            <div class="slide-head">
+                <h2 class="title">A focused position in an active market</h2>
+                <div class="subtitle">Proposed focus: agent negotiation with traceable costs and a human approval step</div>
+            </div>
+
+            <div class="content-body">
+                <div class="table-responsive">
+                    <table class="deck-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 24%;">Alternative</th>
+                                <th style="width: 38%;">Established strength</th>
+                                <th style="width: 38%;">Finux Labs’ proposed focus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Excel and Copilot</strong></td>
+                                <td>Flexible analysis inside familiar workbooks</td>
+                                <td>A consistent supplier cost model with traceable assumptions</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SAP Ariba</strong></td>
+                                <td>Broad sourcing workflow and AI agent capabilities</td>
+                                <td>A narrow entry workflow for smaller procurement teams</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fairmarkit</strong></td>
+                                <td>Automation for repetitive sourcing events</td>
+                                <td>Inventory, freight and cash trade-offs in buyer preparation</td>
+                            </tr>
+                            <tr style="background: #F0EFFF;">
+                                <td style="color: var(--primary-purple); font-weight: 800;">Finux Labs</td>
+                                <td><strong>Two working alpha tools</strong></td>
+                                <td><strong>Agent negotiation with human review and finance checks</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Competitor scope reflects official descriptions. Finux Labs’ dual-agent negotiation and finance connection remain planned.</div>
+                <div class="foot-num">10</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 11 (DARK THEME) ==================== -->
+        <section class="slide-canvas slide-dark" id="slide-11" data-index="11">
+            <div class="slide-head">
+                <h2 class="title">Subscription and transaction fees to validate</h2>
+                <div class="subtitle">Base pricing plus transaction-count and transaction-value fee options</div>
+            </div>
+
+            <div class="content-body">
+                <div class="pricing-cards-split">
+                    <div class="pricing-box">
+                        <div class="pricing-price-val">C$1,200</div>
+                        <div class="pricing-title">8-week paid pilot</div>
+                        <div class="pricing-details">
+                            One purchasing category · A scoped negotiation and outcome review
+                        </div>
+                    </div>
+                    <div class="pricing-box lavender-accent">
+                        <div class="pricing-price-val lavender-color">C$1,500 / year</div>
+                        <div class="pricing-title">or C$150 / month</div>
+                        <div class="pricing-details">
+                            Workspace subscription
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="deck-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 28%;">Usage fee basis</th>
+                                <th style="width: 38%;">Calculation</th>
+                                <th style="width: 34%;">Pricing status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Transaction count</strong></td>
+                                <td>Completed transactions × fee</td>
+                                <td>Per-transaction fee to validate</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Transaction value</strong></td>
+                                <td>Approved value × agreed rate</td>
+                                <td>Value-based rate to validate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="banner-highlight-bar">
+                    50 annual plans = C$75,000 subscription ARR
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">All prices CAD. Usage rates and whether fees combine remain to validate. Pilot fees do not count as subscription ARR.</div>
+                <div class="foot-num">11</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 12 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-12" data-index="12">
+            <div class="slide-head">
+                <h2 class="title">Three paid pilots establish the first proof</h2>
+                <div class="subtitle">A founder-led entry through Canadian manufacturing and distribution networks</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column">
+                    <div class="large-stat-card">
+                        <div class="giant-metric-number" style="color: var(--primary-purple);">3</div>
+                        <div class="stat-desc-lead">paid Canadian pilots targeted within 18 months</div>
+                        <div style="font-size: 0.88rem; color: var(--muted); line-height: 1.4; border-top: 1px solid var(--line-light); padding-top: 8px;">
+                            Pilot scope: one buyer, a willing supplier, one category and a finance reviewer.
+                        </div>
+                    </div>
+
+                    <div class="steps-stack">
+                        <div class="step-item-card">
+                            <h4>Recruit</h4>
+                            <p>Founder outreach to buyers and ERP advisors.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Run</h4>
+                            <p>Real quotations and agent limits. A buyer-approved baseline.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Measure</h4>
+                            <p>Pricing rounds and staff time. Finance-verified outcomes.</p>
+                        </div>
+                        <div class="step-item-card">
+                            <h4>Convert</h4>
+                            <p>Paid renewals and references. A repeatable onboarding process.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Finux Labs Pitch Deck · Confidential</div>
+                <div class="foot-num">12</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 13 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-13" data-index="13">
+            <div class="slide-head">
+                <h2 class="title">The evidence behind each decision</h2>
+                <div class="subtitle">Proposed agent negotiation with deterministic cost checks and human approval</div>
+            </div>
+
+            <div class="content-body">
+                <div class="arch-grid-container">
+                    <div class="arch-box">
+                        <h4>Quotations and mandates</h4>
+                        <p>Source-linked inputs</p>
+                    </div>
+                    <div class="arch-box">
+                        <h4>Buyer / Supplier Agents</h4>
+                        <p>Mandate-bound negotiation</p>
+                    </div>
+                    <div class="arch-box">
+                        <h4>Cost engine</h4>
+                        <p>Verified calculations</p>
+                    </div>
+                    <div class="arch-box">
+                        <h4>Initial agreement</h4>
+                        <p>Human review and approval</p>
+                    </div>
+                    <div class="arch-box highlight-purple">
+                        <h4>Human review and approval</h4>
+                        <p>Authorized final decision</p>
+                    </div>
+                    <div class="arch-box">
+                        <h4>Finance impact</h4>
+                        <p>Cash and payment scenarios</p>
+                    </div>
+                </div>
+
+                <div class="iris-highlight-box" style="margin-top: 6px; text-align: center;">
+                    Approved terms and records · ERP integration roadmap
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Potential defensibility: approved term histories, cost-model coverage and measurable customer outcomes.</div>
+                <div class="foot-num">13</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 14 (LIGHT THEME) ==================== -->
+        <section class="slide-canvas" id="slide-14" data-index="14">
+            <div class="slide-head">
+                <h2 class="title">Founder experience and execution plan</h2>
+                <div class="subtitle">Ju He (Terence), founder and builder</div>
+            </div>
+
+            <div class="content-body">
+                <div class="two-column">
+                    <div class="large-stat-card">
+                        <div class="giant-metric-number" style="color: var(--primary-purple);">10+ years</div>
+                        <div class="stat-desc-lead">Enterprise application development and integration across banking, finance, insurance and e-commerce</div>
+                        <div class="sub-breakdown-row">
+                            <span class="pill-chip">Payments & Workflows</span>
+                            <span class="pill-chip">Java · Python · React</span>
+                            <span class="pill-chip">B.C.-based development</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-stack">
+                        <div class="timeline-card">
+                            <h4>Months 1–6</h4>
+                            <p>Quotation extraction and review · Reproducible cost comparisons</p>
+                        </div>
+                        <div class="timeline-card">
+                            <h4>Months 7–12</h4>
+                            <p>Buyer and Supplier Agent negotiation · Human review and first paid pilots</p>
+                        </div>
+                        <div class="timeline-card">
+                            <h4>Months 13–18</h4>
+                            <p>Three paid pilots and renewal tests · Initial recurring revenue target</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Finux Labs Pitch Deck · Confidential</div>
+                <div class="foot-num">14</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 15 (DARK THEME) ==================== -->
+        <section class="slide-canvas slide-dark" id="slide-15" data-index="15">
+            <div class="slide-head">
+                <h2 class="title">An 18-month plan for C$550,000</h2>
+                <div class="subtitle">An 18-month pre-seed plan for agent-assisted negotiation and three paid Canadian pilots</div>
+            </div>
+
+            <div class="content-body">
+                <div class="slide15-split">
+                    <div class="large-stat-card">
+                        <div class="giant-metric-number mint-variant">C$550k</div>
+                        <div class="stat-desc-lead">18 months · <span>≈C$30,600 monthly budget</span></div>
+                        <div class="dark-highlight-box">
+                            Target: three paid pilots and initial recurring revenue.
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="deck-table slide15-table">
+                            <thead>
+                                <tr>
+                                    <th>Use of funds</th>
+                                    <th style="text-align: right;">C$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Founder and engineering</td>
+                                    <td style="text-align: right; font-weight: 600;">330,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Procurement and pilots</td>
+                                    <td style="text-align: right; font-weight: 600;">45,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Cloud, AI and tools</td>
+                                    <td style="text-align: right; font-weight: 600;">30,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Customer acquisition</td>
+                                    <td style="text-align: right; font-weight: 600;">50,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Legal and security</td>
+                                    <td style="text-align: right; font-weight: 600;">25,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Contingency</td>
+                                    <td style="text-align: right; font-weight: 600;">70,000</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total</td>
+                                    <td style="text-align: right; font-weight: 800;">550,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">Finux Labs</div>
+                <div class="foot-note">Government R&D support may extend runway, subject to eligibility and approval. The base plan excludes unapproved assistance.</div>
+                <div class="foot-num">15</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive Navigation Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide-canvas');
+            const select = document.getElementById('slideSelect');
+            const counter = document.getElementById('slideCounter');
+            const prevBtn = document.getElementById('prevSlide');
+            const nextBtn = document.getElementById('nextSlide');
+            const totalSlides = slides.length;
+
+            let currentSlideIndex = 1;
+
+            // Scroll spy using IntersectionObserver
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const idx = parseInt(entry.target.getAttribute('data-index'));
+                        currentSlideIndex = idx;
+                        updateControls(idx);
+                    }
+                });
+            }, {
+                threshold: 0.35
+            });
+
+            slides.forEach(slide => observer.observe(slide));
+
+            function updateControls(idx) {
+                if (counter) counter.textContent = `${idx} / ${totalSlides}`;
+                if (select) select.value = `slide-${idx}`;
+            }
+
+            function scrollToSlide(idx) {
+                if (idx < 1) idx = 1;
+                if (idx > totalSlides) idx = totalSlides;
+                const target = document.getElementById(`slide-${idx}`);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            if (select) {
+                select.addEventListener('change', (e) => {
+                    const id = e.target.value;
+                    const target = document.getElementById(id);
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    scrollToSlide(currentSlideIndex - 1);
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    scrollToSlide(currentSlideIndex + 1);
+                });
+            }
+
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+                if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollToSlide(currentSlideIndex + 1);
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    scrollToSlide(currentSlideIndex - 1);
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    scrollToSlide(1);
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    scrollToSlide(totalSlides);
+                }
+            });
+
+            // Auto-scroll on initial load for URL hash or ?slide= parameter
+            const hash = window.location.hash;
+            const urlParams = new URLSearchParams(window.location.search);
+            const slideParam = urlParams.get('slide');
+            if (slideParam) {
+                const target = document.getElementById(`slide-${slideParam}`);
+                if (target) {
+                    window.scrollTo(0, target.offsetTop - 60);
+                }
+            } else if (hash && hash.startsWith('#slide-')) {
+                const target = document.getElementById(hash.substring(1));
+                if (target) {
+                    window.scrollTo(0, target.offsetTop - 60);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
