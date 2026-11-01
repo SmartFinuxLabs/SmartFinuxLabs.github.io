@@ -1241,6 +1241,82 @@
             line-height: 1.35;
         }
 
+        /* Slide 14 Layout & Dedicated QR Spotlight */
+        .slide14-layout-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1.15fr 0.85fr;
+            gap: 20px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .qr-spotlight-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-top: 4px solid var(--primary-purple);
+            border-radius: 6px;
+            padding: 18px 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .qr-spotlight-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .qr-spotlight-img {
+            width: 154px;
+            height: 154px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 6px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(16, 20, 43, 0.08);
+            display: block;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .qr-spotlight-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(108, 92, 231, 0.2);
+        }
+
+        .qr-spotlight-sub {
+            font-size: 0.80rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        .qr-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--primary-purple);
+            color: #FFFFFF !important;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 4px;
+            width: 100%;
+            transition: background 0.15s ease;
+        }
+
+        .qr-pill-btn:hover {
+            background: var(--primary-purple-hover);
+        }
+
         /* ==================== SLIDE 15 (DARK THEME & USE OF FUNDS) ==================== */
         .slide15-split {
             display: grid;
@@ -1372,6 +1448,7 @@
             .content-body,
             .two-column,
             .two-column-split,
+            .slide14-layout-grid,
             .slide15-split,
             .chart-container-split {
                 width: 100% !important;
@@ -1380,6 +1457,11 @@
                 box-sizing: border-box !important;
                 grid-template-columns: 1fr !important;
                 gap: 20px !important;
+            }
+
+            .qr-spotlight-img {
+                width: 160px;
+                height: 160px;
             }
 
             .slide15-table th,
@@ -2319,34 +2401,26 @@
             </div>
 
             <div class="content-body">
-                <div class="two-column">
-                    <div class="large-stat-card">
-                        <div class="giant-metric-number" style="color: var(--primary-purple);">10+ years</div>
-                        <div class="stat-desc-lead">Enterprise application development and integration across banking, finance, insurance and e-commerce</div>
-                        <div class="sub-breakdown-row">
-                            <span class="pill-chip">Payments & Workflows</span>
-                            <span class="pill-chip">Java · Python · React</span>
-                            <span class="pill-chip">B.C.-based development</span>
+                <div class="slide14-layout-grid">
+                    <!-- Col 1: Founder Experience -->
+                    <div class="large-stat-card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div class="giant-metric-number" style="color: var(--primary-purple); font-size: 3rem;">10+ years</div>
+                            <div class="stat-desc-lead" style="font-size: 0.96rem;">Enterprise application development and integration across banking, finance, insurance and e-commerce</div>
+                            <div class="sub-breakdown-row" style="margin-bottom: 12px;">
+                                <span class="pill-chip">Payments & Workflows</span>
+                                <span class="pill-chip">Java · Python · React</span>
+                                <span class="pill-chip">B.C.-based development</span>
+                            </div>
                         </div>
-                        <div class="founder-contact-row" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-light); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-                            <div style="display: flex; flex-direction: column; gap: 6px;">
-                                <div style="font-size: 0.90rem; color: var(--ink);">
-                                    <span style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-envelope" style="color: var(--primary-purple);"></i> Contact:</span>
-                                    <a href="mailto:juhe.terence@gmail.com" style="color: var(--primary-purple); font-weight: 700; text-decoration: none;">juhe.terence@gmail.com</a>
-                                </div>
-                                <div style="font-size: 0.78rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px;">
-                                    <i class="fa-solid fa-qrcode" style="color: var(--primary-purple);"></i> Scan 2-D barcode for pitch deck
-                                </div>
-                            </div>
-                            <div class="qr-code-wrapper" style="flex-shrink: 0; text-align: center;">
-                                <a href="https://finuxlabs.github.io/publish/pitch-agentic-procurement/" target="_blank" rel="noopener" title="Scan or click to open live pitch deck" style="display: block;">
-                                    <img src="assets/qrcode_pitch.png" alt="2-D Barcode for https://finuxlabs.github.io/publish/pitch-agentic-procurement/" style="width: 76px; height: 76px; border: 1px solid var(--line); border-radius: 4px; padding: 2px; background: #FFFFFF; display: block; box-shadow: var(--shadow-sm);">
-                                </a>
-                            </div>
+                        <div style="padding-top: 10px; border-top: 1px solid var(--line-light); font-size: 0.88rem; color: var(--ink);">
+                            <span style="font-weight: 700;"><i class="fa-solid fa-envelope" style="color: var(--primary-purple); margin-right: 4px;"></i> Contact:</span>
+                            <a href="mailto:juhe.terence@gmail.com" style="color: var(--primary-purple); font-weight: 700; text-decoration: none;">juhe.terence@gmail.com</a>
                         </div>
                     </div>
 
-                    <div class="timeline-stack">
+                    <!-- Col 2: Execution Roadmap -->
+                    <div class="timeline-stack" style="height: 100%; justify-content: space-between;">
                         <div class="timeline-card">
                             <h4>Months 1–6</h4>
                             <p>Quotation extraction and review · Reproducible cost comparisons</p>
@@ -2359,6 +2433,20 @@
                             <h4>Months 13–18</h4>
                             <p>Three paid pilots and renewal tests · Initial recurring revenue target</p>
                         </div>
+                    </div>
+
+                    <!-- Col 3: Dedicated Barcode Block -->
+                    <div class="qr-spotlight-card">
+                        <div class="qr-spotlight-title">
+                            <i class="fa-solid fa-qrcode" style="color: var(--primary-purple);"></i> Live Pitch Deck
+                        </div>
+                        <a href="https://finuxlabs.github.io/publish/pitch-agentic-procurement/" target="_blank" rel="noopener" title="Scan or click to open live deck">
+                            <img src="assets/qrcode_pitch.png" alt="2-D Barcode for Live Pitch Deck" class="qr-spotlight-img">
+                        </a>
+                        <div class="qr-spotlight-sub">Scan camera or tap below to view presentation</div>
+                        <a href="https://finuxlabs.github.io/publish/pitch-agentic-procurement/" target="_blank" rel="noopener" class="qr-pill-btn">
+                            <span>Open Online Deck</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
                     </div>
                 </div>
             </div>
