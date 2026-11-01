@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D-SHARE — Prime Edition | Global Equity. Stablecoin Access. (15 Slides)</title>
-    <meta name="description" content="D-SHARE Prime Edition Pitch Deck — 15 Slides | Tokenized Depository Receipts for USDC and HSBC RedCoin Holders. Global equity access for stablecoin adoption.">
+    <title>D-SHARE — Prime Edition | Global Equity. Stablecoin Access. (16 Slides)</title>
+    <meta name="description" content="D-SHARE Prime Edition Pitch Deck — 16 Slides | Tokenized Depository Receipts for USDC and HSBC RedCoin Holders. Global equity access for stablecoin adoption.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
@@ -1067,6 +1067,198 @@
             color: var(--muted);
         }
 
+        /* Slide 16 Specifics - Pitch Summary */
+        .slide16-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .slide16-card {
+            background: #F4EFE6;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .slide16-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 4px 16px rgba(23, 108, 107, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .slide16-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slide16-icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            background: var(--teal);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .slide16-card:nth-child(2) .slide16-icon-wrap {
+            background: var(--gold);
+        }
+
+        .slide16-card:nth-child(3) .slide16-icon-wrap {
+            background: var(--blue);
+        }
+
+        .slide16-card-kicker {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .slide16-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .slide16-card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            color: var(--ink);
+        }
+
+        .slide16-card-list li {
+            position: relative;
+            padding-left: 14px;
+        }
+
+        .slide16-card-list li::before {
+            content: '▪';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-size: 0.85rem;
+        }
+
+        .slide16-card:nth-child(2) .slide16-card-list li::before {
+            color: var(--gold);
+        }
+
+        .slide16-card:nth-child(3) .slide16-card-list li::before {
+            color: var(--blue);
+        }
+
+        .slide16-card-badge {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: rgba(23, 108, 107, 0.08);
+            color: var(--teal);
+            border: 1px solid rgba(23, 108, 107, 0.2);
+            text-align: center;
+        }
+
+        .slide16-card:nth-child(2) .slide16-card-badge {
+            background: rgba(184, 134, 11, 0.08);
+            color: var(--gold);
+            border-color: rgba(184, 134, 11, 0.25);
+        }
+
+        .slide16-card:nth-child(3) .slide16-card-badge {
+            background: rgba(43, 90, 142, 0.08);
+            color: var(--blue);
+            border-color: rgba(43, 90, 142, 0.2);
+        }
+
+        .slide16-banner {
+            background: #EFECE3;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .slide16-banner-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .slide16-banner-val {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1;
+        }
+
+        .slide16-banner-lbl {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .slide16-banner-divider {
+            width: 1px;
+            height: 34px;
+            background: var(--line);
+        }
+
+        .slide16-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--teal);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .slide16-btn:hover {
+            background: #115251;
+            color: var(--white);
+        }
+
         /* Print styles */
         @media print {
             body {
@@ -1202,6 +1394,20 @@
             .slide9-actors {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
+            }
+
+            .slide16-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .slide16-banner {
+                flex-wrap: wrap;
+                gap: 14px;
+            }
+
+            .slide16-banner-divider {
+                display: none;
             }
         }
 
@@ -1625,6 +1831,49 @@
             .slide15-deck-link {
                 font-size: 0.82rem;
             }
+
+            /* Slide 16 */
+            .slide16-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 14px;
+            }
+
+            .slide16-card {
+                padding: 14px 12px;
+                gap: 10px;
+            }
+
+            .slide16-card-title {
+                font-size: 1.05rem;
+            }
+
+            .slide16-card-list {
+                font-size: 0.82rem;
+                gap: 7px;
+            }
+
+            .slide16-banner {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .slide16-banner-val {
+                font-size: 1.25rem;
+            }
+
+            .slide16-banner-lbl {
+                font-size: 0.72rem;
+            }
+
+            .slide16-btn {
+                justify-content: center;
+                font-size: 0.80rem;
+                padding: 7px 12px;
+            }
         }
     </style>
 </head>
@@ -1661,9 +1910,10 @@
                     <option value="slide-13">13. The 24-Month Planning Cash Case</option>
                     <option value="slide-14">14. The Itemized 24-Month Fixed Budget</option>
                     <option value="slide-15">15. US$3 Million for Production Programme</option>
+                    <option value="slide-16">16. Leading Payment Engine to Capital Market</option>
                 </select>
 
-                <div class="slide-counter" id="slideCounter">1 / 15</div>
+                <div class="slide-counter" id="slideCounter">1 / 16</div>
 
                 <button class="nav-icon-btn" id="prevSlideBtn" title="Previous Slide (Up/Left)"><i class="fa-solid fa-chevron-up"></i></button>
                 <button class="nav-icon-btn" id="nextSlideBtn" title="Next Slide (Down/Right)"><i class="fa-solid fa-chevron-down"></i></button>
@@ -2542,6 +2792,100 @@
                 <div class="foot-brand">D-SHARE / PRIME</div>
                 <div class="foot-note"></div>
                 <div class="foot-num">15</div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 16 ==================== -->
+        <section class="slide-canvas" id="slide-16" data-index="16">
+            <div class="slide-head">
+                <div class="kicker">THE PITCH</div>
+                <h2 class="title">Leading Payment Engine to Capital Market</h2>
+                <div class="subtitle">Connecting programmable payments, tokenized real-world assets (RWA), and global capital market liquidity.</div>
+            </div>
+
+            <div class="content-body">
+                <div class="slide16-grid">
+                    <!-- Pillar 1: Payment Engine -->
+                    <div class="slide16-card">
+                        <div class="slide16-card-header">
+                            <div class="slide16-icon-wrap"><i class="fa-solid fa-bolt"></i></div>
+                            <div>
+                                <div class="slide16-card-kicker">Foundation Rails</div>
+                                <h3 class="slide16-card-title">Leading Payment Engine</h3>
+                            </div>
+                        </div>
+                        <ul class="slide16-card-list">
+                            <li><strong>Multi-Currency:</strong> Native USDC & HSBC RedCoin settlement</li>
+                            <li><strong>Instant DvP:</strong> Sub-second atomic delivery vs. payment</li>
+                            <li><strong>Zero Float Risk:</strong> Automated banking & reserve integration</li>
+                        </ul>
+                        <div class="slide16-card-badge">Programmable Settlement</div>
+                    </div>
+
+                    <!-- Pillar 2: Tokenized Assets -->
+                    <div class="slide16-card">
+                        <div class="slide16-card-header">
+                            <div class="slide16-icon-wrap"><i class="fa-solid fa-coins"></i></div>
+                            <div>
+                                <div class="slide16-card-kicker">RWA Core</div>
+                                <h3 class="slide16-card-title">Tokenized Assets (RWA)</h3>
+                            </div>
+                        </div>
+                        <ul class="slide16-card-list">
+                            <li><strong>1:1 Asset Backed:</strong> Regulated equity depository receipts</li>
+                            <li><strong>Fractional Units:</strong> Easy access to US$1,000+ share prices</li>
+                            <li><strong>Protected Custody:</strong> Licensed custodians & verifiable proof</li>
+                        </ul>
+                        <div class="slide16-card-badge">100% Backed RWA</div>
+                    </div>
+
+                    <!-- Pillar 3: Trading in Capital Market -->
+                    <div class="slide16-card">
+                        <div class="slide16-card-header">
+                            <div class="slide16-icon-wrap"><i class="fa-solid fa-chart-line"></i></div>
+                            <div>
+                                <div class="slide16-card-kicker">Market Access</div>
+                                <h3 class="slide16-card-title">Trading in Capital Market</h3>
+                            </div>
+                        </div>
+                        <ul class="slide16-card-list">
+                            <li><strong>24/7 Global Trading:</strong> Continuous liquidity via broker & ATS rails</li>
+                            <li><strong>Sponsor Economics:</strong> US$150K setup + 0.30% servicing revenue</li>
+                            <li><strong>Compliant Register:</strong> Permissioned DLT with KYC/AML gating</li>
+                        </ul>
+                        <div class="slide16-card-badge">24/7 Secondary Trading</div>
+                    </div>
+                </div>
+
+                <!-- Value Proposition Summary Banner -->
+                <div class="slide16-banner">
+                    <div class="slide16-banner-item">
+                        <span class="slide16-banner-val">US$3M</span>
+                        <span class="slide16-banner-lbl">Expansion Capital</span>
+                    </div>
+                    <div class="slide16-banner-divider"></div>
+                    <div class="slide16-banner-item">
+                        <span class="slide16-banner-val">24 Months</span>
+                        <span class="slide16-banner-lbl">Delivery to Scale</span>
+                    </div>
+                    <div class="slide16-banner-divider"></div>
+                    <div class="slide16-banner-item">
+                        <span class="slide16-banner-val">US$100M+</span>
+                        <span class="slide16-banner-lbl">Target Serviced Assets</span>
+                    </div>
+                    <div class="slide16-banner-divider"></div>
+                    <div class="slide16-banner-cta">
+                        <a href="D-SHARE-Extended-Investor-Deck.pptx" download class="slide16-btn" title="Download Extended Deck (.pptx)">
+                            <i class="fa-solid fa-file-powerpoint"></i> Extended Deck (.pptx)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-foot">
+                <div class="foot-brand">D-SHARE / PRIME</div>
+                <div class="foot-note">Bridging digital payment engines with institutional securities custody and global capital market trading.</div>
+                <div class="foot-num">16</div>
             </div>
         </section>
 
