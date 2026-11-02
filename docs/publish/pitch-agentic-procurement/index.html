@@ -516,6 +516,18 @@
             margin-bottom: 24px;
         }
 
+        .cover-brand-bottom {
+            position: absolute;
+            right: 48px;
+            bottom: 24px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            z-index: 5;
+        }
+
         .cover-headline {
             font-size: 2.5rem;
             font-weight: 800;
@@ -1454,6 +1466,12 @@
                 display: none !important;
             }
 
+            .cover-brand-bottom {
+                right: 24px;
+                bottom: 20px;
+                font-size: 0.82rem;
+            }
+
             .content-body,
             .two-column,
             .two-column-split,
@@ -1786,6 +1804,17 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
+            .cover-brand-bottom {
+                position: absolute !important;
+                right: 56px !important;
+                bottom: 28px !important;
+                font-size: 1.15rem !important;
+                font-weight: 700 !important;
+                color: var(--dark-muted) !important;
+                letter-spacing: 0.06em !important;
+                text-transform: uppercase !important;
+                z-index: 5 !important;
+            }
         }
     </style>
 </head>
@@ -1844,7 +1873,6 @@
             <div class="cover-container">
                 <div class="cover-left">
                     <div>
-                        <div class="cover-brand-title">Finux Labs</div>
                         <h1 class="cover-headline">Agentic Negotiator,<br><span style="white-space: nowrap;">Procurement AI</span></h1>
                         <p class="cover-subheadline">Supplier cost assessment and Sourcing</p>
                     </div>
@@ -1855,6 +1883,7 @@
                 </div>
                 <div class="cover-right-bg" style="background-image: url('assets/slide_1_img_1.png');"></div>
             </div>
+            <div class="cover-brand-bottom">Finux Labs</div>
         </section>
 
         <!-- ==================== SLIDE 2 (LIGHT THEME) ==================== -->
